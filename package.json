@@ -1,6 +1,6 @@
 {
   "name": "k8s-scripts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
     "k8s-read-config": "./bin/k8s-read-config",
@@ -21,7 +21,7 @@
   "author": "Ross Kukulinski <ross@kukulinski.com>",
   "license": "MIT",
   "repository": {
-    "type" : "git",
-     "url" : "https://github.com/rosskukulinski/k8s-scripts.git"
+    "type": "git",
+    "url": "https://github.com/rosskukulinski/k8s-scripts.git"
   }
 }
