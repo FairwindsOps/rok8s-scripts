@@ -1,0 +1,21 @@
+#!/bin/bash -e
+
+. k8s-read-config "$@"
+
+. minikube-build
+
+. manage-context
+
+switchContext 'minikube'
+
+. k8s-apply
+
+echo "Deleting old pods"
+for i in "${DEPLOYMENTS[@]}"
+do
+  echo "Deleting pods from old deployment of $i"
+  kubectl delete pod -l app=$i || true
+done
+echo ""
+
+restoreContext

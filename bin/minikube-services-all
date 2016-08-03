@@ -1,0 +1,23 @@
+#!/bin/bash -e
+
+. manage-context
+
+switchContext 'minikube'
+
+all_services=($(kubectl get svc --no-headers | awk '{print $1}'))
+
+ip=$(minikube ip)
+for i in "${all_services[@]}"
+do
+  port=$(kubectl get service $i -o yaml | grep nodePort | awk '{print $3}')
+  if [ -n "$port" ]
+  then
+    echo "Access $i at http://$ip:$port"
+  else
+    echo "$i is not accessible via nodePort"
+  fi
+done
+
+echo ""
+
+restoreContext

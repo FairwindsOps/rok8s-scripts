@@ -1,0 +1,28 @@
+#!/bin/bash
+
+switchContext () {
+  if [ -z "$1" ]
+  then
+    echo "ERROR: No context specified"
+    exit 1
+  fi
+  echo "Storing current kubectl context, switching to minikube"
+  OLD_CONTEXT=$(kubectl config current-context)
+  kubectl config use-context $1
+  if [ $1 == 'minikube' ]
+  then
+    eval $(minikube docker-env)
+    export DOCKER_API_VERSION=1.23
+  fi
+  echo ""
+}
+
+restoreContext () {
+  if [ -z $OLD_CONTEXT ]
+  then
+    echo "Conext was never switched, cannot restore"
+    exit 1
+  fi
+  echo "Restoring kubectl context to $OLD_CONTEXT"
+  kubectl config use-context $OLD_CONTEXT
+}

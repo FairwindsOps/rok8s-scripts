@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: example-app
+  name: example-app
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: example-app
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: example-app
+        env:
+        - name: DBSTRING
+          value: connectiontodb
+        - name: DBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: example-app
+              key: password
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: ssl-volume
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+      restartPolicy: Always
+      volumes:
+      - name: ssl-volume
+        secret:
+          secretName: example-app

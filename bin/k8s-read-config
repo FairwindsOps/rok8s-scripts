@@ -1,0 +1,68 @@
+#!/bin/bash
+
+if [ -n "${CONFIG_READ+1}" ]
+then
+  echo "Config already read"
+  return 0
+fi
+echo "Reading config"
+CONFIG_READ=1
+
+while getopts ":f:" opt; do
+  case $opt in
+    f)
+      CONFIG_FILE=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+BASEDIR=$(pwd)
+DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
+CONFIG=${CONFIG_FILE:-k8s-scripts.config}
+if test -f $BASEDIR/$CONFIG ; then
+  echo "Loading configuration from ${BASEDIR}/$CONFIG"
+  . $BASEDIR/k8s-scripts.config
+else
+  echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
+  exit 1
+fi
+
+echo "[dockerfile]: $DOCKERFILE"
+echo "[dockertag]: $DOCKERTAG"
+
+echo "[configmaps]: $CONFIGMAPS"
+CONFIGMAP_FILES=()
+for i in "${CONFIGMAPS[@]}"
+do
+  CONFIGMAP_FILES+=($BASEDIR/kube/$i.configmap.yml)
+done
+echo "[configmap_files]: $CONFIGMAP_FILES"
+
+echo "[secrets]: $SECRETS"
+SECRET_FILES=()
+for i in "${SECRETS[@]}"
+do
+  SECRET_FILES+=($BASEDIR/kube/$i.secret.yml)
+done
+echo "[secret_files]: $SECRET_FILES"
+
+echo "[services]: $SERVICES"
+SERVICE_FILES=()
+for i in "${SERVICES[@]}"
+do
+  SERVICE_FILES+=($BASEDIR/kube/$i.service.yml)
+done
+echo "[service_files]: $SERVICE_FILES"
+
+echo "[deployments]: $DEPLOYMENTS"
+DEPLOYMENT_FILES=()
+for i in "${DEPLOYMENTS[@]}"
+do
+  DEPLOYMENT_FILES+=($BASEDIR/kube/$i.deployment.yml)
+done
+echo "[deployment_files]: $DEPLOYMENT_FILES"
+echo ""

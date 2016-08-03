@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+. k8s-read-config "$@"
+
+. manage-context
+
+switchContext 'minikube'
+
+. k8s-delete
+
+restoreContext

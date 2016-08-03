@@ -1,0 +1,32 @@
+#!/bin/bash -e
+
+. k8s-read-config
+
+echo "Deleting ConfigMaps"
+for i in "${CONFIGMAP_FILES[@]}"
+do
+  kubectl delete -f $i || true
+done
+echo "Done deleting ConfigMaps"
+
+echo "Deleting Secrets"
+for i in "${SECRET_FILES[@]}"
+do
+  kubectl delete -f $i || true
+done
+echo "Done deleting Secrets"
+
+echo "Deleting Services"
+for i in "${SERVICE_FILES[@]}"
+do
+  kubectl delete -f $i || true
+done
+echo "Done deleting Services"
+
+echo "Deleting Deployments"
+for i in "${DEPLOYMENT_FILES[@]}"
+do
+  kubectl delete -f $i || true
+done
+echo "Done deleting Deployments"
+echo ""

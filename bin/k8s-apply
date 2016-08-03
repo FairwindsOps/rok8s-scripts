@@ -1,0 +1,49 @@
+#!/bin/bash -e
+
+. k8s-read-config
+
+echo "Updating ConfigMaps"
+for i in "${CONFIGMAP_FILES[@]}"
+do
+  echo "Updating $i"
+  kubectl apply -f $i
+done
+echo "Done updating ConfigMaps"
+
+echo "Updating Secrets"
+for i in "${SECRET_FILES[@]}"
+do
+  echo "Updating $i"
+  kubectl apply -f $i
+done
+echo "Done updating Secrets"
+
+echo "Updating Deployments"
+for i in "${DEPLOYMENT_FILES[@]}"
+do
+  echo "Updating $i"
+  kubectl apply -f $i
+done
+echo "Done updating Deployments"
+echo ""
+
+echo "Verifying successful deployments"
+for i in "${DEPLOYMENTS[@]}"
+do
+  echo "Checking deployment for $i"
+  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $i
+  result=$?
+  if [ "$result" == "143" ] ; then
+      echo "------- DEPLOYMENT TIMEOUT FAIL --------"
+      exit 1
+  fi
+  if [ "$result" == "0" ] ; then
+    echo "DEPLOY SUCCESFULL"
+  else
+    echo "DEPLOY FAILED"
+    exit $result
+  fi
+done
+
+echo "All objects created"
+echo ""

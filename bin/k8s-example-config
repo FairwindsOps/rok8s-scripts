@@ -1,0 +1,47 @@
+#!/bin/bash
+
+while getopts ":o:" opt; do
+  case $opt in
+    o)
+      CONFIG_FILE=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+CONFIG=${CONFIG_FILE:-k8s-scripts.config}
+
+if test -f $CONFIG ; then
+  echo "Configuration file, $CONFIG, already exists"
+  exit 0
+fi
+
+cat <<EOT >> $CONFIG
+# Configuration for https://www.npmjs.com/package/k8s-scripts
+
+# Dockerfile to build
+DOCKERFILE='Dockerfile'
+
+# Docker tag that will be created
+DOCKERTAG='quay.io/exampleorg/example-app'
+
+# List of files ending in `.configmap.yml` in the kube directory
+CONFIGMAPS=()
+
+# List of files ending in `.secret.yml` in the kube directory
+SECRETS=('example-app')
+
+# List of files ending in `.service.yml` in the kube directory
+SERVICES=('example-app')
+
+# List of files ending in `.deployment.yml` in the kube directory
+DEPLOYMENTS=('example-app')
+
+# List of files ending in `.job.yml` in the kube directory (Not supported yet)
+JOBS=()
+
+EOT
+
+echo "Wrote example config to $CONFIG"
