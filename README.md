@@ -1,3 +1,4 @@
+a note about KUBECONFIG_DATA
 # Kubernetes Scripts
 
 Opinionated scripts for managing application development and deployment lifecycle using Kubernetes.

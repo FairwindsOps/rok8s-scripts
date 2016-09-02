@@ -1,0 +1,20 @@
+#!/bin/bash
+
+mkdir -p ~/.kube
+if [ -n "$KUBECONFIG_DATA" ]
+  echo $KUBECONFIG_DATA | base64 --decode > ~/.kube/config
+fi
+
+# test for the CircleCI platform. If so, install as below
+if [ -n "$CIRCLE_BUILD_NUM" ]
+  sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+fi
+
+# installation for other platforms here
+# TODO
+
+# fail if kubectl is not in the PATH and executable
+if ! hash kubectl 2>/dev/null; then
+  echo "kubectl not found"
+  exit 1
+fi
