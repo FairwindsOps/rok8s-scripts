@@ -25,7 +25,7 @@ DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
 CONFIG=${CONFIG_FILE:-k8s-scripts.config}
 if test -f $BASEDIR/$CONFIG ; then
   echo "Loading configuration from ${BASEDIR}/$CONFIG"
-  . $BASEDIR/k8s-scripts.config
+  . $BASEDIR/$CONFIG
 else
   echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
   exit 1
@@ -38,7 +38,7 @@ echo "[configmaps]: $CONFIGMAPS"
 CONFIGMAP_FILES=()
 for i in "${CONFIGMAPS[@]}"
 do
-  CONFIGMAP_FILES+=($BASEDIR/kube/$i.configmap.yml)
+  CONFIGMAP_FILES+=($BASEDIR/deploy/$i.configmap.yml)
 done
 echo "[configmap_files]: $CONFIGMAP_FILES"
 
@@ -46,7 +46,7 @@ echo "[secrets]: $SECRETS"
 SECRET_FILES=()
 for i in "${SECRETS[@]}"
 do
-  SECRET_FILES+=($BASEDIR/kube/$i.secret.yml)
+  SECRET_FILES+=($BASEDIR/deploy/$i.secret.yml)
 done
 echo "[secret_files]: $SECRET_FILES"
 
@@ -54,7 +54,7 @@ echo "[services]: $SERVICES"
 SERVICE_FILES=()
 for i in "${SERVICES[@]}"
 do
-  SERVICE_FILES+=($BASEDIR/kube/$i.service.yml)
+  SERVICE_FILES+=($BASEDIR/deploy/$i.service.yml)
 done
 echo "[service_files]: $SERVICE_FILES"
 
@@ -62,7 +62,7 @@ echo "[deployments]: $DEPLOYMENTS"
 DEPLOYMENT_FILES=()
 for i in "${DEPLOYMENTS[@]}"
 do
-  DEPLOYMENT_FILES+=($BASEDIR/kube/$i.deployment.yml)
+  DEPLOYMENT_FILES+=($BASEDIR/deploy/$i.deployment.yml)
 done
 echo "[deployment_files]: $DEPLOYMENT_FILES"
 echo ""
