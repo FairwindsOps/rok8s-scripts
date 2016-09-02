@@ -16,7 +16,8 @@
     "timeout.sh": "./bin/timeout.sh",
     "k8s-apply": "./bin/k8s-apply",
     "minikube-services": "./bin/minikube-services",
-    "minikube-services-all": "./bin/minikube-services-all"
+    "minikube-services-all": "./bin/minikube-services-all",
+    "ensure-kubectl": "ensure-kubectl"
   },
   "author": "Ross Kukulinski <ross@kukulinski.com>",
   "license": "MIT",
