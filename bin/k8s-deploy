@@ -6,7 +6,7 @@ echo "Deploying ConfigMaps"
 for i in "${CONFIGMAP_FILES[@]}"
 do
   echo "Creating $i"
-  kubectl create -f $i
+  kubectl apply -f $i
 done
 echo "Done deploying ConfigMaps"
 
@@ -14,7 +14,7 @@ echo "Deploying Secrets"
 for i in "${SECRET_FILES[@]}"
 do
   echo "Creating $i"
-  kubectl create -f $i
+  kubectl apply -f $i
 done
 echo "Done deploying Secrets"
 
@@ -22,7 +22,7 @@ echo "Deploying Services"
 for i in "${SERVICE_FILES[@]}"
 do
   echo "Creating $i"
-  kubectl create -f $i
+  kubectl apply -f $i
 done
 echo "Done deploying Services"
 
@@ -30,7 +30,7 @@ echo "Deploying Deployments"
 for i in "${DEPLOYMENT_FILES[@]}"
 do
   echo "Creating $i"
-  kubectl create -f $i
+  kubectl apply -f $i
 done
 echo "Done deploying Deployments"
 echo ""
