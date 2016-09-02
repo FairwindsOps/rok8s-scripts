@@ -29,7 +29,7 @@ if [ ! -e "/usr/bin/sudo" ]; then
 fi
 
 # remove default setting of requiretty if it exists
-sed -i '/Defaults requiretty/d' /etc/sudoers
+#sed -i '/Defaults requiretty/d' /etc/sudoers
 
 #make sure wget is installed
 if [ ! -e "/usr/bin/wget" ]; then
@@ -49,9 +49,8 @@ fi
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
   # If being run from the CircleCI platform, install as below
-  if [ -n "$CIRCLE_BUILD_NUM" ]
+  if [ -n "$CIRCLE_BUILD_NUM" ] ; then
     sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
-  fi
   else
     wget https://storage.googleapis.com/kubernetes-release/release/v1.2.0/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
     chmod +x /usr/local/bin/kubectl
