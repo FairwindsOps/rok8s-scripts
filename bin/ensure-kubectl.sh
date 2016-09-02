@@ -46,16 +46,14 @@ if [ ! -e "/usr/bin/envsubst" ]; then
     sudo ${PKG_MANAGER} install -y gettext
 fi
 
-# make the temp directory
-if [ ! -e ~/.kube ]; then
-    mkdir -p ~/.kube;
+# make sure kubectl is installed
+if ! hash kubectl 2>/dev/null; then
+  # If being run from the CircleCI platform, install as below
+  if [ -n "$CIRCLE_BUILD_NUM" ]
+    sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+  fi
+  else
+    wget https://storage.googleapis.com/kubernetes-release/release/v1.2.0/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
+    chmod +x /usr/local/bin/kubectl
+  fi
 fi
-
-if [ ! -e ~/.kube/kubectl ]; then
-    wget https://storage.googleapis.com/kubernetes-release/release/v1.2.0/bin/linux/amd64/kubectl -O ~/.kube/kubectl
-    chmod +x ~/.kube/kubectl
-fi
-pwd
-
-~/.kube/kubectl config use-context ${KUBECONTEXTQA}
-~/.kube/kubectl version
