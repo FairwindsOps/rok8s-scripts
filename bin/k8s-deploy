@@ -91,7 +91,7 @@ do
      exit 1
    fi
   fi
-  if [ ! -n $CI_SHA1 ]
+  if [ -n "$CI_SHA1" ]
   then
     echo "Updating image tag from latest to ${CI_SHA1} for ${DEPLOYMENT_FILE}"
     sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
