@@ -26,7 +26,7 @@ do
   mv ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
   SECRET_FIL=${SECRET_FILE}-${CI_SHA1}
   echo "Applying ${SECRET_FILE}"
-  kubectl apply -f ${SECRET_FILE} --record
+  kubectl apply -f ${SECRET_FILE}
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
