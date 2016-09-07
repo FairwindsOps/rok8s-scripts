@@ -1,3 +1,0 @@
-#!/bin/bash -e
-
-docker login -e test@test.com -u $REGISTRY_USERNAME -p $REGISTRY_PASSWORD

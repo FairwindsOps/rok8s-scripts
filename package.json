@@ -20,8 +20,7 @@
     "ensure-kubectl": "./bin/ensure-kubectl",
     "prepare-kubectl": "./bin/prepare-kubectl",
     "docker-build": "./bin/docker-build",
-    "docker-push": "./bin/docker-push",
-    "docker-login": "./bin/docker-login"
+    "docker-push": "./bin/docker-push"
   },
   "author": "Ross Kukulinski <ross@kukulinski.com>",
   "license": "MIT",
