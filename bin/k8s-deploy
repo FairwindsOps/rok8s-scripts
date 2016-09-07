@@ -58,7 +58,6 @@ for index in "${!SERVICE_FILES[@]}"
 do
   SERVICE=${SERVICES[$index]}
   SERVICE_FILE=${SERVICE_FILES[$index]}
-  echo $SERVICE
   kubectl get service ${SERVICE} &>/dev/null
   if [ $? -ne 0 ]
   then
