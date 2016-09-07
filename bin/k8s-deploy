@@ -4,21 +4,12 @@
 
 echo "Deploying ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"; do
-  CONFIGMAP=${CONFIGMAPS[$index]}
   CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
-  kubectl get configmap $CONFIGMAP
-  if [ $? -ne 0 ]
-  then
-   echo "Configmap ${CONFIGMAP} does not exist yet, creating it"
-   kubectl create -f ${CONFIGMAP_FILE} --record
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  fi
-  echo "Updating ${CONFIGMAP_FILE}"
-  kubectl apply -f ${CONFIGMAP_FILE}
+  echo "Appending ${CI_SHA1} to configmap filename"
+  mv ${CONFIGMAP_FILE} ${CONFIGMAP_FILE}-${CI_SHA1}
+  CONFIGMAP_FILE=${CONFIGMAP_FILE}-${CI_SHA1}
+  echo "Applying ${CONFIGMAP_FILE}"
+  kubectl apply -f ${CONFIGMAP_FILE} --record
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
@@ -30,21 +21,12 @@ echo "Done deploying ConfigMaps"
 echo "Deploying Secrets"
 for index in "${!SECRET_FILES[@]}"
 do
-  SECRET=${SECRETS[$index]}
   SECRET_FILE=${SECRET_FILES[$index]}
-  kubectl get secret $SECRET
-  if [ $? -ne 0 ]
-  then
-   echo "Secret ${SECRET} does not exist yet, creating it"
-   kubectl create -f ${SECRET_FILE} --record
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  fi
-  echo "Updating ${SECRET_FILE}"
-  kubectl apply -f ${SECRET_FILE}
+  echo "Appending ${CI_SHA1} to secret filename"
+  mv ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
+  SECRET_FIL=${SECRET_FILE}-${CI_SHA1}
+  echo "Applying ${SECRET_FILE}"
+  kubectl apply -f ${SECRET_FILE} --record
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
