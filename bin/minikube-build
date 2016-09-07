@@ -6,8 +6,6 @@
 
 switchContext 'minikube'
 
-echo Building $DOCKERTAG from $BASEDIR/$DOCKERFILE
-
-docker build -t $DOCKERTAG .
+. docker-build
 
 restoreContext

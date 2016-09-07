@@ -1,0 +1,57 @@
+#!/bin/bash
+
+. k8s-read-config "$@"
+
+echo "Pushing $DOCKERTAG:latest as $CI_SHA1, $CI_BRANCH, $CI_BUILD_NUM to ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
+
+docker tag $DOCKERTAG:latest ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:latest
+if [ $? -ne 0 ]
+then
+  echo "Unable to tag image, aborting"
+  exit 1
+fi
+docker push ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:latest
+if [ $? -ne 0 ]
+then
+  echo "Unable to push docker image, aborting."
+  exit 1
+fi
+
+docker tag $DOCKERTAG:latest ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_SHA1
+if [ $? -ne 0 ]
+then
+  echo "Unable to tag image, aborting"
+  exit 1
+fi
+docker push ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_SHA1
+if [ $? -ne 0 ]
+then
+  echo "Unable to push docker image, aborting."
+  exit 1
+fi
+
+docker tag $DOCKERTAG:latest ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH
+if [ $? -ne 0 ]
+then
+  echo "Unable to tag image, aborting"
+  exit 1
+fi
+docker push ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH
+if [ $? -ne 0 ]
+then
+  echo "Unable to push docker image, aborting."
+  exit 1
+fi
+
+docker tag $DOCKERTAG:latest ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_$CI_BUILD_NUM
+if [ $? -ne 0 ]
+then
+  echo "Unable to tag image, aborting"
+  exit 1
+fi
+docker push ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_$CI_BUILD_NUM
+if [ $? -ne 0 ]
+then
+  echo "Unable to push docker image, aborting."
+  exit 1
+fi
