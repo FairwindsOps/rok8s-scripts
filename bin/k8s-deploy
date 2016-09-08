@@ -6,7 +6,7 @@ echo "Deploying ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"; do
   CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
   echo "Appending ${CI_SHA1} to configmap filename"
-  mv ${CONFIGMAP_FILE} ${CONFIGMAP_FILE}-${CI_SHA1}
+  cp ${CONFIGMAP_FILE} ${CONFIGMAP_FILE}-${CI_SHA1}
   CONFIGMAP_FILE=${CONFIGMAP_FILE}-${CI_SHA1}
   echo "Applying ${CONFIGMAP_FILE}"
   kubectl apply -f ${CONFIGMAP_FILE} --record
@@ -23,7 +23,7 @@ for index in "${!SECRET_FILES[@]}"
 do
   SECRET_FILE=${SECRET_FILES[$index]}
   echo "Appending ${CI_SHA1} to secret filename"
-  mv ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
+  cp ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
   SECRET_FIL=${SECRET_FILE}-${CI_SHA1}
   echo "Applying ${SECRET_FILE}"
   kubectl apply -f ${SECRET_FILE}
