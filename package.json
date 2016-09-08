@@ -1,6 +1,6 @@
 {
   "name": "k8s-scripts",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
     "k8s-read-config": "./bin/k8s-read-config",
