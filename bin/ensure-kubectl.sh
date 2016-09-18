@@ -56,5 +56,3 @@ if [ ! -e ~/.kube/kubectl ]; then
     chmod +x ~/.kube/kubectl
 fi
 pwd
-
-~/.kube/kubectl version
