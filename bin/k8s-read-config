@@ -25,14 +25,13 @@ DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
 CONFIG=${CONFIG_FILE:-k8s-scripts.config}
 if test -f $BASEDIR/$CONFIG ; then
   echo "Loading configuration from ${BASEDIR}/$CONFIG"
-  . $BASEDIR/k8s-scripts.config
+  . $BASEDIR/$CONFIG
 else
   echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
   exit 1
 fi
 
-echo "[dockerfile]: $DOCKERFILE"
-echo "[dockertag]: $DOCKERTAG"
+echo "[dockerrepo]: $DOCKER_REPO"
 
 echo "[configmaps]: $CONFIGMAPS"
 CONFIGMAP_FILES=()

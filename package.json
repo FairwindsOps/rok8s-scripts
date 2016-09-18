@@ -12,7 +12,7 @@
     "minikube-apply": "./bin/minikube-apply",
     "k8s-deploy": "./bin/k8s-deploy",
     "k8s-delete": "./bin/k8s-delete",
-    "verify-deployment": "./bin/verify-deployment",
+    "verify-deployment": "./bin/verify-deployment.sh",
     "timeout.sh": "./bin/timeout.sh",
     "k8s-apply": "./bin/k8s-apply",
     "minikube-services": "./bin/minikube-services",

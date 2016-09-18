@@ -57,5 +57,4 @@ if [ ! -e ~/.kube/kubectl ]; then
 fi
 pwd
 
-~/.kube/kubectl config use-context ${KUBECONTEXTQA}
 ~/.kube/kubectl version
