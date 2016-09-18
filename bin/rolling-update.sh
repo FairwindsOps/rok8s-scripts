@@ -50,6 +50,9 @@ export certdata=`(kubectl config view -o json --raw --minify  | jq '.users[0].us
 export certcmd=""
 
 export CONTEXT=$(kubectl config current-context)
+
+echo "CONTEXT: ${CONTEXT}"
+
 if [ "$certdata" != "null" ] && [ "$certdata" != "" ];
 then
     kubectl config view -o json --raw --minify  | jq '.users[0].user["client-certificate-data"]' | tr -d '\"' | base64 --decode > ${CONTEXT}-cert.pem
