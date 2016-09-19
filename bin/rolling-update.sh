@@ -110,7 +110,7 @@ do
   kubectl apply -f ${i}.${BUILD}
 done
 
-for i in "${SERVICES}"
+for i in "${SERVICES[@]}"
 do
     echo "verify timeout $i"
     $DIR/timeout.sh -t ${DEPLOY_TIMEOUT} $DIR/verify-deployment.sh ${i}
