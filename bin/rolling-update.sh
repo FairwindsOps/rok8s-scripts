@@ -112,7 +112,7 @@ done
 
 for i in "${DEPLOYMENT_FILES[@]}"
 do
-    deployment=$(cat ${i} | $DIR/yq .metadata.name)
+    deployment=$(cat ${i} | $DIR/yq -r .metadata.name)
     echo "verify deployment $deployment"
     $DIR/timeout.sh -t ${DEPLOY_TIMEOUT} $DIR/verify-deployment.sh ${deployment}
 done
