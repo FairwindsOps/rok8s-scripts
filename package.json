@@ -21,7 +21,7 @@
 	"ensure-kubectl": "./bin/ensure-kubectl.sh",
 	"yq": "./bin/yq"
     },
-    "scripts": {"install": "./bin/install.sh"},
+    "scripts": {"install": "pip install pyyaml"},
     "author": "Ross Kukulinski <ross@kukulinski.com>",
     "license": "MIT",
     "repository": {
