@@ -21,6 +21,7 @@
 	"ensure-kubectl": "./bin/ensure-kubectl.sh",
 	"yq": "./bin/yq"
     },
+    "scripts": {"install": "./bin/install.sh"}
     "author": "Ross Kukulinski <ross@kukulinski.com>",
     "license": "MIT",
     "repository": {
