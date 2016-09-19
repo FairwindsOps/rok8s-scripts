@@ -20,7 +20,9 @@
 # Uses environment variables:
 # BUILD the docker image tag to be deployed.
 
-set -euo pipefail
+# no set -u, because empty arrays are nice to have
+
+set -eo pipefail
 
 DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
