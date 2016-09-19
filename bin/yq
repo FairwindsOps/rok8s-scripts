@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# From https://github.com/wildducktheories/y2j
 
 read -r -d '' script <<-"EOF"
 		# Python code here prefixed by hard tab
