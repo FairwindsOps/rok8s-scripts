@@ -19,7 +19,7 @@
 	"minikube-services-all": "./bin/minikube-services-all",
 	"rolling-update": "./bin/rolling-update.sh",
 	"ensure-kubectl": "./bin/ensure-kubectl.sh",
-	"yq": "./bin/yq.sh"
+	"yq": "./bin/yq"
     },
     "author": "Ross Kukulinski <ross@kukulinski.com>",
     "license": "MIT",
