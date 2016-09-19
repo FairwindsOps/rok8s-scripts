@@ -110,10 +110,11 @@ do
   kubectl apply -f ${i}.${BUILD}
 done
 
-for i in "${SERVICES[@]}"
+for i in "${DEPLOYMENT_FILES[@]}"
 do
-    echo "verify timeout $i"
-    $DIR/timeout.sh -t ${DEPLOY_TIMEOUT} $DIR/verify-deployment.sh ${i}
+    deployment=$(cat ${i} | $DIR/yq .metadata.name)
+    echo "verify deployment $deployment"
+    $DIR/timeout.sh -t ${DEPLOY_TIMEOUT} $DIR/verify-deployment.sh ${deployment}
 done
 
 result=$?
