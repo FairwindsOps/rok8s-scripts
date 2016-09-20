@@ -28,6 +28,7 @@ if [ ! -e "/usr/bin/sudo" ]; then
    ${PKG_MANAGER} install -y sudo
 fi
 
+KUBE_VERSION=${KUBE_VERSION:-1.3.6}
 # remove default setting of requiretty if it exists
 sed -i '/Defaults requiretty/d' /etc/sudoers
 
@@ -52,10 +53,7 @@ if [ ! -e ~/.kube ]; then
 fi
 
 if [ ! -e ~/.kube/kubectl ]; then
-    wget https://storage.googleapis.com/kubernetes-release/release/v1.2.0/bin/linux/amd64/kubectl -O ~/.kube/kubectl
+    wget https://storage.googleapis.com/kubernetes-release/release/v${KUBE_VERSION}/bin/linux/amd64/kubectl -O ~/.kube/kubectl
     chmod +x ~/.kube/kubectl
 fi
 pwd
-
-~/.kube/kubectl config use-context ${KUBECONTEXTQA}
-~/.kube/kubectl version
