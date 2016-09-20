@@ -28,7 +28,7 @@ if [ ! -e "/usr/bin/sudo" ]; then
    ${PKG_MANAGER} install -y sudo
 fi
 
-KUBE_VERSION=${KUBE_VERSION:-1.2.0}
+KUBE_VERSION=${KUBE_VERSION:-1.3.6}
 # remove default setting of requiretty if it exists
 sed -i '/Defaults requiretty/d' /etc/sudoers
 
