@@ -55,11 +55,11 @@ Outputs an example config to the filename specified by -o flag.
 All scripts take an `-f configfile` option that allows you to specify which configuration file to use.
 
 We recommend having the default, k8s-scripts.config, setup for your minikube environment, then
-specify `k8s-scripts.<env>.conf` for each of your environments.
+specify `<env>.conf` for each of your environments.
 
-## kube directory
+## deploy directory
 
-Your kubernetes API object files should all be stored in the /kube top level directory using consistent naming:
+Your kubernetes API object files should all be stored in the /deploy top level directory using consistent naming:
 
 * Deployments end in `deployment.yml`
 * Secrets end in `secret.yml`
@@ -93,6 +93,10 @@ of any services defined in the config file that are accessible from your local m
 `minikube-services-all`
 Switches to the minikube kubectl context and prints all the accessible ip:port
 of all services that are accessible from your local machine
+
+`ensure-kubectl`
+Makes sure kubectl is installed and available for use. Customize the version
+by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 
 ## Assumptions
 

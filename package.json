@@ -1,6 +1,6 @@
 {
   "name": "k8s-scripts",
-  "version": "1.0.1",
+  "version": "2.1.2",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
     "k8s-read-config": "./bin/k8s-read-config",
@@ -18,7 +18,9 @@
     "minikube-services": "./bin/minikube-services",
     "minikube-services-all": "./bin/minikube-services-all",
     "ensure-kubectl": "./bin/ensure-kubectl",
-    "prepare-kubectl": "./bin/prepare-kubectl"
+    "prepare-kubectl": "./bin/prepare-kubectl",
+    "docker-build": "./bin/docker-build",
+    "docker-push": "./bin/docker-push"
   },
   "author": "Ross Kukulinski <ross@kukulinski.com>",
   "license": "MIT",
