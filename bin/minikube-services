@@ -9,7 +9,7 @@ switchContext 'minikube'
 ip=$(minikube ip)
 for i in "${SERVICES[@]}"
 do
-  port=$(kubectl get service $i -o yaml | grep nodePort | awk '{print $3}')
+  port=$(kubectl get service $i --namespace=$NAMESPACE -o yaml | grep nodePort | awk '{print $3}')
   echo "Access $i at http://$ip:$port"
 done
 

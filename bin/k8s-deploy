@@ -9,7 +9,7 @@ for index in "${!CONFIGMAP_FILES[@]}"; do
   cp ${CONFIGMAP_FILE} ${CONFIGMAP_FILE}-${CI_SHA1}
   CONFIGMAP_FILE=${CONFIGMAP_FILE}-${CI_SHA1}
   echo "Applying ${CONFIGMAP_FILE}"
-  kubectl apply -f ${CONFIGMAP_FILE} --record
+  kubectl apply -f ${CONFIGMAP_FILE} --namespace=$NAMESPACE --record
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
@@ -26,7 +26,7 @@ do
   cp ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
   SECRET_FIL=${SECRET_FILE}-${CI_SHA1}
   echo "Applying ${SECRET_FILE}"
-  kubectl apply -f ${SECRET_FILE}
+  kubectl apply -f ${SECRET_FILE} --namespace=$NAMESPACE
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
@@ -40,11 +40,11 @@ for index in "${!SERVICE_FILES[@]}"
 do
   SERVICE=${SERVICES[$index]}
   SERVICE_FILE=${SERVICE_FILES[$index]}
-  kubectl get service ${SERVICE} &>/dev/null
+  kubectl get service ${SERVICE} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
   then
    echo "Service ${SERVICE} does not exist yet, creating it"
-   kubectl create -f ${SERVICE_FILE} --record
+   kubectl create -f ${SERVICE_FILE} --namespace=$NAMESPACE --record
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -61,7 +61,7 @@ for index in "${!DEPLOYMENT_FILES[@]}"
 do
   DEPLOYMENT=${DEPLOYMENTS[$index]}
   DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
-  kubectl get deployment ${DEPLOYMENT} &>/dev/null
+  kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
   then
    echo "Deployment ${DEPLOYMENT} does not exist yet, creating it"
@@ -79,7 +79,7 @@ do
     echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
   fi
-  kubectl apply -f ${DEPLOYMENT_FILE}
+  kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
@@ -91,10 +91,11 @@ echo "Done deploying Deployments"
 echo ""
 
 echo "Verifying successful deployments"
-for i in "${DEPLOYMENTS[@]}"
+for index in "${!DEPLOYMENTS[@]}"
 do
+  DEPLOYMENT=${DEPLOYMENTS[$index]}
   echo "Checking deployment for $i"
-  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $i
+  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
   result=$?
   if [ "$result" == "143" ] ; then
       echo "------- DEPLOYMENT TIMEOUT FAIL --------"

@@ -14,7 +14,7 @@ echo "Deleting old pods"
 for i in "${DEPLOYMENTS[@]}"
 do
   echo "Deleting pods from old deployment of $i"
-  kubectl delete pod -l app=$i || true
+  kubectl delete pod -l app=$i --namespace=$NAMESPACE || true
 done
 echo ""
 

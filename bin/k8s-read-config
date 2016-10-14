@@ -34,6 +34,9 @@ fi
 echo "[dockerfile]: $DOCKERFILE"
 echo "[dockertag]: $DOCKERTAG"
 
+NAMESPACE=${NAMESPACE:=default}
+echo "[namespace]: $NAMESPACE"
+
 echo "[configmaps]: $CONFIGMAPS"
 CONFIGMAP_FILES=()
 for i in "${CONFIGMAPS[@]}"

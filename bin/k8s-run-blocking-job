@@ -11,7 +11,7 @@ KUBERNETES_CONFIG_PATH=${KUBERNETES_CONFIG_PATH:-kube}
 POLL_TRIES=${POLL_TRIES:-30}
 POLL_WAIT=${POLL_WAIT:-10}
 
-kubectl apply -f ${KUBERNETES_CONFIG_PATH}/${JOB_NAME}.job.yml
+kubectl apply -f ${KUBERNETES_CONFIG_PATH}/${JOB_NAME}.job.yml --namespace=$NAMESPACE
 
 ACTIVE=$(kubectl get job -o json $JOB_NAME |jq .status.active)
 if [ "$ACTIVE" != 1 ]
@@ -29,7 +29,7 @@ while [  $COUNTER -lt $POLL_TRIES ]; do
   # echo Job Succeeded: $SUCCEEDED
   if [ "$ACTIVE" == "null" ] && [ "$SUCCEEDED" == "1" ]; then
     echo "$JOB_NAME Job succesfully completed, deleting"
-    kubectl delete job $JOB_NAME
+    kubectl delete job $JOB_NAME --namespace=$NAMESPACE
     exit $?
   else
     sleep $POLL_WAIT
