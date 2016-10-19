@@ -24,7 +24,7 @@ do
   SECRET_FILE=${SECRET_FILES[$index]}
   echo "Appending ${CI_SHA1} to secret filename"
   cp ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
-  SECRET_FIL=${SECRET_FILE}-${CI_SHA1}
+  SECRET_FILE=${SECRET_FILE}-${CI_SHA1}
   echo "Applying ${SECRET_FILE}"
   kubectl apply -f ${SECRET_FILE}
   if [ $? -ne 0 ]
