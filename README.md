@@ -102,14 +102,7 @@ Nukes everything defined in your k8s-scripts config file.
 Switches to the minikube kubectl context, builds a Docker image form your current directory within the minikube Docker environment.
 
 ### minikube-deploy
-Switches the minikube kubectl context,
-
-### minikube-apply
-Switches to the minikube kubectl context, updates
-ConfigMaps, Secrets, and Deployments.
-
-### minikube-update
-Runs `minikube-build` and `minikube-apply`
+Switches the minikube kubectl context, then runs `k8s-deploy`
 
 ### minikube-delete
 Switches to the minikube kubectl context and deletes
