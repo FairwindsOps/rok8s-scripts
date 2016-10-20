@@ -3,35 +3,39 @@
 . k8s-read-config
 
 echo "Updating ConfigMaps"
-for i in "${CONFIGMAP_FILES[@]}"
+for index in "${!CONFIGMAP_FILES[@]}"
 do
-  echo "Updating $i"
-  kubectl apply -f $i
+  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
+  echo "Updating $CONFIGMAP_FILE"
+  kubectl apply -f $CONFIGMAP_FILE --namespace=$NAMESPACE
 done
 echo "Done updating ConfigMaps"
 
 echo "Updating Secrets"
-for i in "${SECRET_FILES[@]}"
+for index in "${!SECRET_FILES[@]}"
 do
-  echo "Updating $i"
-  kubectl apply -f $i
+  SECRET_FILE=${SECRET_FILES[$index]}
+  echo "Updating $SECRET_FILE"
+  kubectl apply -f $SECRET_FILE --namespace=$NAMESPACE
 done
 echo "Done updating Secrets"
 
 echo "Updating Deployments"
-for i in "${DEPLOYMENT_FILES[@]}"
+for index in "${!DEPLOYMENT_FILES[@]}"
 do
-  echo "Updating $i"
-  kubectl apply -f $i
+  DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
+  echo "Updating $DEPLOYMENT_FILE"
+  kubectl apply -f $DEPLOYMENT_FILE --namespace=$NAMESPACE
 done
 echo "Done updating Deployments"
 echo ""
 
 echo "Verifying successful deployments"
-for i in "${DEPLOYMENTS[@]}"
+for index in "${!DEPLOYMENTS[@]}"
 do
-  echo "Checking deployment for $i"
-  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $i
+  DEPLOYMENT=${DEPLOYMENTS[$index]}
+  echo "Checking deployment for $DEPLOYMENT"
+  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
   result=$?
   if [ "$result" == "143" ] ; then
       echo "------- DEPLOYMENT TIMEOUT FAIL --------"

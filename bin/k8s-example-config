@@ -27,6 +27,9 @@ DOCKERFILE='Dockerfile'
 # Docker tag that will be created
 DOCKERTAG='quay.io/exampleorg/example-app'
 
+# Namespace to work in
+NAMESPACE='default'
+
 # List of files ending in `.configmap.yml` in the kube directory
 CONFIGMAPS=()
 
