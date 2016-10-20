@@ -22,7 +22,7 @@
 # set -xv
 
 PKG_MANAGER=$( command -v yum || command -v apt-get ) || echo "Neither yum nor apt-get found"
-KUBECTL_VERSION=${KUBECTL_VERSION:-v1.3.6}
+KUBECTL_VERSION=${KUBECTL_VERSION:-v1.4.0}
 #make sure sudo is installed
 if [ ! -e "/usr/bin/sudo" ]; then
    ${PKG_MANAGER} install -y sudo
@@ -50,7 +50,7 @@ fi
 if ! hash kubectl 2>/dev/null; then
   # If being run from the CircleCI platform, install as below
   if [ -n "$CIRCLE_BUILD_NUM" ] ; then
-    sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+    sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl --version=${KUBECTL_VERSION}
   else
     wget https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl
     chmod +x /usr/local/bin/kubectl
