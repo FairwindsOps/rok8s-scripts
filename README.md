@@ -24,19 +24,22 @@ DOCKERFILE='Dockerfile'
 # Docker tag that will be created
 DOCKERTAG='quay.io/exampleorg/example-app'
 
-# List of files ending in `.configmap.yml` in the kube directory
+# Cluster Namespace to work in
+NAMESPACE='default'
+
+# List of files ending in '.configmap.yml' in the kube directory
 CONFIGMAPS=()
 
-# List of files ending in `.secret.yml` in the kube directory
+# List of files ending in '.secret.yml' in the kube directory
 SECRETS=('example-app')
 
-# List of files ending in `.service.yml` in the kube directory
+# List of files ending in '.service.yml' in the kube directory
 SERVICES=('example-app')
 
-# List of files ending in `.deployment.yml` in the kube directory
+# List of files ending in '.deployment.yml' in the kube directory
 DEPLOYMENTS=('example-app')
 
-# List of files ending in `.job.yml` in the kube directory (Not supported yet)
+# List of files ending in '.job.yml' in the kube directory (Not supported yet)
 JOBS=()
 ```
 
@@ -69,32 +72,58 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 
 ## Commands
 
-`minikube-build`
+### docker-build
+
+Does a build of the current directory
+`docker build --rm=false -t $DOCKERTAG -f ${BASEDIR}/$DOCKERFILE ${BASEDIR}``
+
+### docker-pull
+
+Pulls from the registry the most recent build of the image. Useful for CI/CD layer caching
+
+### docker-push
+
+Pushes the recently build image to the registry
+
+### k8s-deploy
+
+Generates $CI_SHA1 suffixs for each of the files defined in your k8s-scripts config and uses
+`kubectl create` if the objects don't exist, `kubectl apply` if they do.
+
+Leverages kubernetes annotations with `--record` when creating objects.
+
+Verifies your deployment was successful within a specified timeout.
+
+### k8s-delete
+
+Nukes everything defined in your k8s-scripts config file.
+
+### minikube-build
 Switches to the minikube kubectl context, builds a Docker image form your current directory within the minikube Docker environment.
 
-`minikube-deploy`
+### minikube-deploy
 Switches the minikube kubectl context,
 
-`minikube-apply`
+### minikube-apply
 Switches to the minikube kubectl context, updates
 ConfigMaps, Secrets, and Deployments.
 
-`minikube-update`
+### minikube-update
 Runs `minikube-build` and `minikube-apply`
 
-`minikube-delete`
+### minikube-delete
 Switches to the minikube kubectl context and deletes
 all of the objects associated with the k8s-scripts.config
 
-`minikube-services`
+### minikube-services
 Switches to the minikube kubectl context and prints out the accessible ip:port
 of any services defined in the config file that are accessible from your local machine
 
-`minikube-services-all`
+### minikube-services-all
 Switches to the minikube kubectl context and prints all the accessible ip:port
 of all services that are accessible from your local machine
 
-`ensure-kubectl`
+### ensure-kubectl
 Makes sure kubectl is installed and available for use. Customize the version
 by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 

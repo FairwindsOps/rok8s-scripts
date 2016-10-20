@@ -2,6 +2,9 @@
 
 . k8s-read-config
 
+echo "DEPRECATION WARNING: This is likely to be removed in the near future"
+echo ""
+
 echo "Updating ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"
 do
