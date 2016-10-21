@@ -84,7 +84,32 @@ All scripts take an `-f configfile` option that allows you to specify which conf
 We recommend having the default, k8s-scripts.config, setup for your minikube environment, then
 specify `<env>.conf` for each of your environments.
 
-## deploy directory
+## Environment Variables
+
+When integrating the k8s-scripts into a CI/CD pipeline (such as CircleCI), it expects certain environment variables be set in order to function properly:
+
+```
+PATH=$PATH:node_modules/.bin
+EXTERNAL_REGISTRY_BASE_DOMAIN=(ex: {AWS_ACCOUNT_NUMBER}.dkr.ecr.us-west-2.amazonaws.com, us.gcr.io/{GCP_PROJECT}, etc)
+REPOSITORY_NAME=(ex: krails)
+
+CI_SHA1=$CIRCLE_SHA1
+CI_BRANCH=$CIRCLE_BRANCH
+CI_BUILD_NUM=$CIRCLE_BUILD_NUM
+
+DOCKERTAG=(ex: krails)
+SERVICENAME=(ex: krails)
+
+#AWS Specific
+REGISTRY_EMAIL=(ECR Login E-mail)
+REGISTRY_USERNAME=(ECR Login Username)
+
+# GCP Specific
+PATH=$PATH:$HOME/google-cloud-sdk/bin:node_modules/.bin
+GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud-service-key.json
+``` 
+
+## Deploy Directory
 
 Your kubernetes API object files should all be stored in the /deploy top level directory using consistent naming:
 

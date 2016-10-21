@@ -7,7 +7,9 @@ if [ -z "$DOCKERTAG" ];  then echo DOCKERTAG must be set; exit 1; fi
 if [ -z "$DOCKERFILE" ]; then echo DOCKERFILE must be set; exit 1; fi
 
 echo "Building ${DOCKERTAG} from ${BASEDIR}/${DOCKERFILE}"
-docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" "${BASEDIR}"
+echo "Build args: ${BUILD_ARGS}"
+docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" "${BASEDIR}" $(if [[ -n $BUILD_ARGS ]]; then echo "--build-arg $BUILD_ARGS "; fi) "${BASEDIR}"
+
 if [ $? -ne 0 ]
 then
   echo "Docker build failed! Aborting"
