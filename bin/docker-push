@@ -2,6 +2,7 @@
 
 . k8s-read-config "$@"
 
+CI_BRANCH=$(echo $CI_BRANCH | tr / _)
 echo "Pushing $DOCKERTAG:latest as $CI_SHA1, $CI_BRANCH, $CI_BUILD_NUM to ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
 
 docker tag $DOCKERTAG:latest ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_SHA1
