@@ -158,6 +158,27 @@ do
 done
 echo ""
 
+echo "Deploying Ingress"
+for index in "${!INGRESS_FILES[@]}"
+do
+  INGRES=${INGRESS[$index]}
+  INGRESS_FILE=${INGRESS_FILES[$index]}
+  kubectl get ingress ${INGRES} --namespace=$NAMESPACE &>/dev/null
+  if [ $? -ne 0 ]
+  then
+   echo "Ingress ${INGRES} does not exist yet, creating it"
+   kubectl create -f ${INGRESS_FILE} --namespace=$NAMESPACE --record
+   if [ $? -ne 0 ]
+   then
+     echo "Create failed, aborting"
+     exit 1
+   fi
+  else
+   echo "Ingress ${INGRES} already exists"
+  fi
+done
+echo "Done deploying Ingress"
+
 echo "Deploying Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do
