@@ -161,7 +161,7 @@ echo ""
 echo "Deploying Ingress"
 for index in "${!INGRESS_FILES[@]}"
 do
-  INGRES=${INGRESS[$index]}
+  INGRES=${INGRESS[$index]##*/}
   INGRESS_FILE=${INGRESS_FILES[$index]}
   kubectl get ingress ${INGRES} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
@@ -182,7 +182,7 @@ echo "Done deploying Ingress"
 echo "Deploying Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do
-  DEPLOYMENT=${DEPLOYMENTS[$index]}
+  DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
   DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
   kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
