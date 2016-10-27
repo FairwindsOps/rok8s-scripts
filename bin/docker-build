@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. k8s-read-config "$@"
+# . k8s-read-config "$@"
 
 echo "Building $DOCKERTAG from $BASEDIR/$DOCKERFILE"
 docker build --rm=false -t $DOCKERTAG -f ${BASEDIR}/$DOCKERFILE ${BASEDIR}
