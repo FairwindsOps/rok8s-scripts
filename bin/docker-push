@@ -2,6 +2,13 @@
 
 . k8s-read-config "$@"
 
+if [ -z "$EXTERNAL_REGISTRY_BASE_DOMAIN" ]; then echo EXTERNAL_REGISTRY_BASE_DOMAIN must be set; exit 1; fi
+if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be set; exit 1; fi
+if [ -z "$DOCKERTAG" ];                     then echo DOCKERTAG must be set; exit 1; fi
+if [ -z "$CI_SHA1" ];                       then echo CI_SHA1 must be set; exit 1; fi
+if [ -z "$CI_BRANCH" ];                     then echo CI_BRANCH must be set; exit 1; fi
+if [ -z "$CI_BUILD_NUM" ];                  then echo CI_BUILD_NUM must be set; exit 1; fi
+
 CI_BRANCH=$(echo $CI_BRANCH | tr / _)
 echo "Pushing $DOCKERTAG:latest as $CI_SHA1, $CI_BRANCH, $CI_BUILD_NUM to ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
 
