@@ -6,27 +6,24 @@ echo "DEPRECATION WARNING: This is likely to be removed in the near future"
 echo ""
 
 echo "Updating ConfigMaps"
-for index in "${!CONFIGMAP_FILES[@]}"
+for CONFIGMAP_FILE in "${CONFIGMAP_FILES[@]}"
 do
-  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
   echo "Updating $CONFIGMAP_FILE"
   kubectl apply -f $CONFIGMAP_FILE --namespace=$NAMESPACE
 done
 echo "Done updating ConfigMaps"
 
 echo "Updating Secrets"
-for index in "${!SECRET_FILES[@]}"
+for SECRET_FILE in "${SECRET_FILES[@]}"
 do
-  SECRET_FILE=${SECRET_FILES[$index]}
   echo "Updating $SECRET_FILE"
   kubectl apply -f $SECRET_FILE --namespace=$NAMESPACE
 done
 echo "Done updating Secrets"
 
 echo "Updating Deployments"
-for index in "${!DEPLOYMENT_FILES[@]}"
+for DEPLOYMENT_FILE in "${DEPLOYMENT_FILES[@]}"
 do
-  DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
   echo "Updating $DEPLOYMENT_FILE"
   kubectl apply -f $DEPLOYMENT_FILE --namespace=$NAMESPACE
 done
@@ -34,9 +31,8 @@ echo "Done updating Deployments"
 echo ""
 
 echo "Verifying successful deployments"
-for index in "${!DEPLOYMENTS[@]}"
+for DEPLOYMENT in "${DEPLOYMENTS[@]}"
 do
-  DEPLOYMENT=${DEPLOYMENTS[$index]}
   echo "Checking deployment for $DEPLOYMENT"
   timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
   result=$?
