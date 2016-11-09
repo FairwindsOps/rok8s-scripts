@@ -12,19 +12,12 @@ then
   exit 1
 fi
 
-if [ -z "$1" ]
-then
-  echo "ERROR: No Job specified"
-  exit 1
-fi
-
 JOB_NAME="$1"
-NAMESPACE=${2:=default}
-
 POLL_TRIES=${POLL_TRIES:-30}
 POLL_WAIT=${POLL_WAIT:-10}
 
 ACTIVE=$(kubectl get job -o json $JOB_NAME --namespace=${2:=default} |jq .status.active)
+
 if [ "$ACTIVE" != 1 ]
 then
   echo "Blocking job $JOB_NAME hasn't started, something is wrong"
