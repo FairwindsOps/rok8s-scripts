@@ -59,6 +59,9 @@ JOBS=()
 # List of files ending in '.blockingjob.yml' in the kube directory (Not supported yet)
 BLOCKING_JOBS=()
 
+# List of files ending in '.deployment.yml' in the kube directory
+DEPLOYMENTS=('example-app')
+
 EOT
 
 echo "Wrote example config to $CONFIG"
