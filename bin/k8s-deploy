@@ -179,6 +179,27 @@ do
 done
 echo "Done deploying Ingress"
 
+echo "Deploying Jobs"
+for index in "${!JOBS_FILES[@]}"
+do
+  JOB=${JOBS[$index]##*/}
+  JOB_FILE=${JOBS_FILES[$index]}
+  kubectl get job ${JOB} --namespace=$NAMESPACE &>/dev/null
+  if [ $? -ne 0 ]
+  then
+   echo "Job ${JOB} does not exist yet, creating it"
+   kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record
+   if [ $? -ne 0 ]
+   then
+     echo "Create failed, aborting"
+     exit 1
+   fi
+  else
+   echo "Job ${JOB} already exists"
+  fi
+done
+echo "Done deploying Job"
+
 echo "Deploying Blocking Jobs"
 for index in "${!BLOCKING_JOBS_FILES[@]}"
 do
