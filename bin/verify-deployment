@@ -8,7 +8,7 @@ fi
 echo "Checking deployment generation"
 OBS_GEN=-1
 CURRENT_GEN=0
-until [ $OBS_GEN -ge $CURRENT_GEN ]; do
+until [[ $OBS_GEN -ge $CURRENT_GEN ]]; do
   sleep 1
   CURRENT_GEN=$(kubectl get deployment ${1} --namespace=${2:=default} -o yaml | grep generation | awk '{print $2}')
   OBS_GEN=$(kubectl get deployment ${1} --namespace=${2:=default} -o yaml | grep Generation | awk '{print $2}')
@@ -19,7 +19,7 @@ echo "observedGeneration ($OBS_GEN) is >= generation ($CURRENT_GEN)"
 echo "Checking for updatedReplicas to equal replicas"
 UPDATED_REPLIACS=-1
 REPLICAS=0
-until [ "$UPDATED_REPLIACS" == "$REPLICAS" ]; do
+until [[ "$UPDATED_REPLIACS" == "$REPLICAS" ]]; do
   sleep 1
   REPLICAS=$(kubectl get deployment ${1} --namespace=${2:=default} -o yaml | grep replicas | sed -n 2p | awk '{print $2}')
   UPDATED_REPLIACS=$(kubectl get deployment ${1} --namespace=${2:=default} -o yaml | grep updatedReplicas | awk '{print $2}')
@@ -30,7 +30,7 @@ echo "updatedReplicas ($UPDATED_REPLIACS) is == replicas ($REPLICAS)."
 echo "Checking for availableReplicas to equal replicas"
 AVAILABLE_REPLICAS=-1
 REPLICAS=0
-until [ "$AVAILABLE_REPLICAS" == "$REPLICAS" ]; do
+until [[ "$AVAILABLE_REPLICAS" == "$REPLICAS" ]]; do
   sleep 1
   REPLICAS=$(kubectl get deployment ${1} --namespace=${2:=default} -o yaml | grep replicas | sed -n 2p | awk '{print $2}')
   AVAILABLE_REPLICAS=$(kubectl get deployment ${1} --namespace=${2:=default} -o yaml | grep -e "\bavailableReplicas" | awk '{print $2}')
