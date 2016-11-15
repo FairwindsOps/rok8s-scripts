@@ -99,7 +99,7 @@ Verifies your deployment was successful within a specified timeout.
 Nukes everything defined in your k8s-scripts config file.
 
 ### minikube-build
-Switches to the minikube kubectl context, builds a Docker image form your current directory within the minikube Docker environment.
+Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.
 
 ### minikube-deploy
 Switches the minikube kubectl context, then runs `k8s-deploy`
