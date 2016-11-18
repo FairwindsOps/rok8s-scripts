@@ -69,3 +69,12 @@ do
 done
 echo "[deployment_files]: $DEPLOYMENT_FILES"
 echo ""
+
+echo "[blocking jobs]: $BLOCKING_JOBS"
+BLOCKING_JOBS_FILES=()
+for i in "${BLOCKING_JOBS[@]}"
+do
+  BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockjob.yml)
+done
+echo "[blocking_jobs_files]: $BLOCKING_JOBS_FILES"
+echo ""
