@@ -8,9 +8,9 @@ echo ""
 echo "Updating ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"
 do
-  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
-  echo "Updating $CONFIGMAP_FILE"
-  kubectl apply -f $CONFIGMAP_FILE --namespace=$NAMESPACE
+  CONFIGMAP_FILE="${CONFIGMAP_FILES[$index]}"
+  echo "Updating ${CONFIGMAP_FILE}"
+  kubectl apply -f "${CONFIGMAP_FILE}" --namespace="${NAMESPACE}"
 done
 echo "Done updating ConfigMaps"
 echo ""
@@ -18,9 +18,9 @@ echo ""
 echo "Updating Secrets"
 for index in "${!SECRET_FILES[@]}"
 do
-  SECRET_FILE=${SECRET_FILES[$index]}
-  echo "Updating $SECRET_FILE"
-  kubectl apply -f $SECRET_FILE --namespace=$NAMESPACE
+  SECRET_FILE="${SECRET_FILES[$index]}"
+  echo "Updating ${SECRET_FILE}"
+  kubectl apply -f "${SECRET_FILE}" --namespace="${NAMESPACE}"
 done
 echo "Done updating Secrets"
 echo ""
@@ -29,8 +29,8 @@ echo "Updating Jobs"
 for index in "${!JOBS_FILES[@]}"
 do
   JOB_FILE=${JOBS_FILES[$index]}
-  echo "Updating $JOB_FILE"
-  kubectl apply -f $JOB_FILE --namespace=$NAMESPACE
+  echo "Updating ${JOB_FILE}"
+  kubectl apply -f "${JOB_FILE}" --namespace="${NAMESPACE}"
 done
 echo "Done updating Jobs"
 echo ""
@@ -39,8 +39,8 @@ echo "Updating Ingress Resources"
 for index in "${!INGRESS_FILES[@]}"
 do
   INGRESS_FILE=${INGRESS_FILES[$index]}
-  echo "Updating $INGRESS_FILE"
-  kubectl apply -f $INGRESS_FILE --namespace=$NAMESPACE
+  echo "Updating ${INGRESS_FILE}"
+  kubectl apply -f "${INGRESS_FILE}" --namespace="${NAMESPACE}"
 done
 echo "Done updating Ingress Resources"
 echo ""
@@ -48,9 +48,9 @@ echo ""
 echo "Updating Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do
-  DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
-  echo "Updating $DEPLOYMENT_FILE"
-  kubectl apply -f $DEPLOYMENT_FILE --namespace=$NAMESPACE
+  DEPLOYMENT_FILE="${DEPLOYMENT_FILES[$index]}"
+  echo "Updating ${DEPLOYMENT_FILE}"
+  kubectl apply -f "${DEPLOYMENT_FILE}" --namespace="${NAMESPACE}"
 done
 echo "Done updating Deployments"
 echo ""
@@ -58,19 +58,19 @@ echo ""
 echo "Verifying successful deployments"
 for index in "${!DEPLOYMENTS[@]}"
 do
-  DEPLOYMENT=${DEPLOYMENTS[$index]}
-  echo "Checking deployment for $DEPLOYMENT"
-  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
+  DEPLOYMENT="${DEPLOYMENTS[$index]}"
+  echo "Checking deployment for ${DEPLOYMENT}"
+  timeout.sh -t "${DEPLOY_TIMEOUT}" verify-deployment "${DEPLOYMENT}" "${NAMESPACE}"
   result=$?
-  if [ "$result" == "143" ] ; then
+  if [ "${result}" == "143" ] ; then
       echo "------- DEPLOYMENT TIMEOUT FAIL --------"
       exit 1
   fi
-  if [ "$result" == "0" ] ; then
+  if [ "${result}" == "0" ] ; then
     echo "DEPLOY SUCCESFULL"
   else
     echo "DEPLOY FAILED"
-    exit $result
+    exit ${result}
   fi
 done
 
