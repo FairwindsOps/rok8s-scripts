@@ -24,8 +24,16 @@ cat <<EOT >> $CONFIG
 # Dockerfile to build
 DOCKERFILE='Dockerfile'
 
+# External registry domain
+EXTERNAL_REGISTRY_BASE_DOMAIN=quay.io/example-org
+
+# Name of repository/project
+REPOSITORY_NAME='example-app'
+
 # Docker tag that will be created
-DOCKERTAG='quay.io/exampleorg/example-app'
+# Defaults to concatenation of your external registry + repository name, i.e.:
+# DOCKERTAG=quay.io/example-org/example-app
+DOCKERTAG="${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
 
 # Namespace to work in
 NAMESPACE='default'
