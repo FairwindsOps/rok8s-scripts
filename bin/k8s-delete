@@ -18,6 +18,14 @@ do
 done
 echo "Done deleting Secrets"
 
+echo "Deleting Blocking Jobs"
+for index in "${!BLOCKING_JOBS_FILES[@]}"
+do
+  BLOCKING_JOB_FILE=${BLOCKING_JOBS_FILES[$index]}
+  kubectl delete -f $BLOCKING_JOB_FILE --namespace=$NAMESPACE || true
+done
+echo "Done deleting Blocking Jobs"
+
 echo "Deleting Services"
 for index in "${!SERVICE_FILES[@]}"
 do
