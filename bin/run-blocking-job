@@ -6,6 +6,12 @@
 # and JOB_NAME should match the job's metadata.name attribute
 # Usage: ./script/run-migrations.sh JOB_NAME
 
+if [ -z "$1" ]
+then
+  echo "ERROR: No blocking job specified"
+  exit 1
+fi
+
 JOB_NAME="$1"
 KUBERNETES_CONFIG_PATH=${KUBERNETES_CONFIG_PATH:-kube}
 POLL_TRIES=${POLL_TRIES:-30}
