@@ -5,7 +5,7 @@ Opinionated scripts for managing application development and deployment lifecycl
 ## How to Install
 
 ```
-npm install -g k8s-scripts
+npm install -g reactiveops/k8s-scripts
 ```
 
 Then in your top-level project directory:
