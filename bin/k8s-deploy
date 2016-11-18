@@ -87,7 +87,7 @@ for index in "${!BLOCKING_JOBS[@]}"
 do
   BLOCKING_JOB=${BLOCKING_JOBS[$index]##*/}
   echo "Checking jobs for $BLOCKING_JOB"
-  timeout.sh -t ${DEPLOY_TIMEOUT} run-blocking-job $BLOCKING_JOB $NAMESPACE
+  timeout.sh -t ${BLOCKING_JOB_TIMEOUT} run-blocking-job $BLOCKING_JOB $NAMESPACE
   result=$?
   if [ "$result" == "143" ] ; then
       echo "------- BLOCKING JOB TIMEOUT FAIL --------"

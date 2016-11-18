@@ -22,6 +22,8 @@ done
 
 BASEDIR=$(pwd)
 DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
+BLOCKING_JOB_TIMEOUT=${BLOCKING_JOB_TIMEOUT:-300}
+
 CONFIG=${CONFIG_FILE:-deploy/k8s-scripts.config}
 if test -f $BASEDIR/$CONFIG ; then
   echo "Loading configuration from ${BASEDIR}/$CONFIG"
