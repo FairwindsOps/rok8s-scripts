@@ -34,6 +34,14 @@ do
 done
 echo "Done deleting Services"
 
+echo "Deleting Ingress Resources"
+for index in "${!INGRESS_FILES[@]}"
+do
+  INGRESS_FILE=${INGRESS_FILES[$index]}
+  kubectl delete -f $INGRESS_FILE --namespace=$NAMESPACE || true
+done
+echo "Done deleting Ingress Resources"
+
 echo "Deleting Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do

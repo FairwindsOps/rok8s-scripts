@@ -37,6 +37,9 @@ SECRETS=('example-app')
 # List of files ending in '.service.yml' in the kube directory
 SERVICES=('example-app')
 
+# List of files ending in '.ingress.yml' in the kube directory
+INGRESSES=()
+
 # List of files ending in '.deployment.yml' in the kube directory
 DEPLOYMENTS=('example-app')
 
@@ -73,6 +76,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * ConfigMaps end in `configmap.yml`
 * Services end in `service.yml`
 * Jobs end in `job.yml`
+* Ingress Resources end in `ingress.yml`
 
 ## Commands
 

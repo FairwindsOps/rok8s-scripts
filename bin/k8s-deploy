@@ -56,6 +56,27 @@ do
 done
 echo "Done deploying Services"
 
+echo "Deploying Ingress Resources"
+for index in "${!INGRESS_FILES[@]}"
+do
+  INGRESS=${INGRESSES[$index]##*/}
+  INGRESS_FILE=${INGRESS_FILES[$index]}
+  kubectl get ingress ${INGRESS} --namespace=$NAMESPACE &>/dev/null
+  if [ $? -ne 0 ]
+  then
+   echo "Ingress Resource ${INGRESS} does not exist yet, creating it"
+   kubectl create -f ${INGRESS_FILE} --namespace=$NAMESPACE --record
+   if [ $? -ne 0 ]
+   then
+     echo "Create failed, aborting"
+     exit 1
+   fi
+  else
+   echo "Ingress Resource ${INGRESS} already exists"
+  fi
+done
+echo "Done deploying Ingress Resources"
+
 echo "Deploying Blocking Jobs"
 for index in "${!BLOCKING_JOBS_FILES[@]}"
 do
