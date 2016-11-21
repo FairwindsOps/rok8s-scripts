@@ -17,6 +17,7 @@ for index in "${!CONFIGMAP_FILES[@]}"; do
   fi
 done
 echo "Done deploying ConfigMaps"
+echo ""
 
 echo "Deploying Secrets"
 for index in "${!SECRET_FILES[@]}"
@@ -34,6 +35,7 @@ do
   fi
 done
 echo "Done deploying Secrets"
+echo ""
 
 echo "Deploying Services"
 for index in "${!SERVICE_FILES[@]}"
@@ -55,6 +57,29 @@ do
   fi
 done
 echo "Done deploying Services"
+echo ""
+
+echo "Deploying Jobs"
+for index in "${!JOBS_FILES[@]}"
+do
+  JOB=${JOBS[$index]##*/}
+  JOB_FILE=${JOBS_FILES[$index]}
+  kubectl get job ${JOB} --namespace=$NAMESPACE &>/dev/null
+  if [ $? -ne 0 ]
+  then
+   echo "Job ${JOB} does not exist yet, creating it"
+   kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record
+   if [ $? -ne 0 ]
+   then
+     echo "Create failed, aborting"
+     exit 1
+   fi
+  else
+   echo "Job ${JOB} already exists"
+  fi
+done
+echo "Done deploying Job"
+echo ""
 
 echo "Deploying Ingress Resources"
 for index in "${!INGRESS_FILES[@]}"
@@ -131,6 +156,7 @@ do
     exit $result
   fi
 done
+echo ""
 
 echo "Deploying Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
