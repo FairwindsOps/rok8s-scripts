@@ -120,7 +120,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Deployment ${DEPLOYMENT} does not exist yet, creating it"
-   kubectl create -f ${DEPLOYMENT_FILE} --record
+   kubectl create -f ${DEPLOYMENT_FILE} --record --namespace=$NAMESPACE
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
