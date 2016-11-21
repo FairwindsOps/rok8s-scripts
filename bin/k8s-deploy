@@ -56,6 +56,51 @@ do
 done
 echo "Done deploying Services"
 
+echo "Deploying Blocking Jobs"
+for index in "${!BLOCKING_JOBS_FILES[@]}"
+do
+  BLOCKING_JOB=${BLOCKING_JOBS[$index]##*/}
+  BLOCKING_JOB_FILE=${BLOCKING_JOBS_FILES[$index]}
+  kubectl get job ${BLOCKING_JOB} --namespace=$NAMESPACE &>/dev/null
+  if [ $? -ne 0 ]
+  then
+   echo "Blocking Job ${BLOCKING_JOB} does not exist yet, creating it"
+   kubectl create -f ${BLOCKING_JOB_FILE} --record
+   if [ $? -ne 0 ]
+   then
+     echo "Create failed, aborting"
+     exit 1
+   fi
+  fi
+  kubectl apply -f ${BLOCKING_JOB_FILE} --namespace=$NAMESPACE
+  if [ $? -ne 0 ]
+  then
+    echo "Apply failed, aborting"
+    exit 1
+  fi
+done
+echo "Done deploying Blocking Jobs"
+echo ""
+
+echo "Running Blocking Jobs"
+for index in "${!BLOCKING_JOBS[@]}"
+do
+  BLOCKING_JOB=${BLOCKING_JOBS[$index]##*/}
+  echo "Checking jobs for $BLOCKING_JOB"
+  timeout.sh -t ${BLOCKING_JOB_TIMEOUT} run-blocking-job $BLOCKING_JOB $NAMESPACE
+  result=$?
+  if [ "$result" == "143" ] ; then
+      echo "------- BLOCKING JOB TIMEOUT FAIL --------"
+      exit 1
+  fi
+  if [ "$result" == "0" ] ; then
+    echo "BLOCKING JOB SUCCESFULL"
+  else
+    echo "BLOCKING JOB FAILED"
+    exit $result
+  fi
+done
+
 echo "Deploying Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do

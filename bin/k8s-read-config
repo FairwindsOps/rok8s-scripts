@@ -22,6 +22,8 @@ done
 
 BASEDIR=$(pwd)
 DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
+BLOCKING_JOB_TIMEOUT=${BLOCKING_JOB_TIMEOUT:-300}
+
 CONFIG=${CONFIG_FILE:-deploy/k8s-scripts.config}
 if test -f $BASEDIR/$CONFIG ; then
   echo "Loading configuration from ${BASEDIR}/$CONFIG"
@@ -68,4 +70,13 @@ do
   DEPLOYMENT_FILES+=($BASEDIR/deploy/$i.deployment.yml)
 done
 echo "[deployment_files]: $DEPLOYMENT_FILES"
+echo ""
+
+echo "[blocking jobs]: $BLOCKING_JOBS"
+BLOCKING_JOBS_FILES=()
+for i in "${BLOCKING_JOBS[@]}"
+do
+  BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
+done
+echo "[blocking_jobs_files]: $BLOCKING_JOBS_FILES"
 echo ""
