@@ -61,11 +61,21 @@ for index in "${!BLOCKING_JOBS_FILES[@]}"
 do
   BLOCKING_JOB=${BLOCKING_JOBS[$index]##*/}
   BLOCKING_JOB_FILE=${BLOCKING_JOBS_FILES[$index]}
+
+  # If we are runnin in CI, replace :latest with the CI_SHA1
+  if [ -n "$CI_SHA1" ]
+  then
+    echo "Updating image tag from latest to ${CI_SHA1} for ${BLOCKING_JOB_FILE}"
+    sed 's/:latest/':${CI_SHA1}'/g;' ${BLOCKING_JOB_FILE} > ${BLOCKING_JOB_FILE}-${CI_SHA1}
+    echo "Updating ${BLOCKING_JOB_FILE}-${CI_SHA1}"
+    BLOCKING_JOB_FILE=${BLOCKING_JOB_FILE}-${CI_SHA1}
+  fi
+
   kubectl get job ${BLOCKING_JOB} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
   then
    echo "Blocking Job ${BLOCKING_JOB} does not exist yet, creating it"
-   kubectl create -f ${BLOCKING_JOB_FILE} --record
+   kubectl create -f ${BLOCKING_JOB_FILE} --record --namespace=$NAMESPACE
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -110,7 +120,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Deployment ${DEPLOYMENT} does not exist yet, creating it"
-   kubectl create -f ${DEPLOYMENT_FILE} --record
+   kubectl create -f ${DEPLOYMENT_FILE} --record --namespace=$NAMESPACE
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
