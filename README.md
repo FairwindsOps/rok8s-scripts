@@ -76,6 +76,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * ConfigMaps end in `configmap.yml`
 * Services end in `service.yml`
 * Jobs end in `job.yml`
+* Ingress Resources end in `ingress.yml`
 
 ## Commands
 
