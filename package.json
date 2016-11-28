@@ -15,6 +15,7 @@
 	"verify-deployment": "./bin/verify-deployment.sh",
 	"timeout.sh": "./bin/timeout.sh",
 	"k8s-apply": "./bin/k8s-apply",
+	"k8s-run-blocking-job": "./bin/k8s-run-blocking-job",
 	"minikube-services": "./bin/minikube-services",
 	"minikube-services-all": "./bin/minikube-services-all",
 	"rolling-update": "./bin/rolling-update.sh",
