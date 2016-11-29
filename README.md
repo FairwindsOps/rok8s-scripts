@@ -49,8 +49,6 @@ JOBS=()
 # List of files ending in '.blockingjob.yml' in the kube directory
 BLOCKING_JOBS=()
 
-# List of files ending in '.deployment.yml' in the kube directory
-DEPLOYMENTS=('example-app')
 
 ```
 

@@ -45,27 +45,6 @@ done
 echo "Done updating Ingress Resources"
 echo ""
 
-echo "Updating Jobs"
-for index in "${!JOBS_FILES[@]}"
-do
-  JOB_FILE=${JOBS_FILES[$index]}
-  echo "Updating $JOB_FILE"
-  kubectl apply -f $JOB_FILE --namespace=$NAMESPACE
-done
-echo "Done updating Jobs"
-echo ""
-
-echo "Updating Ingress"
-for index in "${!INGRESS_FILES[@]}"
-do
-  INGRESS_FILE=${INGRESS_FILES[$index]}
-  echo "Updating $INGRESS_FILE"
-  kubectl apply -f $INGRESS_FILE --namespace=$NAMESPACE
-done
-echo "Done updating Ingress"
-echo ""
-
-
 echo "Updating Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do
