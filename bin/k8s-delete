@@ -3,17 +3,15 @@
 . k8s-read-config
 
 echo "Deleting ConfigMaps"
-for index in "${!CONFIGMAP_FILES[@]}"
+for CONFIGMAP_FILE in "${CONFIGMAP_FILES[@]}"
 do
-  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
   kubectl delete -f $CONFIGMAP_FILE --namespace=$NAMESPACE || true
 done
 echo "Done deleting ConfigMaps"
 
 echo "Deleting Secrets"
-for index in "${!SECRET_FILES[@]}"
+for SECRET_FILE in "${SECRET_FILES[@]}"
 do
-  SECRET_FILE=${SECRET_FILES[$index]}
   kubectl delete -f $SECRET_FILE --namespace=$NAMESPACE || true
 done
 echo "Done deleting Secrets"
@@ -36,9 +34,8 @@ echo "Done deleting Jobs"
 echo ""
 
 echo "Deleting Services"
-for index in "${!SERVICE_FILES[@]}"
+for SERVICE_FILE in "${SERVICE_FILES[@]}"
 do
-  SERVICE_FILE=${SERVICE_FILES[$index]}
   kubectl delete -f $SERVICE_FILE --namespace=$NAMESPACE || true
 done
 echo "Done deleting Services"
@@ -53,9 +50,8 @@ done
 echo "Done deleting Ingress Resources"
 
 echo "Deleting Deployments"
-for index in "${!DEPLOYMENT_FILES[@]}"
+for DEPLOYMENT_FILE in "${DEPLOYMENT_FILES[@]}"
 do
-  DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
   kubectl delete -f $DEPLOYMENT_FILE --namespace=$NAMESPACE || true
 done
 echo "Done deleting Deployments"

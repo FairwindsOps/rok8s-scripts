@@ -3,8 +3,7 @@
 . k8s-read-config
 
 echo "Deploying ConfigMaps"
-for index in "${!CONFIGMAP_FILES[@]}"; do
-  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
+for CONFIGMAP_FILE in "${CONFIGMAP_FILES[@]}"; do
   echo "Appending ${CI_SHA1} to configmap filename"
   cp ${CONFIGMAP_FILE} ${CONFIGMAP_FILE}-${CI_SHA1}
   CONFIGMAP_FILE=${CONFIGMAP_FILE}-${CI_SHA1}
@@ -20,9 +19,8 @@ echo "Done deploying ConfigMaps"
 echo ""
 
 echo "Deploying Secrets"
-for index in "${!SECRET_FILES[@]}"
+for SECRET_FILE in "${SECRET_FILES[@]}"
 do
-  SECRET_FILE=${SECRET_FILES[$index]}
   echo "Appending ${CI_SHA1} to secret filename"
   cp ${SECRET_FILE} ${SECRET_FILE}-${CI_SHA1}
   SECRET_FILE=${SECRET_FILE}-${CI_SHA1}
@@ -193,9 +191,8 @@ echo "Done deploying Deployments"
 echo ""
 
 echo "Verifying successful deployments"
-for index in "${!DEPLOYMENTS[@]}"
+for DEPLOYMENT in "${DEPLOYMENTS[@]}"
 do
-  DEPLOYMENT=${DEPLOYMENTS[$index]}
   echo "Checking deployment for $i"
   timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
   result=$?
