@@ -13,6 +13,7 @@ do
   kubectl apply -f $CONFIGMAP_FILE --namespace=$NAMESPACE
 done
 echo "Done updating ConfigMaps"
+echo ""
 
 echo "Updating Secrets"
 for index in "${!SECRET_FILES[@]}"
@@ -22,6 +23,17 @@ do
   kubectl apply -f $SECRET_FILE --namespace=$NAMESPACE
 done
 echo "Done updating Secrets"
+echo ""
+
+echo "Updating Jobs"
+for index in "${!JOBS_FILES[@]}"
+do
+  JOB_FILE=${JOBS_FILES[$index]}
+  echo "Updating $JOB_FILE"
+  kubectl apply -f $JOB_FILE --namespace=$NAMESPACE
+done
+echo "Done updating Jobs"
+echo ""
 
 echo "Updating Ingress Resources"
 for index in "${!INGRESS_FILES[@]}"

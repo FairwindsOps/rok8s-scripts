@@ -26,6 +26,15 @@ do
 done
 echo "Done deleting Blocking Jobs"
 
+echo "Deleting Jobs"
+for index in "${!JOBS_FILES[@]}"
+do
+  JOB_FILE=${JOBS_FILES[$index]}
+  kubectl delete -f $JOB_FILE --namespace=$NAMESPACE || true
+done
+echo "Done deleting Jobs"
+echo ""
+
 echo "Deleting Services"
 for index in "${!SERVICE_FILES[@]}"
 do
@@ -33,6 +42,7 @@ do
   kubectl delete -f $SERVICE_FILE --namespace=$NAMESPACE || true
 done
 echo "Done deleting Services"
+echo ""
 
 echo "Deleting Ingress Resources"
 for index in "${!INGRESS_FILES[@]}"
