@@ -2,7 +2,7 @@
 
 # Runs a Kubernetes Job once. Designed for a single, non-parallel job, typically db migrations
 # http://kubernetes.io/docs/user-guide/jobs/#parallel-jobs
-# The job needs to be located in KUBERNETES_CONFIG_PATH, named ${JOB_NAME}.job.yml,
+# The job needs to be located in $BASEDIR/deploy, named ${JOB_NAME}.job.yml,
 # and JOB_NAME should match the job's metadata.name attribute
 # Usage: ./script/run-migrations.sh JOB_NAME
 
@@ -17,6 +17,7 @@ POLL_TRIES=${POLL_TRIES:-30}
 POLL_WAIT=${POLL_WAIT:-10}
 
 ACTIVE=$(kubectl get job -o json $JOB_NAME --namespace=${2:=default} |jq .status.active)
+
 if [ "$ACTIVE" != 1 ]
 then
   echo "Blocking job $JOB_NAME hasn't started, something is wrong"

@@ -40,7 +40,7 @@ echo ""
 echo "Deploying Services"
 for index in "${!SERVICE_FILES[@]}"
 do
-  SERVICE=${SERVICES[$index]}
+  SERVICE=${SERVICES[$index]##*/}
   SERVICE_FILE=${SERVICE_FILES[$index]}
   kubectl get service ${SERVICE} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
@@ -161,7 +161,7 @@ echo ""
 echo "Deploying Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do
-  DEPLOYMENT=${DEPLOYMENTS[$index]}
+  DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
   DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
   kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
@@ -195,8 +195,8 @@ echo ""
 echo "Verifying successful deployments"
 for index in "${!DEPLOYMENTS[@]}"
 do
-  DEPLOYMENT=${DEPLOYMENTS[$index]}
-  echo "Checking deployment for $i"
+  DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
+  echo "Checking deployment for $DEPLOYMENT"
   timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
   result=$?
   if [ "$result" == "143" ] ; then
