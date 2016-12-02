@@ -1,0 +1,13 @@
+machine:
+  environment:
+    GITHUB_ORGANIZATION: $CIRCLE_PROJECT_USERNAME
+    GITHUB_REPOSITORY: $CICLE_REPOSITORY_REPONAME
+
+deployment:
+  release:
+    tag: /v.*/
+    owner: reactiveops
+    commands:
+      - git fetch --tags
+      - curl -O https://raw.githubusercontent.com/reactiveops/release.sh/master/release.sh
+      - /bin/bash release.sh
