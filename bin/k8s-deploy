@@ -163,6 +163,13 @@ for index in "${!DEPLOYMENT_FILES[@]}"
 do
   DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
   DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
+  if [ -n "$CI_SHA1" ]
+  then
+    echo "Updating image tag from latest to ${CI_SHA1} for ${DEPLOYMENT_FILE}"
+    sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
+    echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
+    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
+  fi
   kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
   then
@@ -173,13 +180,6 @@ do
      echo "Create failed, aborting"
      exit 1
    fi
-  fi
-  if [ -n "$CI_SHA1" ]
-  then
-    echo "Updating image tag from latest to ${CI_SHA1} for ${DEPLOYMENT_FILE}"
-    sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
-    echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
-    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
   fi
   kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE
   if [ $? -ne 0 ]
