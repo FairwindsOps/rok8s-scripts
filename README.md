@@ -134,3 +134,7 @@ by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 ## Assumptions
 
 * In your Deployment file, specify imagePullPolicy: IfNotPresent
+
+# Releasing
+
+This repo follows the [ReactiveOps release process](https://github.com/reactiveops/docs/blob/master/engineering/software-releases.md).

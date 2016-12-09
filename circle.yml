@@ -1,3 +1,8 @@
+machine:
+  environment:
+    GITHUB_ORGANIZATION: $CIRCLE_PROJECT_USERNAME
+    GITHUB_REPOSITORY: $CICLE_REPOSITORY_REPONAME
+
 dependencies:
   pre:
     - sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu trusty-backports main restricted universe"
@@ -7,3 +12,12 @@ dependencies:
 test:
   override:
     - shellcheck bin/docker-* bin/ensure-kubectl bin/k8s-apply
+
+deployment:
+  release:
+    tag: /v.*/
+    owner: reactiveops
+    commands:
+      - git fetch --tags
+      - curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.1/release.sh
+      - /bin/bash release.sh
