@@ -7,16 +7,16 @@ if ! hash aws 2>/dev/null; then
   pip install awscli
 fi
 
-if [ -z "$AWS_ECR_ACCOUNT_ID" ]; then
-	eval $(aws ecr get-login --region $AWS_DEFAULT_REGION)
+if [ -z "${AWS_ECR_ACCOUNT_ID}" ]; then
+	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}")"
 else
-	eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --registry-ids ${AWS_ECR_ACCOUNT_ID})
+	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}" --registry-ids "${AWS_ECR_ACCOUNT_ID}")"
 fi
 
 # Warm the local docker cache (aka the local docker images) by pulling the previous commit and the images
 # tagged with the current branch, if they exist.
 # This should exit 0 even if the image is not there. For example, on a first run
 PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
-CI_BRANCH=$(echo $CI_BRANCH | tr / _)
-docker pull ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT || true
-docker pull ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH || true
+CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
+docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" || true
+docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" || true
