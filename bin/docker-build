@@ -8,7 +8,13 @@ if [ -z "$DOCKERFILE" ]; then echo DOCKERFILE must be set; exit 1; fi
 
 echo "Building ${DOCKERTAG} from ${BASEDIR}/${DOCKERFILE}"
 echo "Build args: ${BUILD_ARGS}"
-docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" "${BASEDIR}" $(if [[ -n $BUILD_ARGS ]]; then echo "--build-arg $BUILD_ARGS "; fi) "${BASEDIR}"
+
+if [[ -n "${BUILD_ARGS}" ]]; then
+  BUILD_ARGS="--build-arg ${BUILD_ARGS}"
+fi
+
+# shellcheck disable=SC2086
+docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" ${BUILD_ARGS+"$BUILD_ARGS"} "${BASEDIR}"
 
 if [ $? -ne 0 ]
 then
