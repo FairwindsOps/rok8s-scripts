@@ -59,6 +59,28 @@ done
 echo "Done deploying Persistent Volumes"
 echo ""
 
+echo "Deploying Persistent Volume Claims"
+for index in "${!PERSISTENT_VOLUME_CLAIM_FILES[@]}"
+do
+  PERSISTENT_VOLUME_CLAIM=${PERSISTENT_VOLUME_CLAIMS[$index]##*/}
+  PERSISTENT_VOLUME_CLAIM_FILE=${PERSISTENT_VOLUME_CLAIM_FILES[$index]}
+  kubectl get persistentvolumeclaims ${PERSISTENT_VOLUME_CLAIM} --namespace=$NAMESPACE &>/dev/null
+  if [ $? -ne 0 ]
+  then
+   echo "Persistent Volume Claim ${PERSISTENT_VOLUME_CLAIM} does not exist yet, creating it"
+   kubectl create -f ${PERSISTENT_VOLUME_CLAIM_FILE} --namespace=$NAMESPACE --record
+   if [ $? -ne 0 ]
+   then
+     echo "Create failed, aborting"
+     exit 1
+   fi
+  else
+   echo "Persistent Volume Claim ${PERSISTENT_VOLUME_CLAIM} already exists"
+  fi
+done
+echo "Done deploying Persistent Volume Claims"
+echo ""
+
 echo "Deploying Services"
 for index in "${!SERVICE_FILES[@]}"
 do

@@ -47,6 +47,9 @@ SECRETS=('example-app')
 # List of files ending in '.persistent_volume.yml' in the kube directory
 PERSISTENT_VOLUMES=('example-app')
 
+# List of files ending in '.persistent_volume_claim.yml' in the kube directory
+PERSISTENT_VOLUME_CLAIMS=('example-app')
+
 # List of files ending in '.service.yml' in the kube directory
 SERVICES=('example-app')
 

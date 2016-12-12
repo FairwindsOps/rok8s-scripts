@@ -63,6 +63,14 @@ do
 done
 echo "[persistent_volume_files]: $PERSISTENT_VOLUME_FILES"
 
+echo "[persistent volume_claims]: $PERSISTENT_VOLUME_CLAIMS"
+PERSISTENT_VOLUME_CLAIM_FILES=()
+for i in "${PERSISTENT_VOLUME_CLAIMS[@]}"
+do
+  PERSISTENT_VOLUME_CLAIM_FILES+=($BASEDIR/deploy/$i.persistent_volume_claim.yml)
+done
+echo "[persistent_volume_claim_files]: $PERSISTENT_VOLUME_CLAIM_FILES"
+
 echo "[services]: $SERVICES"
 SERVICE_FILES=()
 for i in "${SERVICES[@]}"
