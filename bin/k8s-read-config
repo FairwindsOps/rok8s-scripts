@@ -55,6 +55,14 @@ do
 done
 echo "[secret_files]: $SECRET_FILES"
 
+echo "[persistent volumes]: $PERSISTENT_VOLUMES"
+PERSISTENT_VOLUME_FILES=()
+for i in "${PERSISTENT_VOLUMES[@]}"
+do
+  PERSISTENT_VOLUME_FILES+=($BASEDIR/deploy/$i.persistent_volume.yml)
+done
+echo "[persistent_volume_files]: $PERSISTENT_VOLUME_FILES"
+
 echo "[services]: $SERVICES"
 SERVICE_FILES=()
 for i in "${SERVICES[@]}"
