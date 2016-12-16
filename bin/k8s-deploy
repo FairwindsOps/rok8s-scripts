@@ -59,6 +59,21 @@ done
 echo "Done deploying Services"
 echo ""
 
+echo "Deploying Endpoints"
+for index in "${!ENDPOINT_FILES[@]}"
+do
+  ENDPOINT=${ENDPOINTS[$index]##*/}
+  ENDPOINT_FILE=${ENDPOINT_FILES[$index]}
+  kubectl apply -f ${ENDPOINT_FILE} --namespace=$NAMESPACE --record
+  if [ $? -ne 0 ]
+  then
+    echo "Apply failed, aborting"
+    exit 1
+  fi
+done
+echo "Done deploying endpoints"
+echo ""
+
 echo "Deploying Jobs"
 for index in "${!JOBS_FILES[@]}"
 do
