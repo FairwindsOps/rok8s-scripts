@@ -1,7 +1,7 @@
 machine:
   environment:
     GITHUB_ORGANIZATION: $CIRCLE_PROJECT_USERNAME
-    GITHUB_REPOSITORY: $CICLE_REPOSITORY_REPONAME
+    GITHUB_REPOSITORY: $CIRCLE_PROJECT_REPONAME
 
 dependencies:
   pre:
@@ -19,5 +19,5 @@ deployment:
     owner: reactiveops
     commands:
       - git fetch --tags
-      - curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.1/release.sh
-      - /bin/bash release.sh
+      - curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
+      - /bin/bash release
