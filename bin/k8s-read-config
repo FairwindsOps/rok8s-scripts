@@ -63,6 +63,14 @@ do
 done
 echo "[service_files]: $SERVICE_FILES"
 
+echo "[endpoints]: $ENDPOINTS"
+ENDPOINT_FILES=()
+for i in "${ENDPOINTS[@]}"
+do
+  ENDPOINT_FILES+=($BASEDIR/deploy/$i.endpoint.yml)
+done
+echo "[endpoint_files]: $ENDPOINT_FILES"
+
 echo "[ingresses]: $INGRESSES"
 INGRESS_FILES=()
 for i in "${INGRESSES[@]}"

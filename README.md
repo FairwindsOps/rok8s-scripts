@@ -37,6 +37,9 @@ SECRETS=('example-app')
 # List of files ending in '.service.yml' in the kube directory
 SERVICES=('example-app')
 
+# List of files ending in '.endpoint.yml' in the kube directory
+ENDPOINTS=()
+
 # List of files ending in '.ingress.yml' in the kube directory
 INGRESSES=()
 
