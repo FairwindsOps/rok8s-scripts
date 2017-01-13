@@ -34,6 +34,12 @@ CONFIGMAPS=()
 # List of files ending in '.secret.yml' in the kube directory
 SECRETS=('example-app')
 
+# List of files ending in '.persistent_volume.yml' in the kube directory
+PERSISTENT_VOLUMES=('example-app')
+
+# List of files ending in '.persistent_volume_claim.yml' in the kube directory
+PERSISTENT_VOLUME_CLAIMS=('example-app')
+
 # List of files ending in '.service.yml' in the kube directory
 SERVICES=('example-app')
 
@@ -79,6 +85,8 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Deployments end in `deployment.yml`
 * Secrets end in `secret.yml`
 * ConfigMaps end in `configmap.yml`
+* Persistent Volumes end in `persistent_volume.yml`
+* Persistent Volume Claims end in `persistent_volume_claim.yml`
 * Services end in `service.yml`
 * Blocking Jobs end in `blockingjob.yml`
 * Jobs end in `job.yml`
