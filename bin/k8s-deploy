@@ -46,7 +46,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Persistent Volume ${PERSISTENT_VOLUME} does not exist yet, creating it"
-   kubectl create -f ${PERSISTENT_VOLUME_FILE} --namespace=$NAMESPACE --record
+   kubectl create -f ${PERSISTENT_VOLUME_FILE} --namespace=$NAMESPACE --record --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -68,7 +68,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Persistent Volume Claim ${PERSISTENT_VOLUME_CLAIM} does not exist yet, creating it"
-   kubectl create -f ${PERSISTENT_VOLUME_CLAIM_FILE} --namespace=$NAMESPACE --record
+   kubectl create -f ${PERSISTENT_VOLUME_CLAIM_FILE} --namespace=$NAMESPACE --record --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -90,7 +90,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Service ${SERVICE} does not exist yet, creating it"
-   kubectl create -f ${SERVICE_FILE} --namespace=$NAMESPACE --record
+   kubectl create -f ${SERVICE_FILE} --namespace=$NAMESPACE --record --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -127,7 +127,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Job ${JOB} does not exist yet, creating it"
-   kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record
+   kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -149,7 +149,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Ingress Resource ${INGRESS} does not exist yet, creating it"
-   kubectl create -f ${INGRESS_FILE} --namespace=$NAMESPACE --record
+   kubectl create -f ${INGRESS_FILE} --namespace=$NAMESPACE --record --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -180,7 +180,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Blocking Job ${BLOCKING_JOB} does not exist yet, creating it"
-   kubectl create -f ${BLOCKING_JOB_FILE} --record --namespace=$NAMESPACE
+   kubectl create -f ${BLOCKING_JOB_FILE} --record --namespace=$NAMESPACE --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
@@ -233,7 +233,7 @@ do
   if [ $? -ne 0 ]
   then
    echo "Deployment ${DEPLOYMENT} does not exist yet, creating it"
-   kubectl create -f ${DEPLOYMENT_FILE} --record --namespace=$NAMESPACE
+   kubectl create -f ${DEPLOYMENT_FILE} --record --namespace=$NAMESPACE --save-config
    if [ $? -ne 0 ]
    then
      echo "Create failed, aborting"
