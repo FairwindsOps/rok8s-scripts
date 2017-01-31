@@ -209,7 +209,7 @@ do
       exit 1
   fi
   if [ "$result" == "0" ] ; then
-    echo "BLOCKING JOB SUCCESFULL"
+    echo "BLOCKING JOB SUCCESFUL"
   else
     echo "BLOCKING JOB FAILED"
     exit $result
@@ -263,7 +263,7 @@ do
       exit 1
   fi
   if [ "$result" == "0" ] ; then
-    echo "DEPLOY SUCCESFULL"
+    echo "DEPLOY SUCCESFUL"
   else
     echo "DEPLOY FAILED"
     exit $result
