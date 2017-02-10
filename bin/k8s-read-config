@@ -39,84 +39,84 @@ echo "[dockertag]: $DOCKERTAG"
 NAMESPACE=${NAMESPACE:=default}
 echo "[namespace]: $NAMESPACE"
 
-echo "[configmaps]: $CONFIGMAPS"
+echo "[configmaps]: ${CONFIGMAPS[@]}"
 CONFIGMAP_FILES=()
 for i in "${CONFIGMAPS[@]}"
 do
   CONFIGMAP_FILES+=($BASEDIR/deploy/$i.configmap.yml)
 done
-echo "[configmap_files]: $CONFIGMAP_FILES"
+echo "[configmap_files]: ${CONFIGMAP_FILES[@]}"
 
-echo "[secrets]: $SECRETS"
+echo "[secrets]: ${SECRETS[@]}"
 SECRET_FILES=()
 for i in "${SECRETS[@]}"
 do
   SECRET_FILES+=($BASEDIR/deploy/$i.secret.yml)
 done
-echo "[secret_files]: $SECRET_FILES"
+echo "[secret_files]: ${SECRET_FILES[@]}"
 
-echo "[persistent volumes]: $PERSISTENT_VOLUMES"
+echo "[persistent volumes]: ${PERSISTENT_VOLUMES[@]}"
 PERSISTENT_VOLUME_FILES=()
 for i in "${PERSISTENT_VOLUMES[@]}"
 do
   PERSISTENT_VOLUME_FILES+=($BASEDIR/deploy/$i.persistent_volume.yml)
 done
-echo "[persistent_volume_files]: $PERSISTENT_VOLUME_FILES"
+echo "[persistent_volume_files]: ${PERSISTENT_VOLUME_FILES[@]}"
 
-echo "[persistent volume_claims]: $PERSISTENT_VOLUME_CLAIMS"
+echo "[persistent volume_claims]: ${PERSISTENT_VOLUME_CLAIMS[@]}"
 PERSISTENT_VOLUME_CLAIM_FILES=()
 for i in "${PERSISTENT_VOLUME_CLAIMS[@]}"
 do
   PERSISTENT_VOLUME_CLAIM_FILES+=($BASEDIR/deploy/$i.persistent_volume_claim.yml)
 done
-echo "[persistent_volume_claim_files]: $PERSISTENT_VOLUME_CLAIM_FILES"
+echo "[persistent_volume_claim_files]: ${PERSISTENT_VOLUME_CLAIM_FILES[@]}"
 
-echo "[services]: $SERVICES"
+echo "[services]: ${SERVICES[@]}"
 SERVICE_FILES=()
 for i in "${SERVICES[@]}"
 do
   SERVICE_FILES+=($BASEDIR/deploy/$i.service.yml)
 done
-echo "[service_files]: $SERVICE_FILES"
+echo "[service_files]: ${SERVICE_FILES[@]}"
 
-echo "[endpoints]: $ENDPOINTS"
+echo "[endpoints]: ${ENDPOINTS[@]}"
 ENDPOINT_FILES=()
 for i in "${ENDPOINTS[@]}"
 do
   ENDPOINT_FILES+=($BASEDIR/deploy/$i.endpoint.yml)
 done
-echo "[endpoint_files]: $ENDPOINT_FILES"
+echo "[endpoint_files]: ${ENDPOINT_FILES[@]}"
 
-echo "[ingresses]: $INGRESSES"
+echo "[ingresses]: ${INGRESSES[@]}"
 INGRESS_FILES=()
 for i in "${INGRESSES[@]}"
 do
   INGRESS_FILES+=($BASEDIR/deploy/$i.ingress.yml)
 done
-echo "[ingress_files]: $INGRESS_FILES"
+echo "[ingress_files]: ${INGRESS_FILES[@]}"
 
-echo "[jobs]: $JOBS"
+echo "[jobs]: ${JOBS[@]}"
 JOBS_FILES=()
 for i in "${JOBS[@]}"
 do
   JOBS_FILES+=($BASEDIR/deploy/$i.job.yml)
 done
-echo "[jobs_files]: $JOBS_FILES"
+echo "[jobs_files]: ${JOBS_FILES[@]}"
 
-echo "[deployments]: $DEPLOYMENTS"
+echo "[deployments]: ${DEPLOYMENTS[@]}"
 DEPLOYMENT_FILES=()
 for i in "${DEPLOYMENTS[@]}"
 do
   DEPLOYMENT_FILES+=($BASEDIR/deploy/$i.deployment.yml)
 done
-echo "[deployment_files]: $DEPLOYMENT_FILES"
+echo "[deployment_files]: ${DEPLOYMENT_FILES[@]}"
 echo ""
 
-echo "[blocking jobs]: $BLOCKING_JOBS"
+echo "[blocking jobs]: ${BLOCKING_JOBS[@]}"
 BLOCKING_JOBS_FILES=()
 for i in "${BLOCKING_JOBS[@]}"
 do
   BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
 done
-echo "[blocking_jobs_files]: $BLOCKING_JOBS_FILES"
+echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
 echo ""
