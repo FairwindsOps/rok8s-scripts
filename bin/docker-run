@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. k8s-read-config "$@"
+
+# Skip config file if specified, required to be first.
+if [[ "${1}" = "-f" ]]; then
+  shift 2
+fi
+
+docker run "${DOCKERTAG}" "${*}"
