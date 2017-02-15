@@ -127,6 +127,31 @@ Nukes everything defined in your k8s-scripts config file.
 
 Generates a kubernetes secrets YAML file from the contents of a path within an S3 bucket. This will copy files from `${S3_BUCKET}/${NAMESPACE}/${SECRET}` and generate a file into `deploy/${SECRET}.secret.yaml`, suitable for deployment with `k8s-deploy`.
 
+This script assumes that [`aws-cli`](https://pypi.python.org/pypi/awscli) is installed and that AWS credentials with appropriate permissions are available to the CLI.
+
+Example permissions:
+
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Effect": "Allow",
+          "Action": [
+              "s3:Get*",
+              "s3:List*"
+          ],
+          "Resource": [
+            "arn:aws:s3:::${S3_BUCKET}",
+            "arn:aws:s3:::${S3_BUCKET}/*"
+          ]
+      }
+  ]
+}
+```
+
+Secrets across clusters in the same namespace are not easily supported with this method as cluster names are not used. If you need to use the same namespace across different clusters (`kube-system` for example) then you should create separate buckets.
+
 ### minikube-build
 Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.
 
