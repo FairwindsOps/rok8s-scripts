@@ -55,6 +55,8 @@ do
 done
 echo "[secret_files]: ${SECRET_FILES[@]}"
 
+echo "[s3-secrets]: ${S3_SECRETS[@]}"
+
 echo "[persistent volumes]: ${PERSISTENT_VOLUMES[@]}"
 PERSISTENT_VOLUME_FILES=()
 for i in "${PERSISTENT_VOLUMES[@]}"

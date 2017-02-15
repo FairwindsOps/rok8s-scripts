@@ -34,6 +34,9 @@ CONFIGMAPS=()
 # List of files ending in '.secret.yml' in the kube directory
 SECRETS=('example-app')
 
+# List of secrets to pull from S3
+S3_SECRETS=()
+
 # List of files ending in '.persistent_volume.yml' in the kube directory
 PERSISTENT_VOLUMES=('example-app')
 
@@ -119,6 +122,10 @@ Verifies your deployment was successful within a specified timeout.
 ### k8s-delete
 
 Nukes everything defined in your k8s-scripts config file.
+
+### k8s-secrets-from-s3
+
+Generates a kubernetes secrets YAML file from the contents of a path within an S3 bucket. This will copy files from `${S3_BUCKET}/${NAMESPACE}/${SECRET}` and generate a file into `deploy/${SECRET}.secret.yaml`, suitable for deployment with `k8s-deploy`.
 
 ### minikube-build
 Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.
