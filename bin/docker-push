@@ -1,5 +1,6 @@
 #!/bin/bash
 
+. docker-read-config "$@"
 . k8s-read-config "$@"
 
 if [ -z "$EXTERNAL_REGISTRY_BASE_DOMAIN" ]; then echo EXTERNAL_REGISTRY_BASE_DOMAIN must be set; exit 1; fi

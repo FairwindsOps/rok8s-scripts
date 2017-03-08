@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. docker-read-config "$@"
+
 if [ -z "$EXTERNAL_REGISTRY_BASE_DOMAIN" ]; then echo EXTERNAL_REGISTRY_BASE_DOMAIN must be set; exit 1; fi
 if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be set; exit 1; fi
 
