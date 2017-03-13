@@ -49,7 +49,7 @@ fi
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
   # If being run from the CircleCI platform, install as below
-  if [ -n "$CIRCLE_BUILD_NUM" ] ; then
+  if [ -n "$CIRCLECI" ] ; then
     sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
   else
     wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl

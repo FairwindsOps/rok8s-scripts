@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ -n "${DOCKER_CONFIG_READ+1}" ]
+then
+  echo "Config already read"
+  return 0
+fi
+echo "Reading config"
+DOCKER_CONFIG_READ=1
+
+while getopts ":f:" opt; do
+  case $opt in
+    f)
+      CONFIG_FILE=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+BASEDIR=$(pwd)
+
+CONFIG=${CONFIG_FILE:-deploy/k8s-docker.config}
+if test -f $BASEDIR/$CONFIG ; then
+  echo "Loading configuration from ${BASEDIR}/$CONFIG"
+  . $BASEDIR/$CONFIG
+else
+  echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
+  exit 1
+fi
+
+
+# EXTERNAL_REGISTRY_BASE_DOMAIN
+# REPOSITORY_NAME
+# DOCKERTAG

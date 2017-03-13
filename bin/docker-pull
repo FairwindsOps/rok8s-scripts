@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. docker-read-config "$@"
+
 if [ -z "$EXTERNAL_REGISTRY_BASE_DOMAIN" ]; then echo EXTERNAL_REGISTRY_BASE_DOMAIN must be set; exit 1; fi
 if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be set; exit 1; fi
 
@@ -8,9 +10,9 @@ if ! hash aws 2>/dev/null; then
 fi
 
 if [ -z "${AWS_ECR_ACCOUNT_ID}" ]; then
-	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}")"
+	eval $(aws ecr get-login --region "${AWS_DEFAULT_REGION}" | sed -e 's/-e none//g')
 else
-	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}" --registry-ids "${AWS_ECR_ACCOUNT_ID}")"
+	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}" --registry-ids "${AWS_ECR_ACCOUNT_ID}" | sed -e 's/-e none//g')"
 fi
 
 # Warm the local docker cache (aka the local docker images) by pulling the previous commit and the images

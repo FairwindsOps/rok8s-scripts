@@ -3,6 +3,7 @@
   "version": "3.2.1",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
+    "docker-read-config": "./bin/docker-read-config",
     "k8s-read-config": "./bin/k8s-read-config",
     "minikube-build": "./bin/minikube-build",
     "manage-context": "./bin/manage-context",
