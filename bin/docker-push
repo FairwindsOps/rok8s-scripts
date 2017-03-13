@@ -10,9 +10,9 @@ if [ -z "$CI_BRANCH" ];                     then echo CI_BRANCH must be set; exi
 if [ -z "$CI_BUILD_NUM" ];                  then echo CI_BUILD_NUM must be set; exit 1; fi
 
 CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
-echo "Pushing ${DOCKERTAG}:latest as ${CI_SHA1}, ${CI_BRANCH}, ${CI_BUILD_NUM} to ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
+echo "Pushing ${DOCKERTAG} as ${CI_SHA1}, ${CI_BRANCH}, ${CI_BUILD_NUM} to ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
 
-docker tag "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_SHA1}"
+docker tag "${DOCKERTAG}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_SHA1}"
 if [ $? -ne 0 ]
 then
   echo "Unable to tag image, aborting"
@@ -25,7 +25,7 @@ then
   exit 1
 fi
 
-docker tag -f "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_BRANCH}"
+docker tag "${DOCKERTAG}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_BRANCH}"
 if [ $? -ne 0 ]
 then
   echo "Unable to tag image, aborting"
@@ -38,7 +38,7 @@ then
   exit 1
 fi
 
-docker tag "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
+docker tag "${DOCKERTAG}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
 if [ $? -ne 0 ]
 then
   echo "Unable to tag image, aborting"
