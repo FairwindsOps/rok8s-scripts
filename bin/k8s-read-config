@@ -36,6 +36,8 @@ fi
 echo "[dockerfile]: $DOCKERFILE"
 echo "[dockertag]: $DOCKERTAG"
 
+echo "[external_registry_base_domain]: $EXTERNAL_REGISTRY_BASE_DOMAIN"
+
 NAMESPACE=${NAMESPACE:=default}
 echo "[namespace]: $NAMESPACE"
 
