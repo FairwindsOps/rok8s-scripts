@@ -41,7 +41,7 @@ echo "[external_registry_base_domain]: $EXTERNAL_REGISTRY_BASE_DOMAIN"
 NAMESPACE=${NAMESPACE:=default}
 echo "[namespace]: $NAMESPACE"
 
-S3_BUCKET=${S3_BUCKET:=default}
+S3_BUCKET=${S3_BUCKET:=$S3_BUCKET}
 echo "[s3_bucket]: $S3_BUCKET"
 
 echo "[configmaps]: ${CONFIGMAPS[@]}"
