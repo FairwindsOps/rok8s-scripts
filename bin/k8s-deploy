@@ -65,6 +65,7 @@ echo "Deploying Endpoints"
 for index in "${!ENDPOINT_FILES[@]}"
 do
   ENDPOINT_FILE=${ENDPOINT_FILES[$index]}
+  echo "Applying ${ENDPOINT_FILE}"
   kubectl apply -f ${ENDPOINT_FILE} --namespace=$NAMESPACE --record
   if [ $? -ne 0 ]
   then
