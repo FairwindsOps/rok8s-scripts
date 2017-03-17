@@ -117,6 +117,8 @@ Generates $CI_SHA1 suffixs for each of the files defined in your k8s-scripts con
 
 Leverages kubernetes annotations with `--record` when creating objects.
 
+### k8s-verify
+
 Verifies your deployment was successful within a specified timeout.
 
 ### k8s-delete
