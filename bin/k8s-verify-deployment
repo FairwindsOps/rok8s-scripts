@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "Verifying successful deployments"
+for index in "${!DEPLOYMENTS[@]}"
+do
+  DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
+  echo "Checking deployment for $DEPLOYMENT"
+  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
+  result=$?
+  if [ "$result" == "143" ] ; then
+      echo "------- DEPLOYMENT TIMEOUT FAIL --------"
+      exit 1
+  fi
+  if [ "$result" == "0" ] ; then
+    echo "DEPLOY SUCCESFUL"
+  else
+    echo "DEPLOY FAILED"
+    exit $result
+  fi
+done
+
+echo "All objects created"
+echo ""
