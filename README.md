@@ -110,6 +110,16 @@ Pulls from the registry the most recent build of the image. Useful for CI/CD lay
 
 Pushes the recently built image to the registry.
 
+This requires the environment variables:
+
+* `EXTERNAL_REGISTRY_BASE_DOMAIN`
+* `REPOSITORY_NAME`
+* `DOCKERTAG`
+* `CI_SHA1`
+* `CI_BUILD_NUM`
+
+And either `CI_BRANCH` or `CI_TAG`
+
 ### k8s-deploy
 
 `kubectl apply`'s files in the config. If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined. This allows a set image tag to be used when deploying from a CI system. When the `CI_SHA1` is used, a new file will be created with that value as part of the filename.
