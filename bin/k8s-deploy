@@ -70,7 +70,7 @@ do
   JOB_FILE=${JOBS_FILES[$index]}
   kubectl apply -f ${JOB_FILE} --namespace=$NAMESPACE --record
 done
-echo "Done deploying Job"
+echo "Done deploying Jobs"
 echo ""
 
 echo "Deploying Ingress Resources"
