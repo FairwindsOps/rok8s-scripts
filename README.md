@@ -182,3 +182,10 @@ by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 # Releasing
 
 This repo follows the [ReactiveOps release process](https://github.com/reactiveops/docs/blob/master/engineering/software-releases.md).
+
+# Testing
+
+Tests are run with `./run_tests`. These work by replacing `kubectl` with a mock
+script that will record commands run to a log an allow mocking
+`stdout`/`stderr` and the `exit_code` via corresponding files. These files are
+placed into a directory of the md5'd arguments to the script.

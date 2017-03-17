@@ -1,0 +1,8 @@
+echo "kubectl get deployment example --namespace=default"
+echo "kubectl apply -f ${PWD}/deploy/example.deployment.yml --namespace=default"
+echo "kubectl get deployment example --namespace=default -o yaml"
+echo "kubectl get deployment example --namespace=default -o yaml"
+echo "kubectl get deployment example --namespace=default -o yaml"
+echo "kubectl get deployment example --namespace=default -o yaml"
+echo "kubectl get deployment example --namespace=default -o yaml"
+echo "kubectl get deployment example --namespace=default -o yaml"

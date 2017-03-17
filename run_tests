@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+set -x
+
+export PATH="${PWD}/tests/bin:${PWD}/bin/:$PATH"
+
+
+cd tests/cases/deploy_case
+rm -f act.log
+TESTDIR=. k8s-deploy -f test.config
+bash expect.sh > expect
+diff act.log expect
+echo $?
