@@ -108,7 +108,7 @@ Pulls from the registry the most recent build of the image. Useful for CI/CD lay
 
 ### docker-push
 
-Pushes the recently build image to the registry
+Pushes the recently built image to the registry.
 
 ### k8s-deploy
 
