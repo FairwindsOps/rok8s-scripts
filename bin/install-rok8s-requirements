@@ -63,4 +63,7 @@ if ! hash kubectl 2>/dev/null; then
   echo Installing kubectl...
   wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl
   chmod +x /usr/local/bin/kubectl
+  if [[ -d /var/lib/jenkins/tools ]]; then
+    cp /usr/local/bin/kubectl /var/lib/jenkins/tools/kubectl
+  fi
 fi
