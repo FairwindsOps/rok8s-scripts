@@ -51,6 +51,10 @@ if ! hash kubectl 2>/dev/null; then
   # If being run from the CircleCI platform, install as below
   if [ -n "$CIRCLE_BUILD_NUM" ] ; then
     sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+  # If being run with JenkinsCI, istall as below
+  elif [-n "$JENKINS_HOME" ] 
+    wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /var/lib/jenkins/tools/kubectl
+    chmod +x /var/lib/jenkins/tools/kubectl
   else
     wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl
     chmod +x /usr/local/bin/kubectl
