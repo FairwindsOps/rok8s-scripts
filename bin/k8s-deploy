@@ -21,7 +21,7 @@ for index in "${!SECRET_FILES[@]}"
 do
   SECRET_FILE=${SECRET_FILES[$index]}
   echo "Applying ${SECRET_FILE}"
-  kubectl apply -f ${SECRET_FILE} --namespace=$NAMESPACE
+  kubectl apply -f ${SECRET_FILE} --namespace=$NAMESPACE --record
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
@@ -234,7 +234,7 @@ do
      exit 1
    fi
   fi
-  kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE
+  kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
   if [ $? -ne 0 ]
   then
     echo "Apply failed, aborting"
