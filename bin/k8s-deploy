@@ -34,21 +34,9 @@ echo ""
 echo "Deploying Persistent Volumes"
 for index in "${!PERSISTENT_VOLUME_FILES[@]}"
 do
-  PERSISTENT_VOLUME=${PERSISTENT_VOLUMES[$index]##*/}
   PERSISTENT_VOLUME_FILE=${PERSISTENT_VOLUME_FILES[$index]}
-  kubectl get persistentvolumes ${PERSISTENT_VOLUME} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Persistent Volume ${PERSISTENT_VOLUME} does not exist yet, creating it"
-   kubectl create -f ${PERSISTENT_VOLUME_FILE} --namespace=$NAMESPACE --record --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  else
-   echo "Persistent Volume ${PERSISTENT_VOLUME} already exists"
-  fi
+  echo "Applying ${PERSISTENT_VOLUME_FILE}"
+  kubectl apply -f ${PERSISTENT_VOLUME_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Persistent Volumes"
 echo ""
@@ -56,21 +44,9 @@ echo ""
 echo "Deploying Persistent Volume Claims"
 for index in "${!PERSISTENT_VOLUME_CLAIM_FILES[@]}"
 do
-  PERSISTENT_VOLUME_CLAIM=${PERSISTENT_VOLUME_CLAIMS[$index]##*/}
   PERSISTENT_VOLUME_CLAIM_FILE=${PERSISTENT_VOLUME_CLAIM_FILES[$index]}
-  kubectl get persistentvolumeclaims ${PERSISTENT_VOLUME_CLAIM} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Persistent Volume Claim ${PERSISTENT_VOLUME_CLAIM} does not exist yet, creating it"
-   kubectl create -f ${PERSISTENT_VOLUME_CLAIM_FILE} --namespace=$NAMESPACE --record --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  else
-   echo "Persistent Volume Claim ${PERSISTENT_VOLUME_CLAIM} already exists"
-  fi
+  echo "Applying ${PERSISTENT_VOLUME_CLAIM_FILE}"
+  kubectl apply -f ${PERSISTENT_VOLUME_CLAIM_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Persistent Volume Claims"
 echo ""
@@ -78,21 +54,9 @@ echo ""
 echo "Deploying Services"
 for index in "${!SERVICE_FILES[@]}"
 do
-  SERVICE=${SERVICES[$index]##*/}
   SERVICE_FILE=${SERVICE_FILES[$index]}
-  kubectl get service ${SERVICE} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Service ${SERVICE} does not exist yet, creating it"
-   kubectl create -f ${SERVICE_FILE} --namespace=$NAMESPACE --record --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  else
-   echo "Service ${SERVICE} already exists"
-  fi
+  echo "Applying ${SERVICE_FILE}"
+  kubectl apply -f ${SERVICE_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Services"
 echo ""
@@ -116,19 +80,7 @@ for index in "${!JOBS_FILES[@]}"
 do
   JOB=${JOBS[$index]##*/}
   JOB_FILE=${JOBS_FILES[$index]}
-  kubectl get job ${JOB} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Job ${JOB} does not exist yet, creating it"
-   kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  else
-   echo "Job ${JOB} already exists"
-  fi
+  kubectl apply -f ${JOB_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Job"
 echo ""
@@ -136,21 +88,9 @@ echo ""
 echo "Deploying Ingress Resources"
 for index in "${!INGRESS_FILES[@]}"
 do
-  INGRESS=${INGRESSES[$index]##*/}
   INGRESS_FILE=${INGRESS_FILES[$index]}
-  kubectl get ingress ${INGRESS} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Ingress Resource ${INGRESS} does not exist yet, creating it"
-   kubectl create -f ${INGRESS_FILE} --namespace=$NAMESPACE --record --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  else
-   echo "Ingress Resource ${INGRESS} already exists"
-  fi
+  echo "Applying ${INGRESS_FILE}"
+  kubectl apply -f ${INGRESS_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Ingress Resources"
 
@@ -169,17 +109,6 @@ do
     BLOCKING_JOB_FILE=${BLOCKING_JOB_FILE}-${CI_SHA1}
   fi
 
-  kubectl get job ${BLOCKING_JOB} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Blocking Job ${BLOCKING_JOB} does not exist yet, creating it"
-   kubectl create -f ${BLOCKING_JOB_FILE} --record --namespace=$NAMESPACE --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
-  fi
   kubectl apply -f ${BLOCKING_JOB_FILE} --namespace=$NAMESPACE
   if [ $? -ne 0 ]
   then
@@ -221,17 +150,6 @@ do
     sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
     echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
-  fi
-  kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-   echo "Deployment ${DEPLOYMENT} does not exist yet, creating it"
-   kubectl create -f ${DEPLOYMENT_FILE} --record --namespace=$NAMESPACE --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
   fi
   kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
   if [ $? -ne 0 ]

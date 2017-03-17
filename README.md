@@ -112,8 +112,7 @@ Pushes the recently build image to the registry
 
 ### k8s-deploy
 
-Generates $CI_SHA1 suffixs for each of the files defined in your k8s-scripts config and uses
-`kubectl create` if the objects don't exist, `kubectl apply` if they do.
+`kubectl apply`'s files in the config. If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined. This allows a set image tag to be used when deploying from a CI system. When the `CI_SHA1` is used, a new file will be created with that value as part of the filename.
 
 Leverages kubernetes annotations with `--record` when creating objects.
 
