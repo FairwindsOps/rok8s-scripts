@@ -23,7 +23,8 @@
     "prepare-kubectl": "./bin/prepare-kubectl",
     "docker-build": "./bin/docker-build",
     "docker-push": "./bin/docker-push",
-    "docker-pull": "./bin/docker-pull"
+    "docker-pull": "./bin/docker-pull",
+    "docker-run": "./bin/docker-run"
   },
   "author": "Ross Kukulinski <ross@kukulinski.com>",
   "license": "MIT",

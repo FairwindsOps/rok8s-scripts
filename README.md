@@ -106,6 +106,10 @@ Does a build of the current directory
 
 Pulls from the registry the most recent build of the image. Useful for CI/CD layer caching
 
+### docker-run
+
+Runs `docker run` for the `$DOCKERTAG` after reading your config. If `-f` is used it must be defined first.
+
 ### docker-push
 
 Pushes the recently build image to the registry
