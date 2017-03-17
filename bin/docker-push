@@ -9,8 +9,8 @@ if [ -z "$CI_SHA1" ];                       then echo CI_SHA1 must be set; exit 
 if [ -z "$CI_BUILD_NUM" ];                  then echo CI_BUILD_NUM must be set; exit 1; fi
 
 # Set a CI_REF from branch or tag
-CI_REF="${CI_BRANCH}"
-CI_REF="${CI_REF:-$CI_TAG}"
+CI_REF="${CI_TAG}"
+CI_REF="${CI_REF:-$CI_BRANCH}"
 
 if [ -z "$CI_REF" ]; then echo CI_BRANCH or CI_TAG must be set; exit 1; fi
 
