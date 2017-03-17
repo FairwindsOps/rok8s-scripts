@@ -63,6 +63,15 @@ done
 echo "Done deploying endpoints"
 echo ""
 
+echo "Deploying Ingress Resources"
+for index in "${!INGRESS_FILES[@]}"
+do
+  INGRESS_FILE=${INGRESS_FILES[$index]}
+  echo "Applying ${INGRESS_FILE}"
+  kubectl apply -f ${INGRESS_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Ingress Resources"
+
 echo "Deploying Jobs"
 for index in "${!JOBS_FILES[@]}"
 do
@@ -72,15 +81,6 @@ do
 done
 echo "Done deploying Jobs"
 echo ""
-
-echo "Deploying Ingress Resources"
-for index in "${!INGRESS_FILES[@]}"
-do
-  INGRESS_FILE=${INGRESS_FILES[$index]}
-  echo "Applying ${INGRESS_FILE}"
-  kubectl apply -f ${INGRESS_FILE} --namespace=$NAMESPACE --record
-done
-echo "Done deploying Ingress Resources"
 
 echo "Deploying Blocking Jobs"
 for index in "${!BLOCKING_JOBS_FILES[@]}"
