@@ -126,15 +126,31 @@ do
   kubectl get job ${JOB} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
   then
-   echo "Job ${JOB} does not exist yet, creating it"
-   kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record --save-config
-   if [ $? -ne 0 ]
-   then
-     echo "Create failed, aborting"
-     exit 1
-   fi
+    echo "Job ${JOB} does not exist yet, creating it"
+    kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record --save-config
+    if [ $? -ne 0 ]
+    then
+      echo "Create failed, aborting"
+      exit 1
+    fi
   else
-   echo "Job ${JOB} already exists"
+    if [ $(kubectl get job ${JOB} --namespace=$NAMESPACE | awk 'NR==2{print $2}') > $(kubectl get job ${JOB} --namespace=$NAMESPACE | awk 'NR==2{print $3}') ]
+    then
+      echo "Job ${JOB} already exists and has not completed successfully"
+    else
+      kubectl delete job ${JOB} --namespace=$NAMESPACE 
+      if [ $? -ne 0 ]
+      then
+        echo "Failed to remove old job, aborting"
+        exit 1
+      fi
+      kubectl create -f ${JOB_FILE} --namespace=$NAMESPACE --record --save-config
+      if [ $? -ne 0 ]
+      then
+        echo "Create failed, aborting"
+        exit 1
+      fi
+    fi
   fi
 done
 echo "Done deploying Job"
