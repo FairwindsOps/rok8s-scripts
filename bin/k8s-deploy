@@ -134,7 +134,7 @@ do
       exit 1
     fi
   else
-    if [ $(kubectl get job ${JOB} --namespace=$NAMESPACE | awk 'NR==2{print $2}') > $(kubectl get job ${JOB} --namespace=$NAMESPACE | awk 'NR==2{print $3}') ]
+    if [[ $(kubectl get job ${JOB} --namespace=$NAMESPACE | awk 'NR==2{print $2}') > $(kubectl get job ${JOB} --namespace=$NAMESPACE | awk 'NR==2{print $3}') ]]
     then
       echo "Job ${JOB} already exists and has not completed successfully"
     else
