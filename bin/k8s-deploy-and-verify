@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+set -e
+
+k8s-deploy "$@"
+k8s-verify-deployment "$@"

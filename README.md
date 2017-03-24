@@ -108,16 +108,33 @@ Pulls from the registry the most recent build of the image. Useful for CI/CD lay
 
 ### docker-push
 
-Pushes the recently build image to the registry
+Pushes the recently built image to the registry.
+
+This requires the environment variables:
+
+* `EXTERNAL_REGISTRY_BASE_DOMAIN`
+* `REPOSITORY_NAME`
+* `DOCKERTAG`
+* `CI_SHA1`
+* `CI_BUILD_NUM`
+
+And either `CI_BRANCH` or `CI_TAG`
 
 ### k8s-deploy
 
-Generates $CI_SHA1 suffixs for each of the files defined in your k8s-scripts config and uses
-`kubectl create` if the objects don't exist, `kubectl apply` if they do.
+`kubectl apply`'s files in the config.
+
+**If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` is are deployed, a new file will be created with that value as part of the filename.
 
 Leverages kubernetes annotations with `--record` when creating objects.
 
+### k8s-verify
+
 Verifies your deployment was successful within a specified timeout.
+
+### k8s-deploy-and-verify
+
+Combines `k8s-deploy` and `k8s-verify` into a single command. This can be used to keep a smaller script/deployment config and for backwards compatibility.
 
 ### k8s-delete
 
@@ -182,3 +199,4 @@ by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 # Releasing
 
 This repo follows the [ReactiveOps release process](https://github.com/reactiveops/docs/blob/master/engineering/software-releases.md).
+Before following that please update the `package.json` file with the new version.
