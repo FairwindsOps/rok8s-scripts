@@ -199,3 +199,4 @@ by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 # Releasing
 
 This repo follows the [ReactiveOps release process](https://github.com/reactiveops/docs/blob/master/engineering/software-releases.md).
+Before following that please update the `package.json` file with the new version.
