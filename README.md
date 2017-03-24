@@ -130,6 +130,10 @@ Leverages kubernetes annotations with `--record` when creating objects.
 
 Verifies your deployment was successful within a specified timeout.
 
+### k8s-deploy-and-verify
+
+Combines `k8s-deploy` and `k8s-verify` into a single command. This can be used to keep a smaller script/deployment config and for backwards compatibility.
+
 ### k8s-delete
 
 Nukes everything defined in your k8s-scripts config file.

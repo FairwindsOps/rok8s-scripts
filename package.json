@@ -10,6 +10,7 @@
     "k8s-apply": "./bin/k8s-apply",
     "k8s-delete": "./bin/k8s-delete",
     "k8s-deploy": "./bin/k8s-deploy",
+    "k8s-deploy-and-verify": "./bin/k8s-deploy-and-verify",
     "k8s-example-config": "./bin/k8s-example-config",
     "k8s-read-config": "./bin/k8s-read-config",
     "k8s-secrets-from-s3": "./bin/k8s-secrets-from-s3",
