@@ -1,5 +1,5 @@
 {
-  "name": "k8s-scripts",
+  "name": "rok8s-scripts",
   "version": "4.0.1",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
@@ -27,10 +27,10 @@
     "timeout.sh": "./bin/timeout.sh",
     "verify-deployment": "./bin/verify-deployment"
   },
-  "author": "Ross Kukulinski <ross@kukulinski.com>",
+  "author": "ReactiveOps <ops+rok8s-scripts@reactiveops.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reactiveops/k8s-scripts.git"
+    "url": "https://github.com/reactiveops/rok8s-scripts.git"
   }
 }
