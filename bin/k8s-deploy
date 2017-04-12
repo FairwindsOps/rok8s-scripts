@@ -127,3 +127,12 @@ do
 done
 echo "Done deploying Deployments"
 echo ""
+
+echo "Deploying Horizontal Pod Autoscalers"
+for index in "${!HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
+do
+  HORIZONTAL_POD_AUTOSCALER_FILE=${HORIZONTAL_POD_AUTOSCALER_FILES[$index]}
+  echo "Applying ${HORIZONTAL_POD_AUTOSCALER_FILE}"
+  kubectl apply -f ${HORIZONTAL_POD_AUTOSCALER_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Horizontal Pod Autoscalers"
