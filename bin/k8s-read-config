@@ -116,6 +116,15 @@ done
 echo "[deployment_files]: ${DEPLOYMENT_FILES[@]}"
 echo ""
 
+echo "[horizontal_pod_autoscalers]: ${HORIZONTAL_POD_AUTOSCALERS[@]}"
+HORIZONTAL_POD_AUTOSCALER_FILES=()
+for i in "${HORIZONTAL_POD_AUTOSCALERS[@]}"
+do
+  HORIZONTAL_POD_AUTOSCALER_FILES+=($BASEDIR/deploy/$i.horizontal_pod_autoscaler.yml)
+done
+echo "[horizontal_pod_autoscaler_files]: ${HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
+echo ""
+
 echo "[blocking jobs]: ${BLOCKING_JOBS[@]}"
 BLOCKING_JOBS_FILES=()
 for i in "${BLOCKING_JOBS[@]}"
