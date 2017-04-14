@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minimal-example
+  labels:
+    app: minimal-example
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: http
+  selector:
+    app: minimal-example

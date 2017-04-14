@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: minimal-example
+
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: minimal-example
+    spec:
+      containers:
+        - name: minimal-example
+          image: quay.io/example-org/example-app:latest
+          ports:
+          - containerPort: 5000
+            name: http
