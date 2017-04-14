@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example-migration
+spec:
+  template:
+    metadata:
+      name: example-migration
+    spec:
+      containers:
+      - name: example-migration
+        image: quay.io/example-org/example:latest
+        command:
+          - migrate.sh
+
+        volumeMounts:
+        - name: example-config
+          mountPath: /config
+          readOnly: true
+
+      restartPolicy: Never
+      volumes:
+      - name: example-config
+        secret:
+          secretName: example-config
+
