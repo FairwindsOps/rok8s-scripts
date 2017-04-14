@@ -16,7 +16,7 @@ test:
 
 deployment:
   release:
-    tag: /v.*/
+    tag: /v[0-9]+(\.[0-9]+)*/
     owner: reactiveops
     commands:
       # Github release
