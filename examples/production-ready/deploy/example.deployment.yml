@@ -20,6 +20,7 @@ spec:
             secretName: example-secrets
       containers:
         - name: example
+          # `latest` will be replaced with $CI_SHA1 by k8s-deploy
           image: quay.io/example-org/example:latest
           ports:
           - containerPort: 5000
