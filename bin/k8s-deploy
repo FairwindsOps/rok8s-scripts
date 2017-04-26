@@ -33,16 +33,6 @@ done
 echo "Done deploying Persistent Volumes"
 echo ""
 
-echo "Deploying StatefulSets"
-for index in "${!STATEFULSET_FILES[@]}"
-do
-  STATEFULSET_FILE=${STATEFULSET_FILES[$index]}
-  echo "Applying ${STATEFULSET_FILE}"
-  kubectl apply -f ${STATEFULSET_FILE} --namespace=$NAMESPACE --record
-done
-echo "Done deploying StatefulSets"
-echo ""
-
 echo "Deploying Persistent Volume Claims"
 for index in "${!PERSISTENT_VOLUME_CLAIM_FILES[@]}"
 do
@@ -51,6 +41,16 @@ do
   kubectl apply -f ${PERSISTENT_VOLUME_CLAIM_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Persistent Volume Claims"
+echo ""
+
+echo "Deploying StatefulSets"
+for index in "${!STATEFULSET_FILES[@]}"
+do
+  STATEFULSET_FILE=${STATEFULSET_FILES[$index]}
+  echo "Applying ${STATEFULSET_FILE}"
+  kubectl apply -f ${STATEFULSET_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying StatefulSets"
 echo ""
 
 echo "Deploying Services"
