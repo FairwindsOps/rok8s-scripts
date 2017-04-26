@@ -43,6 +43,9 @@ PERSISTENT_VOLUMES=('example-app')
 # List of files ending in '.persistent_volume_claim.yml' in the kube directory
 PERSISTENT_VOLUME_CLAIMS=('example-app')
 
+# List of files ending in '.statefulset.yml' in the kube directory
+STATEFULSETS=('example-app')
+
 # List of files ending in '.service.yml' in the kube directory
 SERVICES=('example-app')
 
@@ -93,6 +96,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * ConfigMaps end in `configmap.yml`
 * Persistent Volumes end in `persistent_volume.yml`
 * Persistent Volume Claims end in `persistent_volume_claim.yml`
+* Statefulsets end in `statefulset.yml`
 * Services end in `service.yml`
 * Blocking Jobs end in `blockingjob.yml`
 * Jobs end in `job.yml`
