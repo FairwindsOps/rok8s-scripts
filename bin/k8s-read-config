@@ -75,6 +75,14 @@ do
 done
 echo "[persistent_volume_claim_files]: ${PERSISTENT_VOLUME_CLAIM_FILES[@]}"
 
+echo "[statefulsets]: ${STATEFULSETS[@]}"
+STATEFULSET_FILES=()
+for i in "${STATEFULSETS[@]}"
+do
+  STATEFULSET_FILES+=($BASEDIR/deploy/$i.statefulset.yml)
+done
+echo "[statefulset_files]: ${STATEFULSET_FILES[@]}"
+
 echo "[services]: ${SERVICES[@]}"
 SERVICE_FILES=()
 for i in "${SERVICES[@]}"
