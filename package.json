@@ -24,6 +24,8 @@
     "minikube-deploy": "./bin/minikube-deploy",
     "minikube-services": "./bin/minikube-services",
     "minikube-services-all": "./bin/minikube-services-all",
+    "prepare-awscli": "./bin/prepare-awscli",
+    "prepare-gcloud": "./bin/prepare-gcloud",
     "prepare-kubectl": "./bin/prepare-kubectl",
     "run-blocking-job": "./bin/run-blocking-job",
     "timeout.sh": "./bin/timeout.sh",

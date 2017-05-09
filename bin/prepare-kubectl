@@ -1,6 +1,10 @@
 #!/bin/bash
 
+  . k8s-read-config "$@"
+
 mkdir -p ~/.kube
 if [ -n "$KUBECONFIG_DATA" ]; then
   echo $KUBECONFIG_DATA | base64 --decode > ~/.kube/config
+else
+  gcloud container clusters get-credentials $CLUSTER_NAME --zone "${GCP_ZONE}" --project "${GCP_PROJECT}"
 fi
