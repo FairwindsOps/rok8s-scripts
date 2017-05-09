@@ -5,15 +5,35 @@
 if [ -z "$EXTERNAL_REGISTRY_BASE_DOMAIN" ]; then echo EXTERNAL_REGISTRY_BASE_DOMAIN must be set; exit 1; fi
 if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be set; exit 1; fi
 
-if ! hash aws 2>/dev/null; then
-  pip install awscli
-fi
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  TARGET="$(readlink "$SOURCE")"
+  if [[ $TARGET == /* ]]; then
+    SOURCE="$TARGET"
+  else
+    DIR="$( dirname "$SOURCE" )"
+    SOURCE="$DIR/$TARGET" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+  fi
+done
+DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-if [ -z "${AWS_ECR_ACCOUNT_ID}" ]; then
-	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}")"
-else
-	eval "$(aws ecr get-login --region "${AWS_DEFAULT_REGION}" --registry-ids "${AWS_ECR_ACCOUNT_ID}")"
-fi
+case $EXTERNAL_REGISTRY_BASE_DOMAIN in
+  *amazonaws.com*)
+    "${DIR}/registries/docker-pull.ecr.sh" ||
+      { echo "Could not authenticate." && exit 1; }
+    ;;
+
+  *gcr.io*)
+    "${DIR}/registries/docker-pull.gcr.sh" ||
+      { echo "Could not authenticate." && exit 1; }
+    ;;
+
+  *quay.io*)
+    "${DIR}/registries/docker-pull.quay.sh" ||
+      { echo "Could not authenticate." && exit 1; }
+    ;;
+
+esac
 
 # Warm the local docker cache (aka the local docker images) by pulling the previous commit and the images
 # tagged with the current branch, if they exist.
