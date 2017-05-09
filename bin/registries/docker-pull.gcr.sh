@@ -1,4 +1,5 @@
 #!/bin/bash -e
+echo "Preping to pull image from GCR."
 
 if [ -z "$GCP_PROJECT" || -z "$GCP_CLUSTER" || -z "$GCP_ZONE" ]; then
   echo "Missing GCP project, cluster, or zone!  Aborting"
