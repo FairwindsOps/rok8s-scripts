@@ -23,7 +23,8 @@ gcloud config set project "${GCP_PROJECT}"
 gcloud config set container/cluster "${GCP_CLUSTER}"
 gcloud config set compute/zone "${GCP_ZONE}"
 
-gcloud container clusters get-credentials "${GCP_CLUSTER}"
+gcloud container clusters get-credentials "${GCP_CLUSTER}" --key-file "${KEYFILE}" 
+gcloud auth application-default login
 
 # Authorize the docker client to work with GCR
 gcloud docker --authorize-only
