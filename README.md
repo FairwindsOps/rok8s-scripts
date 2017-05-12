@@ -14,6 +14,10 @@ Then in your top-level project directory:
 k8s-example-config
 ```
 
+## Examples
+
+Explore the `examples/` directory for example files.
+
 ## Config file
 
 k8s-scripts all function based on a simple bash config file in the root of your project directory named 'k8s-scripts.config'.

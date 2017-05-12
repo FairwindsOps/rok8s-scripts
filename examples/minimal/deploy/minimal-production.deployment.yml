@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: minimal-example
+
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: minimal-example
+    spec:
+      containers:
+        - name: minimal-example
+          # `latest` will be replaced with $CI_SHA1 by k8s-deploy
+          image: quay.io/example-org/example-app:latest
+          command:
+            - 'sleep 86400'
+          ports:
+          - containerPort: 5000
+            name: http

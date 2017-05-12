@@ -1,0 +1,48 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: example
+
+spec:
+  minReadySeconds: 15
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      labels:
+        app: example
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: example-config
+        - name: secrets
+          secret:
+            secretName: example-secrets
+      containers:
+        - name: example
+          # `latest` will be replaced with $CI_SHA1 by k8s-deploy
+          image: quay.io/example-org/example:latest
+          command:
+            - 'sleep 86400'
+          ports:
+          - containerPort: 5000
+            name: http
+          volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+            - name: config
+              mountPath: /config
+              readOnly: true
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+            initialDelaySeconds: 10

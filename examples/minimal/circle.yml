@@ -1,0 +1,33 @@
+machine:
+  environment:
+    PATH: $PATH:node_modules/.bin
+
+    CI_SHA1: $CIRCLE_SHA1
+    CI_BRANCH: $CIRCLE_BRANCH
+    CI_BUILD_NUM: $CIRCLE_BUILD_NUM
+
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - npm install
+    - docker-pull -f deploy/production.config
+    - docker-build -f deploy/production.config
+
+  override:
+    - echo "overriding inferred dependencies"
+
+test:
+  override:
+    - echo "No tests for now!"
+
+deployment:
+  production:
+    branch: [master]
+    commands:
+      - docker-push -f deploy/production.config
+      - ensure-kubectl
+      - prepare-kubectl
+      - k8s-deploy-and-verify -f deploy/production.config
+
