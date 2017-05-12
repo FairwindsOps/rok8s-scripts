@@ -12,7 +12,7 @@ machine:
 dependencies:
   pre:
     - npm install
-    - docker-pull
+    - docker-pull -f deploy/production.config
     - docker-build -f deploy/production.config
 
   override:
