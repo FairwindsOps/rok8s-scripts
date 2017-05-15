@@ -146,3 +146,12 @@ do
   kubectl apply -f ${HORIZONTAL_POD_AUTOSCALER_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Horizontal Pod Autoscalers"
+
+echo "Deploying Pod Disruption Budgets"
+for index in "${!POD_DISRUPTION_BUDGET_FILES[@]}"
+do
+  POD_DISRUPTION_BUDGET_FILE=${POD_DISRUPTION_BUDGET_FILES[$index]}
+  echo "Applying ${POD_DISRUPTION_BUDGET_FILE}"
+  kubectl apply -f ${POD_DISRUPTION_BUDGET_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Pod Disruption Budget"

@@ -65,6 +65,9 @@ DEPLOYMENTS=('example-app')
 # List of files ending in '.horizontal_pod_autoscaler.yml' in the kube directory
 HORIZONTAL_POD_AUTOSCALERS=()
 
+# List of files ending in '.pod_disruption_budget.yml' in the kube directory
+POD_DISRUPTION_BUDGETS=()
+
 # List of files ending in '.job.yml' in the kube directory
 JOBS=()
 
@@ -105,6 +108,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Blocking Jobs end in `blockingjob.yml`
 * Jobs end in `job.yml`
 * Ingress Resources end in `ingress.yml`
+* Pod Disruption Budgets end in `pod_disruption_budget.yml`
 
 ## Commands
 

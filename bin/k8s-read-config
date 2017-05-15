@@ -131,6 +131,14 @@ do
 done
 echo "[horizontal_pod_autoscaler_files]: ${HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
 
+echo "[pod_disruption_budget]: ${POD_DISRUPTION_BUDGETS[@]}"
+POD_DISRUPTION_BUDGET_FILES=()
+for i in "${POD_DISRUPTION_BUDGETS[@]}"
+do
+  POD_DISRUPTION_BUDGET_FILES+=($BASEDIR/deploy/$i.pod_disruption_budget.yml)
+done
+echo "[pod_disruption_budget_files]: ${POD_DISRUPTION_BUDGET_FILES[@]}"
+
 echo "[blocking jobs]: ${BLOCKING_JOBS[@]}"
 BLOCKING_JOBS_FILES=()
 for i in "${BLOCKING_JOBS[@]}"
