@@ -23,6 +23,16 @@ done
 echo "Done deploying Secrets"
 echo ""
 
+echo "Deploying Services"
+for index in "${!SERVICE_FILES[@]}"
+do
+  SERVICE_FILE=${SERVICE_FILES[$index]}
+  echo "Applying ${SERVICE_FILE}"
+  kubectl apply -f ${SERVICE_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Services"
+echo ""
+
 echo "Deploying Persistent Volumes"
 for index in "${!PERSISTENT_VOLUME_FILES[@]}"
 do
@@ -51,16 +61,6 @@ do
   kubectl apply -f ${STATEFULSET_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying StatefulSets"
-echo ""
-
-echo "Deploying Services"
-for index in "${!SERVICE_FILES[@]}"
-do
-  SERVICE_FILE=${SERVICE_FILES[$index]}
-  echo "Applying ${SERVICE_FILE}"
-  kubectl apply -f ${SERVICE_FILE} --namespace=$NAMESPACE --record
-done
-echo "Done deploying Services"
 echo ""
 
 echo "Deploying Endpoints"
