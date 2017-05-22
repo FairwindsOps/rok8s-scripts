@@ -14,6 +14,7 @@
     "k8s-example-config": "./bin/k8s-example-config",
     "k8s-read-config": "./bin/k8s-read-config",
     "k8s-secrets-from-s3": "./bin/k8s-secrets-from-s3",
+    "k8s-sops-secret-decrypt": "./bin/k8s-sops-secret-decrypt",
     "k8s-verify-deployment": "./bin/k8s-verify-deployment",
     "manage-context": "./bin/manage-context",
     "minikube-apply": "./bin/minikube-apply",
