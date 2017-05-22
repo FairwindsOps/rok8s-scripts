@@ -38,6 +38,9 @@ CONFIGMAPS=()
 # List of files ending in '.secret.yml' in the kube directory
 SECRETS=('example-app')
 
+# List of files ending in '.secret.sops.yml' in the kube directory
+SOPS_SECRETS=('example-app')
+
 # List of secrets to pull from S3
 S3_SECRETS=()
 
@@ -184,6 +187,41 @@ Example permissions:
 
 Secrets across clusters in the same namespace are not easily supported with this method as cluster names are not used. If you need to use the same namespace across different clusters (`kube-system` for example) then you should create separate buckets.
 
+### k8s-sops-secret-decrypt
+
+Given an [AWS KMS](https://aws.amazon.com/kms/) key id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.
+
+The script assumes [sops](https://github.com/mozilla/sops.git) is installed and the `SOPS_KMS_ARN` environment variable is set. Ensure your `circle.yml` installs sops. I.e. add, `go get -u go.mozilla.org/sops/cmd/sops` to the `dependencies` level.
+
+If run from circleci, the script also assumes that the circleci IAM user has proper privileges to decrypt secrets using the set key.
+
+An example IAM policy might look like this:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "circle-decrypt",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Decrypt",
+                "kms:DescribeKey"
+            ],
+            "Resource": [
+                "arn:aws:kms:<region>:<accountId>:key/<key>"
+            ]
+        }
+    ]
+}
+```
+
+A procedure for _encrypting_ secrets with sops might look this this:
+
+Encrypt [secret spec files](https://kubernetes.io/docs/concepts/configuration/secret/) with [sops](https://github.com/mozilla/sops)
+  eg. `sops --kms="<your kms key arn>" --encrypt mysecret.yaml` _
+
+
 
 ### minikube-build
 Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.
@@ -207,9 +245,11 @@ of all services that are accessible from your local machine
 Makes sure kubectl is installed and available for use. Customize the version
 by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 
+
 ## Assumptions
 
 * In your Deployment file, specify imagePullPolicy: IfNotPresent
+
 
 # Releasing
 
