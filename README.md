@@ -5,7 +5,7 @@ Opinionated scripts for managing application development and deployment lifecycl
 ## How to Install
 
 ```
-npm install reactiveops/k8s-scripts
+npm install rok8s-scripts
 export PATH="$(PWD)/node_modules/.bin:$PATH"
 ```
 
