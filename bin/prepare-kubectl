@@ -4,3 +4,6 @@ mkdir -p ~/.kube
 if [ -n "$KUBECONFIG_DATA" ]; then
   echo $KUBECONFIG_DATA | base64 --decode > ~/.kube/config
 fi
+
+# Exit with the exit code of base64 --decode
+exit ${PIPESTATUS[1]}

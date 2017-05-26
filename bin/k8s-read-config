@@ -8,10 +8,13 @@ fi
 echo "Reading config"
 CONFIG_READ=1
 
-while getopts ":f:" opt; do
+while getopts ":f:e:" opt; do
   case $opt in
     f)
       CONFIG_FILE=$OPTARG
+      ;;
+    e)
+      BUILD_ARGS=$OPTARG
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
