@@ -187,6 +187,30 @@ Example permissions:
 
 Secrets across clusters in the same namespace are not easily supported with this method as cluster names are not used. If you need to use the same namespace across different clusters (`kube-system` for example) then you should create separate buckets.
 
+Each file in `${S3_BUCKET}/${NAMESPACE}/${SECRET}` will be a single entry in the Kubernetes Secret `${SECRET}`
+
+An S3 bucket layout of:
+
+```
+production/
+  example-secret/
+    username
+    password
+```
+
+With the file `username` containing `example-username` and `password` containing `example-password` would generate a secret of
+
+```
+apiVersion: v1
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: example-secret
+data:
+  username: example-username
+  password: example-password
+```
+
 ### k8s-sops-secret-decrypt
 
 Given an [AWS KMS](https://aws.amazon.com/kms/) key id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.
