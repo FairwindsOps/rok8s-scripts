@@ -274,7 +274,6 @@ by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
 
 * In your Deployment file, specify imagePullPolicy: IfNotPresent
 
-
 # Releasing
 
 Create an annotated tag on the commit you would like to release
