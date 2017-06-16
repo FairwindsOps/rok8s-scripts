@@ -59,6 +59,15 @@ echo "[secret_files]: ${SECRET_FILES[@]}"
 
 echo "[s3-secrets]: ${S3_SECRETS[@]}"
 
+
+echo "[sops-secrets]: ${SOPS_SECRETS[@]}"
+SOPS_SECRET_FILES=()
+for i in "${SOPS_SECRETS[@]}"
+do
+  SOPS_SECRET_FILES+=($BASEDIR/deploy/$i.secret.sops.yml)
+done
+echo "[sops_secret_files]: ${SOPS_SECRET_FILES[@]}"
+
 echo "[persistent volumes]: ${PERSISTENT_VOLUMES[@]}"
 PERSISTENT_VOLUME_FILES=()
 for i in "${PERSISTENT_VOLUMES[@]}"
