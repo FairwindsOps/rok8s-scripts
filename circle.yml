@@ -12,7 +12,7 @@ dependencies:
 
 test:
   override:
-    - shellcheck bin/docker-* bin/ensure-kubectl bin/k8s-apply bin/k8s-secrets-from-s3 bin/verify-deployment
+    - shellcheck bin/docker-* bin/ensure-kubectl bin/k8s-apply bin/k8s-secrets-from-s3 bin/verify-deployment bin/k8s-lint
 
 deployment:
   release:

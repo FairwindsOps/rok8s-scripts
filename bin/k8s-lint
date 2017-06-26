@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+. k8s-read-config
+
+LINT_ERROR=0
+CHECKMARK="\xE2\x9C\x93"
+SKULL="\xE2\x98\xA0"
+
+files_exist () {
+    for FILE in "${@}"
+    do
+        if [[ -e "${FILE}" ]]
+        then
+            echo -e "${CHECKMARK} " "${FILE}" exists
+        else
+            echo -e "${SKULL} " ERROR "${FILE}" does not exist
+            LINT_ERROR=1
+        fi
+    done
+}
+
+main() {
+    echo "Linting files"
+    files_exist "${CONFIGMAP_FILES[@]}"
+    files_exist "${PERSISTENT_VOLUME_FILES[@]}"
+    files_exist "${PERSISTENT_VOLUME_CLAIM_FILES[@]}"
+    files_exist "${STATEFULSET_FILES[@]}"
+    files_exist "${SERVICE_FILES[@]}"
+    files_exist "${ENDPOINT_FILES[@]}"
+    files_exist "${INGRESS_FILES[@]}"
+    files_exist "${BLOCKING_JOBS_FILES[@]}"
+    files_exist "${JOBS_FILES[@]}"
+    files_exist "${DEPLOYMENT_FILES[@]}"
+    files_exist "${HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
+    files_exist "${POD_DISRUPTION_BUDGET_FILES[@]}"
+
+    exit $LINT_ERROR
+}
+
+main
