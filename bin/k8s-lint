@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 . k8s-read-config
 
 LINT_ERROR=0
@@ -13,13 +11,39 @@ files_exist () {
     do
         if [[ -e "${FILE}" ]]
         then
-            echo -e "${CHECKMARK} " "${FILE}" exists
+            echo -e "${CHECKMARK} " "${FILE} exists"
         else
-            echo -e "${SKULL} " ERROR "${FILE}" does not exist
+            echo -e "${SKULL} " "ERROR ${FILE} does not exist"
             LINT_ERROR=1
         fi
     done
 }
+
+check_deployments () {
+    local FILE
+    for FILE in "${@}"
+    do
+        check_deployment "${FILE}"
+    done
+}
+
+check_deployment () {
+    local FILE=$1
+
+    # Check for revisionHistoryLimit
+    grep 'revisionHistoryLimit' "${FILE}" > /dev/null
+    RC=$?
+
+    if [[ $RC -eq 0 ]]
+    then
+        echo -e "${CHECKMARK} " "${FILE} includes revisionHistoryLimit"
+    else
+        echo -e "${SKULL} " "ERROR ${FILE} does not include 'revisionHistoryLimit' https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy"
+        LINT_ERROR=1
+    fi
+}
+
+
 
 main() {
     echo "Linting files"
@@ -36,6 +60,9 @@ main() {
     files_exist "${HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
     files_exist "${POD_DISRUPTION_BUDGET_FILES[@]}"
 
+    check_deployments "${DEPLOYMENT_FILES[@]}"
+
+    echo "Exit: ${LINT_ERROR}"
     exit $LINT_ERROR
 }
 

@@ -173,6 +173,7 @@ Will exit non-zero on a failure.
 Current checks:
 
 * Files referenced in config file exist (does not check for secrets files)
+* Deployments contain a `revisionHistoryLimit`
 
 ### k8s-secrets-from-s3
 
