@@ -158,6 +158,23 @@ Combines `k8s-deploy` and `k8s-verify` into a single command. This can be used t
 
 Nukes everything defined in your k8s-scripts config file.
 
+### k8s-lint
+
+Linter to provide quick feedback on files. This should be used as part of your CI testing to lint on each build to discover problems before they stop a deployment.
+
+Example:
+
+```
+k8s-lint -f k8s-scripts.config
+```
+
+Will exit non-zero on a failure.
+
+Current checks:
+
+* Files referenced in config file exist (does not check for secrets files)
+* Deployments contain a `revisionHistoryLimit`
+
 ### k8s-secrets-from-s3
 
 Generates a kubernetes secrets YAML file from the contents of a path within an S3 bucket. This will copy files from `${S3_BUCKET}/${NAMESPACE}/${SECRET}` and generate a file into `deploy/${SECRET}.secret.yaml`, suitable for deployment with `k8s-deploy`.
