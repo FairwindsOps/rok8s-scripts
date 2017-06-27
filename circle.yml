@@ -2,6 +2,7 @@ machine:
   environment:
     GITHUB_ORGANIZATION: $CIRCLE_PROJECT_USERNAME
     GITHUB_REPOSITORY: $CIRCLE_PROJECT_REPONAME
+    PATH: ~/$CIRCLE_PROJECT_REPONAME/bin:$PATH
 
 dependencies:
   pre:
@@ -13,6 +14,8 @@ dependencies:
 test:
   override:
     - shellcheck bin/docker-* bin/ensure-kubectl bin/k8s-apply bin/k8s-secrets-from-s3 bin/verify-deployment bin/k8s-lint
+    - cd examples/production-ready; k8s-lint -f staging.config
+    - cd examples/production-ready; k8s-lint -f production.config
 
 deployment:
   release:

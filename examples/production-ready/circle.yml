@@ -20,7 +20,8 @@ dependencies:
 
 test:
   override:
-    - echo "No tests for now!"
+    - k8s-lint -f staging.config
+    - k8s-lint -f production.config
 
 deployment:
   staging:
