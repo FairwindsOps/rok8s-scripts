@@ -32,7 +32,7 @@ deployment:
       - prepare-kubectl
       - k8s-deploy-and-verify -f deploy/staging.config
 
-  staging:
+  production:
     branch: [production]
     commands:
       - docker-push -f deploy/production.config
