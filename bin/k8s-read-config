@@ -136,7 +136,9 @@ echo "[horizontal_pod_autoscalers]: ${HORIZONTAL_POD_AUTOSCALERS[@]}"
 HORIZONTAL_POD_AUTOSCALER_FILES=()
 for i in "${HORIZONTAL_POD_AUTOSCALERS[@]}"
 do
-  HORIZONTAL_POD_AUTOSCALER_FILES+=($BASEDIR/deploy/$i.horizontal_pod_autoscaler.yml)
+  if [[ -f "$BASEDIR/deploy/$i.horizontal_pod_autoscaler.yml" ]]; then
+    HORIZONTAL_POD_AUTOSCALER_FILES+=($BASEDIR/deploy/$i.horizontal_pod_autoscaler.yml)
+  fi
 done
 echo "[horizontal_pod_autoscaler_files]: ${HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
 
