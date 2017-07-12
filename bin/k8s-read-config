@@ -45,7 +45,9 @@ echo "[configmaps]: ${CONFIGMAPS[@]}"
 CONFIGMAP_FILES=()
 for i in "${CONFIGMAPS[@]}"
 do
-  CONFIGMAP_FILES+=($BASEDIR/deploy/$i.configmap.yml)
+  if [[ -f "$BASEDIR/deploy/$i.configmap.yml" ]]; then
+    CONFIGMAP_FILES+=($BASEDIR/deploy/$i.configmap.yml)
+  fi
 done
 echo "[configmap_files]: ${CONFIGMAP_FILES[@]}"
 
@@ -53,18 +55,21 @@ echo "[secrets]: ${SECRETS[@]}"
 SECRET_FILES=()
 for i in "${SECRETS[@]}"
 do
-  SECRET_FILES+=($BASEDIR/deploy/$i.secret.yml)
+  if [[ -f "$BASEDIR/deploy/$i.secret.yml" ]]; then
+    SECRET_FILES+=($BASEDIR/deploy/$i.secret.yml)]
+  fi
 done
 echo "[secret_files]: ${SECRET_FILES[@]}"
 
 echo "[s3-secrets]: ${S3_SECRETS[@]}"
 
-
 echo "[sops-secrets]: ${SOPS_SECRETS[@]}"
 SOPS_SECRET_FILES=()
 for i in "${SOPS_SECRETS[@]}"
 do
-  SOPS_SECRET_FILES+=($BASEDIR/deploy/$i.secret.sops.yml)
+  if [[ -f "$BASEDIR/deploy/$i.secret.sops.yml" ]]; then
+    SOPS_SECRET_FILES+=($BASEDIR/deploy/$i.secret.sops.yml)
+  fi
 done
 echo "[sops_secret_files]: ${SOPS_SECRET_FILES[@]}"
 
@@ -72,7 +77,9 @@ echo "[persistent volumes]: ${PERSISTENT_VOLUMES[@]}"
 PERSISTENT_VOLUME_FILES=()
 for i in "${PERSISTENT_VOLUMES[@]}"
 do
-  PERSISTENT_VOLUME_FILES+=($BASEDIR/deploy/$i.persistent_volume.yml)
+  if [[ -f "$BASEDIR/deploy/$i.persistent_volume.yml" ]]; then
+    PERSISTENT_VOLUME_FILES+=($BASEDIR/deploy/$i.persistent_volume.yml)
+  fi
 done
 echo "[persistent_volume_files]: ${PERSISTENT_VOLUME_FILES[@]}"
 
@@ -80,7 +87,9 @@ echo "[persistent volume_claims]: ${PERSISTENT_VOLUME_CLAIMS[@]}"
 PERSISTENT_VOLUME_CLAIM_FILES=()
 for i in "${PERSISTENT_VOLUME_CLAIMS[@]}"
 do
-  PERSISTENT_VOLUME_CLAIM_FILES+=($BASEDIR/deploy/$i.persistent_volume_claim.yml)
+  if [[ -f "$BASEDIR/deploy/$i.persistent_volume_claim.yml" ]]; then
+    PERSISTENT_VOLUME_CLAIM_FILES+=($BASEDIR/deploy/$i.persistent_volume_claim.yml)
+  fi
 done
 echo "[persistent_volume_claim_files]: ${PERSISTENT_VOLUME_CLAIM_FILES[@]}"
 
@@ -88,7 +97,9 @@ echo "[statefulsets]: ${STATEFULSETS[@]}"
 STATEFULSET_FILES=()
 for i in "${STATEFULSETS[@]}"
 do
-  STATEFULSET_FILES+=($BASEDIR/deploy/$i.statefulset.yml)
+  if [[ -f "$BASEDIR/deploy/$i.statefulset.yml" ]]; then
+    STATEFULSET_FILES+=($BASEDIR/deploy/$i.statefulset.yml)
+  fi
 done
 echo "[statefulset_files]: ${STATEFULSET_FILES[@]}"
 
@@ -96,7 +107,9 @@ echo "[services]: ${SERVICES[@]}"
 SERVICE_FILES=()
 for i in "${SERVICES[@]}"
 do
-  SERVICE_FILES+=($BASEDIR/deploy/$i.service.yml)
+  if [[ -f "$BASEDIR/deploy/$i.service.yml" ]]; then
+    SERVICE_FILES+=($BASEDIR/deploy/$i.service.yml)
+  fi
 done
 echo "[service_files]: ${SERVICE_FILES[@]}"
 
@@ -104,7 +117,9 @@ echo "[endpoints]: ${ENDPOINTS[@]}"
 ENDPOINT_FILES=()
 for i in "${ENDPOINTS[@]}"
 do
-  ENDPOINT_FILES+=($BASEDIR/deploy/$i.endpoint.yml)
+  if [[ -f "$BASEDIR/deploy/$i.endpoint.yml" ]]; then
+    ENDPOINT_FILES+=($BASEDIR/deploy/$i.endpoint.yml)
+  fi
 done
 echo "[endpoint_files]: ${ENDPOINT_FILES[@]}"
 
@@ -112,7 +127,9 @@ echo "[ingresses]: ${INGRESSES[@]}"
 INGRESS_FILES=()
 for i in "${INGRESSES[@]}"
 do
-  INGRESS_FILES+=($BASEDIR/deploy/$i.ingress.yml)
+  if [[ -f "$BASEDIR/deploy/$i.ingress.yml" ]]; then
+    INGRESS_FILES+=($BASEDIR/deploy/$i.ingress.yml)
+  fi
 done
 echo "[ingress_files]: ${INGRESS_FILES[@]}"
 
@@ -120,7 +137,9 @@ echo "[jobs]: ${JOBS[@]}"
 JOBS_FILES=()
 for i in "${JOBS[@]}"
 do
-  JOBS_FILES+=($BASEDIR/deploy/$i.job.yml)
+  if [[ -f "$BASEDIR/deploy/$i.job.yml" ]]; then
+    JOBS_FILES+=($BASEDIR/deploy/$i.job.yml)
+  fi
 done
 echo "[jobs_files]: ${JOBS_FILES[@]}"
 
@@ -128,7 +147,9 @@ echo "[deployments]: ${DEPLOYMENTS[@]}"
 DEPLOYMENT_FILES=()
 for i in "${DEPLOYMENTS[@]}"
 do
-  DEPLOYMENT_FILES+=($BASEDIR/deploy/$i.deployment.yml)
+  if [[ -f "$BASEDIR/deploy/$i.deployment.yml" ]]; then
+    DEPLOYMENT_FILES+=($BASEDIR/deploy/$i.deployment.yml)
+  fi
 done
 echo "[deployment_files]: ${DEPLOYMENT_FILES[@]}"
 
@@ -146,7 +167,9 @@ echo "[pod_disruption_budget]: ${POD_DISRUPTION_BUDGETS[@]}"
 POD_DISRUPTION_BUDGET_FILES=()
 for i in "${POD_DISRUPTION_BUDGETS[@]}"
 do
-  POD_DISRUPTION_BUDGET_FILES+=($BASEDIR/deploy/$i.pod_disruption_budget.yml)
+  if [[ -f "$BASEDIR/deploy/$i.pod_disruption_budget.yml" ]]; then
+     POD_DISRUPTION_BUDGET_FILES+=($BASEDIR/deploy/$i.pod_disruption_budget.yml)
+  fi
 done
 echo "[pod_disruption_budget_files]: ${POD_DISRUPTION_BUDGET_FILES[@]}"
 
@@ -154,7 +177,9 @@ echo "[blocking jobs]: ${BLOCKING_JOBS[@]}"
 BLOCKING_JOBS_FILES=()
 for i in "${BLOCKING_JOBS[@]}"
 do
-  BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
+  if [[ -f "$BASEDIR/deploy/$i.blockingjob.yml" ]]; then
+    BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
+  fi
 done
 echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
 
