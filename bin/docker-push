@@ -31,7 +31,11 @@ then
   exit 1
 fi
 
-docker tag -f "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_REF}"
+DOCKER_TAG_COM="docker tag"
+docker version | grep -e Version | head -n 1 | grep  1.9 && DOCKER_TAG_COM="${DOCKER_TAG_COM} -f "
+
+$DOCKER_TAG_COM "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_REF}"
+
 if [ $? -ne 0 ]
 then
   echo "Unable to tag image, aborting"
