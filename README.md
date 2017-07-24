@@ -228,7 +228,7 @@ data:
   password: example-password
 ```
 
-Most text editors add a newline character to the end of a file which could cause an issue with the secrets on S3 because that newline character will be included in the base64 encoded value in the secrets.yml file. To strip all newline characters from the end of a file pass the `-s` flag to the `k8s-secrets-from-s3` command.
+Most text editors add a newline character to the end of a file which could cause an issue with the secrets on S3 because that newline character will be included in the base64 encoded value in the `deploy/${SECRET}.secret.yaml` file. To strip all newline characters from the end of a file pass the `-s` flag to the `k8s-secrets-from-s3` command.
 
 ### k8s-sops-secret-decrypt
 
