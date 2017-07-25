@@ -32,11 +32,11 @@ then
 fi
 
 DOCKER_TAG_COM="docker tag"
-version=`docker version | grep -e Version | head -n 1 | awk '{ print $2 }'`
-major=`echo $version | awk -F. '{ print $1 }'`
-minor=`echo $version | awk -F. '{ print $2 }'`
+version=$(docker version | grep -e Version | head -n 1 | awk '{ print $2 }')
+major=$(echo ${version} | awk -F. '{ print $1 }')
+minor=$(echo ${version} | awk -F. '{ print $2 }')
 
-if [[ $minor -le 9 && $major -eq 1 ]] || [ $major -eq 0 ]
+if [[ ${minor} -le 9 && ${major} -eq 1 ]] || [ ${major} -eq 0 ]
 then
   DOCKER_TAG_COM="${DOCKER_TAG_COM} -f "
 fi
