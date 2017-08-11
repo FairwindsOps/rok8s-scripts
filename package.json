@@ -29,7 +29,8 @@
     "prepare-kubectl": "./bin/prepare-kubectl",
     "run-blocking-job": "./bin/run-blocking-job",
     "timeout.sh": "./bin/timeout.sh",
-    "verify-deployment": "./bin/verify-deployment"
+    "verify-deployment": "./bin/verify-deployment",
+    "cloud-login": "./bin/cloud-login"
   },
   "author": "ReactiveOps <ops+rok8s-scripts@reactiveops.com>",
   "license": "MIT",

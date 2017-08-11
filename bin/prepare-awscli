@@ -5,7 +5,7 @@ if ! hash aws 2>/dev/null; then
 fi
 
 if [ -z "$AWS_ECR_ACCOUNT_ID" ]; then
-  eval $(aws ecr get-login --region $AWS_DEFAULT_REGION)
+  eval "$(aws ecr get-login --region $AWS_DEFAULT_REGION)"
 else
-  eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --registry-ids ${AWS_ECR_ACCOUNT_ID})
+  eval "$(aws ecr get-login --region $AWS_DEFAULT_REGION --registry-ids ${AWS_ECR_ACCOUNT_ID})"
 fi
