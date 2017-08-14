@@ -92,6 +92,23 @@ done
 echo "Done deploying Jobs"
 echo ""
 
+echo "Deploying CronJobs"
+for index in "${!CRONJOB_FILES[@]}"
+do
+  CRONJOB=${CRONJOBS[$index]##*/}
+  CRONJOB_FILE=${CRONJOB_FILES[$index]}
+  if [ -n "$CI_SHA1" ]
+  then
+    echo "Updating image tag from latest to ${CI_SHA1} for ${CRONJOB_FILE}"
+    sed 's/:latest/':${CI_SHA1}'/g;' ${CRONJOB_FILE} > ${CRONJOB_FILE}-${CI_SHA1}
+    echo "Updating ${CRONJOB_FILE}-${CI_SHA1}"
+    CRONJOB_FILE=${CRONJOB_FILE}-${CI_SHA1}
+  fi
+  kubectl apply -f ${CRONJOB_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying CronJobs"
+echo ""
+
 echo "Deploying Blocking Jobs"
 for index in "${!BLOCKING_JOBS_FILES[@]}"
 do
