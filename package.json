@@ -3,6 +3,7 @@
   "version": "4.1.0",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
+    "cloud-login": "./bin/cloud-login",
     "docker-build": "./bin/docker-build",
     "docker-pull": "./bin/docker-pull",
     "docker-push": "./bin/docker-push",
@@ -29,8 +30,7 @@
     "prepare-kubectl": "./bin/prepare-kubectl",
     "run-blocking-job": "./bin/run-blocking-job",
     "timeout.sh": "./bin/timeout.sh",
-    "verify-deployment": "./bin/verify-deployment",
-    "cloud-login": "./bin/cloud-login"
+    "verify-deployment": "./bin/verify-deployment"
   },
   "author": "ReactiveOps <ops+rok8s-scripts@reactiveops.com>",
   "license": "MIT",

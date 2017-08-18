@@ -1,8 +1,13 @@
 #!/bin/bash -e
 echo "Preparing the gcloud command line tools."
 
-if [[ -z "$GCP_PROJECT"  ]]; then
-  echo "Missing GCP project, or zone!  Aborting"
+if [[ -z ${GCP_PROJECT+x}  ]]; then
+  echo "Missing GCP_PROJECT environment variable.  Aborting"
+  exit 1
+fi
+
+if [[ -z ${GCLOUD_KEY+x}  ]]; then
+  echo "Missing GCLOUD_KEY environment variable.  Aborting"
   exit 1
 fi
 

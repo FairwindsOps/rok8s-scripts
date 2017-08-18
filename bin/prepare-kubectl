@@ -7,5 +7,11 @@ if [ -n "$KUBECONFIG_DATA" ]; then
   echo "${KUBECONFIG_DATA}" | base64 --decode > ~/.kube/config
 else
   cloud-login
-  gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${GCP_ZONE}" --project "${GCP_PROJECT}"
+  if [ -n "${CLOUD_LOGGED_IN+1}" ]
+  then
+    gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${GCP_ZONE}" --project "${GCP_PROJECT}"  
+  else
+    echo "Unable prepare kubectl. No KUBECONFIG_DATA or no GCP login provided."
+    exit 1
+  fi
 fi
