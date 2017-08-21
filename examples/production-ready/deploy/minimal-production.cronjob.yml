@@ -1,0 +1,37 @@
+apiVersion: batch/v2alpha1
+kind: CronJob
+metadata:
+  name: foo
+spec:
+  schedule: "17 * * * *"
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 20
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: foo
+              persistentVolumeClaim:
+                claimName: foo
+          containers:
+          - name: foo
+            image: foo/bar:latest
+            imagePullPolicy: IfNotPresent
+            resources:
+              limits:
+                cpu: 50m
+                memory: 256Mi
+              requests:
+                cpu: 50m
+                memory: 256Mi
+            volumeMounts:
+            - mountPath: /var/foo
+              name: foo
+            args: ["foo-job", "-t", "-c", "foo-arg_1", "foo-arg_2"]
+            env:
+            - name: K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          restartPolicy: OnFailure

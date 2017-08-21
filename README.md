@@ -77,6 +77,8 @@ JOBS=()
 # List of files ending in '.blockingjob.yml' in the kube directory
 BLOCKING_JOBS=()
 
+# List of files ending in '.cronjob.yml' in the kube directory
+CRONJOBS=()
 
 ```
 

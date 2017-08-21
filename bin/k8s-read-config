@@ -156,3 +156,13 @@ do
 done
 echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
 echo ""
+
+
+echo "[cronjobs]: ${CRONJOBS[@]}"
+CRONJOB_FILES=()
+for i in "${CRONJOBS[@]}"
+do
+  CRONJOB_FILES+=($BASEDIR/deploy/$i.cronjob.yml)
+done
+echo "[cronjobs_files]: ${CRONJOB_FILES[@]}"
+echo ""
