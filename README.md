@@ -304,6 +304,21 @@ of all services that are accessible from your local machine
 Makes sure kubectl is installed and available for use. Customize the version
 by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.4.0`.
 
+### prepare-kubectl
+Initializes the Kubernetes config to be used with kubectl. There are 2 modes of
+operation, with an environment variable to store the config, or using `gcloud`.
+
+If `KUBECONFIG_DATA` is defined this script will `base64 --decode` and place
+the value into `~/.kube/config` to be used by kubectl.
+
+To generate a `KUBECONFIG_DATA` value you can use `cat ~/.kube/config | base64`.
+
+If `KUBECONFIG_DATA` is not defined then the script will check for environment
+variables used for `gcloud`. This requires:
+
+* `CLUSTER_NAME` - The short name of the cluster as shown in the GKE dashboard
+* `GCP_ZONE` - The zone of the cluster
+* `GCP_PROJECT` - The GCP project name (as passed to `gcloud` with `--project`)
 
 ## Assumptions
 
