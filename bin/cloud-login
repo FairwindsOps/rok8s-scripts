@@ -17,5 +17,3 @@ if [ ! -z "${GCLOUD_KEY}" ]; then
     CLOUD_LOGGED_IN=true
     return 0
 fi
-
-echo "Something unexpected occured authenticating to cloud provider. Attempting to proceed..." 
