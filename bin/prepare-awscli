@@ -1,9 +1,5 @@
 #!/bin/bash -e
 
-if ! hash aws 2>/dev/null; then
-  pip install awscli
-fi
-
 # shellcheck disable=SC2086
 if [ -z "$AWS_ECR_ACCOUNT_ID" ]; then  
   eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION})"
