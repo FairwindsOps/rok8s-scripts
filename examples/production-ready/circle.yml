@@ -29,7 +29,7 @@ deployment:
     commands:
       - docker-push -f deploy/staging.config
       - ensure-kubectl
-      - prepare-kubectl
+      - prepare-kubectl -f deploy/staging.config
       - k8s-deploy-and-verify -f deploy/staging.config
 
   production:
@@ -37,7 +37,7 @@ deployment:
     commands:
       - docker-push -f deploy/production.config
       - ensure-kubectl
-      - prepare-kubectl
+      - prepare-kubectl -f deploy/production.config
       - k8s-deploy-and-verify -f deploy/production.config
 
 

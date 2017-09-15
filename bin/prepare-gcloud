@@ -1,0 +1,27 @@
+#!/bin/bash -e
+echo "Preparing the gcloud command line tools."
+
+if [[ -z ${GCP_PROJECT+x}  ]]; then
+  echo "Missing GCP_PROJECT environment variable.  Aborting"
+  exit 1
+fi
+
+if [[ -z ${GCLOUD_KEY+x}  ]]; then
+  echo "Missing GCLOUD_KEY environment variable.  Aborting"
+  exit 1
+fi
+
+if ! hash gcloud 2>/dev/null; then
+  sudo apt-get install google-cloud-sdk
+fi
+
+KEYFILE=${HOME}/gcloud-service-key.json
+export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/gcloud-service-key.json"
+echo "${GCLOUD_KEY}" | base64 --decode > "${KEYFILE}"
+gcloud auth activate-service-account --key-file "${KEYFILE}" --project "${GCP_PROJECT}"
+
+# Set GCP Project
+gcloud config set project "${GCP_PROJECT}"
+
+# Authorize the docker client to work with GCR
+gcloud docker --authorize-only

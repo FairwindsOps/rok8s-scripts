@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+if [ -n "${CLOUD_LOGGED_IN+1}" ]
+then
+  echo "Already logged in to gloud provider"
+  return 0
+fi
+
+if [ ! -z "${AWS_ACCESS_KEY_ID}" ]; then
+    prepare-awscli
+    CLOUD_LOGGED_IN=true
+    return 0
+fi
+
+if [ ! -z "${GCLOUD_KEY}" ]; then
+    prepare-gcloud
+    CLOUD_LOGGED_IN=true
+    return 0
+fi

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . k8s-read-config "$@"
+cloud-login
 
 if [ -z "$EXTERNAL_REGISTRY_BASE_DOMAIN" ]; then echo EXTERNAL_REGISTRY_BASE_DOMAIN must be set; exit 1; fi
 if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be set; exit 1; fi
@@ -55,7 +56,7 @@ then
   exit 1
 fi
 
-docker tag "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
+$DOCKER_TAG_COM "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
 if [ $? -ne 0 ]
 then
   echo "Unable to tag image, aborting"

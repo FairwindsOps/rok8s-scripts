@@ -3,6 +3,7 @@
   "version": "4.1.0",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
+    "cloud-login": "./bin/cloud-login",
     "docker-build": "./bin/docker-build",
     "docker-pull": "./bin/docker-pull",
     "docker-push": "./bin/docker-push",
@@ -24,6 +25,8 @@
     "minikube-deploy": "./bin/minikube-deploy",
     "minikube-services": "./bin/minikube-services",
     "minikube-services-all": "./bin/minikube-services-all",
+    "prepare-awscli": "./bin/prepare-awscli",
+    "prepare-gcloud": "./bin/prepare-gcloud",
     "prepare-kubectl": "./bin/prepare-kubectl",
     "run-blocking-job": "./bin/run-blocking-job",
     "timeout.sh": "./bin/timeout.sh",

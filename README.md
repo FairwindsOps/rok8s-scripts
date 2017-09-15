@@ -115,6 +115,22 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Ingress Resources end in `ingress.yml`
 * Pod Disruption Budgets end in `pod_disruption_budget.yml`
 
+## Credentials
+
+If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS or GCP you will need to provide credentials as enviconrment variables. `rok8s-scripts` will automatically login if the following variables exist:
+
+### AWS [Access Keys](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
+* `AWS_ACCESS_KEY_ID`
+* `AWS_SECRET_ACCESS_KEY`
+
+### GCP
+* `GCLOUD_KEY` [Service Account Keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+
+## Kubernetes Access
+
+In order to connect to a Kubernets cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clustuers, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
+
+
 ## Commands
 
 ### docker-build
@@ -286,8 +302,23 @@ of all services that are accessible from your local machine
 
 ### ensure-kubectl
 Makes sure kubectl is installed and available for use. Customize the version
-by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.3.6`.
+by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.4.0`.
 
+### prepare-kubectl
+Initializes the Kubernetes config to be used with kubectl. There are 2 modes of
+operation, with an environment variable to store the config, or using `gcloud`.
+
+If `KUBECONFIG_DATA` is defined this script will `base64 --decode` and place
+the value into `~/.kube/config` to be used by kubectl.
+
+To generate a `KUBECONFIG_DATA` value you can use `cat ~/.kube/config | base64`.
+
+If `KUBECONFIG_DATA` is not defined then the script will check for environment
+variables used for `gcloud`. This requires:
+
+* `CLUSTER_NAME` - The short name of the cluster as shown in the GKE dashboard
+* `GCP_ZONE` - The zone of the cluster
+* `GCP_PROJECT` - The GCP project name (as passed to `gcloud` with `--project`)
 
 ## Assumptions
 

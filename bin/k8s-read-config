@@ -155,6 +155,10 @@ do
   BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
 done
 echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
+
+CLUSTER_NAME=${CLUSTER_NAME}
+echo "[cluster_name]: $CLUSTER_NAME"
+
 echo ""
 
 
