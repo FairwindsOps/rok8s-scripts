@@ -31,7 +31,7 @@ while [  $COUNTER -lt $POLL_TRIES ]; do
   SUCCEEDED=$(kubectl get job -o json $JOB_NAME --namespace=${2:=default} |jq .status.succeeded)
   if [ "$ACTIVE" == "null" ] && [ "$SUCCEEDED" == "1" ]; then
     echo "Blocking job $JOB_NAME succesfully completed, deleting"
-    kubectl delete job ${JOB_NAME} --namespace=${2:=default} 
+    kubectl delete job ${JOB_NAME} --namespace=${2:=default}
     exit $?
   else
     sleep ${POLL_WAIT}
@@ -39,3 +39,4 @@ while [  $COUNTER -lt $POLL_TRIES ]; do
 done
 
 echo "Blocking job $JOB_NAME failed to complete"
+exit 124
