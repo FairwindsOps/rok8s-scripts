@@ -124,6 +124,8 @@ do
     BLOCKING_JOB_FILE=${BLOCKING_JOB_FILE}-${CI_SHA1}
   fi
 
+  BLOCKING_JOB=${BLOCKING_JOBS[$index]##*/}
+  kubectl delete --namespace="${NAMESPACE}" job "${BLOCKING_JOB}" 2>/dev/null || true
   kubectl apply -f ${BLOCKING_JOB_FILE} --namespace=$NAMESPACE
 done
 echo "Done deploying Blocking Jobs"
