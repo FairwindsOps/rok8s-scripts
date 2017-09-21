@@ -39,3 +39,4 @@ while [  $COUNTER -lt $POLL_TRIES ]; do
 done
 
 echo "Blocking job $JOB_NAME failed to complete"
+exit 124
