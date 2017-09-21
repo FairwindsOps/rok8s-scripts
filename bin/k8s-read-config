@@ -41,159 +41,83 @@ echo "[external_registry_base_domain]: $EXTERNAL_REGISTRY_BASE_DOMAIN"
 NAMESPACE=${NAMESPACE:=default}
 echo "[namespace]: $NAMESPACE"
 
-echo "[configmaps]: ${CONFIGMAPS[@]}"
-CONFIGMAP_FILES=()
-for i in "${CONFIGMAPS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.configmap.yml" ]]; then
-    CONFIGMAP_FILES+=($BASEDIR/deploy/$i.configmap.yml)
-  fi
-done
-echo "[configmap_files]: ${CONFIGMAP_FILES[@]}"
+function expand_files() {
+  local INPUT_NAME="${1}"
+  local OUTPUT_NAME="${2}"
+  local FILE_ENDING="${3}"
 
-echo "[secrets]: ${SECRETS[@]}"
-SECRET_FILES=()
-for i in "${SECRETS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.secret.yml" ]]; then
-    SECRET_FILES+=($BASEDIR/deploy/$i.secret.yml)]
+  local INPUTS=""
+  eval "INPUTS=\${${INPUT_NAME}[@]}"
+
+  if [[ ${#INPUTS} -eq 0 ]]; then
+    return
   fi
-done
-echo "[secret_files]: ${SECRET_FILES[@]}"
+
+  eval echo "[${INPUT_NAME}]: \${${INPUT_NAME}[@]}"
+
+  for i in ${INPUTS}
+  do
+    filename="$BASEDIR/deploy/$i.${FILE_ENDING}"
+    if [[ -f "${filename}" ]]; then
+      eval "$OUTPUT_NAME+=("${filename}")"
+    elif [[ -z "${ROK8S_ENABLE_OPTIONAL_CONFIGS}" ]]; then
+      echo "ERROR: Missing ${filename}"
+      exit 1
+    else
+      echo "INFO: Skipping optional ${filename}"
+    fi
+  done
+
+  eval echo "[${OUTPUT_NAME}]: \${${OUTPUT_NAME}[@]}"
+}
+
+CONFIGMAP_FILES=()
+expand_files "CONFIGMAPS" "CONFIGMAP_FILES" "configmap.yml"
+
+SECRET_FILES=()
+expand_files "SECRETS" "SECRET_FILES" "secret.yml"
 
 echo "[s3-secrets]: ${S3_SECRETS[@]}"
 
-echo "[sops-secrets]: ${SOPS_SECRETS[@]}"
 SOPS_SECRET_FILES=()
-for i in "${SOPS_SECRETS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.secret.sops.yml" ]]; then
-    SOPS_SECRET_FILES+=($BASEDIR/deploy/$i.secret.sops.yml)
-  fi
-done
-echo "[sops_secret_files]: ${SOPS_SECRET_FILES[@]}"
+expand_files "SOPS_SECRETS" "SOPS_SECRET_FILES" "secret.sops.yml"
 
-echo "[persistent volumes]: ${PERSISTENT_VOLUMES[@]}"
 PERSISTENT_VOLUME_FILES=()
-for i in "${PERSISTENT_VOLUMES[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.persistent_volume.yml" ]]; then
-    PERSISTENT_VOLUME_FILES+=($BASEDIR/deploy/$i.persistent_volume.yml)
-  fi
-done
-echo "[persistent_volume_files]: ${PERSISTENT_VOLUME_FILES[@]}"
+expand_files "PERSISTENT_VOLUMES" "PERSISTENT_VOLUME_FILES" "persistent_volume.yml"
 
-echo "[persistent volume_claims]: ${PERSISTENT_VOLUME_CLAIMS[@]}"
 PERSISTENT_VOLUME_CLAIM_FILES=()
-for i in "${PERSISTENT_VOLUME_CLAIMS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.persistent_volume_claim.yml" ]]; then
-    PERSISTENT_VOLUME_CLAIM_FILES+=($BASEDIR/deploy/$i.persistent_volume_claim.yml)
-  fi
-done
-echo "[persistent_volume_claim_files]: ${PERSISTENT_VOLUME_CLAIM_FILES[@]}"
+expand_files "PERSISTENT_VOLUME_CLAIMS" "PERSISTENT_VOLUME_CLAIM_FILES" "persistent_volume_claim.yml"
 
-echo "[statefulsets]: ${STATEFULSETS[@]}"
 STATEFULSET_FILES=()
-for i in "${STATEFULSETS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.statefulset.yml" ]]; then
-    STATEFULSET_FILES+=($BASEDIR/deploy/$i.statefulset.yml)
-  fi
-done
-echo "[statefulset_files]: ${STATEFULSET_FILES[@]}"
+expand_files "STATEFULSETS" "STATEFULSET_FILES" "statefulset.yml"
 
-echo "[services]: ${SERVICES[@]}"
 SERVICE_FILES=()
-for i in "${SERVICES[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.service.yml" ]]; then
-    SERVICE_FILES+=($BASEDIR/deploy/$i.service.yml)
-  fi
-done
-echo "[service_files]: ${SERVICE_FILES[@]}"
+expand_files "SERVICES" "SERVICE_FILES" "service.yml"
 
-echo "[endpoints]: ${ENDPOINTS[@]}"
 ENDPOINT_FILES=()
-for i in "${ENDPOINTS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.endpoint.yml" ]]; then
-    ENDPOINT_FILES+=($BASEDIR/deploy/$i.endpoint.yml)
-  fi
-done
-echo "[endpoint_files]: ${ENDPOINT_FILES[@]}"
+expand_files "ENDPOINTS" "ENDPOINT_FILES" "endpoint.yml"
 
-echo "[ingresses]: ${INGRESSES[@]}"
 INGRESS_FILES=()
-for i in "${INGRESSES[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.ingress.yml" ]]; then
-    INGRESS_FILES+=($BASEDIR/deploy/$i.ingress.yml)
-  fi
-done
-echo "[ingress_files]: ${INGRESS_FILES[@]}"
+expand_files "INGRESSES" "INGRESS_FILES" "ingress.yml"
 
-echo "[jobs]: ${JOBS[@]}"
 JOBS_FILES=()
-for i in "${JOBS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.job.yml" ]]; then
-    JOBS_FILES+=($BASEDIR/deploy/$i.job.yml)
-  fi
-done
-echo "[jobs_files]: ${JOBS_FILES[@]}"
+expand_files "JOBS" "JOBS_FILES" "job.yml"
 
-echo "[deployments]: ${DEPLOYMENTS[@]}"
 DEPLOYMENT_FILES=()
-for i in "${DEPLOYMENTS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.deployment.yml" ]]; then
-    DEPLOYMENT_FILES+=($BASEDIR/deploy/$i.deployment.yml)
-  fi
-done
-echo "[deployment_files]: ${DEPLOYMENT_FILES[@]}"
+expand_files "DEPLOYMENTS" "DEPLOYMENT_FILES" "deployment.yml"
 
-echo "[horizontal_pod_autoscalers]: ${HORIZONTAL_POD_AUTOSCALERS[@]}"
 HORIZONTAL_POD_AUTOSCALER_FILES=()
-for i in "${HORIZONTAL_POD_AUTOSCALERS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.horizontal_pod_autoscaler.yml" ]]; then
-    HORIZONTAL_POD_AUTOSCALER_FILES+=($BASEDIR/deploy/$i.horizontal_pod_autoscaler.yml)
-  fi
-done
-echo "[horizontal_pod_autoscaler_files]: ${HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
+expand_files "HORIZONTAL_POD_AUTOSCALERS" "HORIZONTAL_POD_AUTOSCALER_FILES" "horizontal_pod_autoscaler.yml"
 
-echo "[pod_disruption_budget]: ${POD_DISRUPTION_BUDGETS[@]}"
 POD_DISRUPTION_BUDGET_FILES=()
-for i in "${POD_DISRUPTION_BUDGETS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.pod_disruption_budget.yml" ]]; then
-     POD_DISRUPTION_BUDGET_FILES+=($BASEDIR/deploy/$i.pod_disruption_budget.yml)
-  fi
-done
-echo "[pod_disruption_budget_files]: ${POD_DISRUPTION_BUDGET_FILES[@]}"
+expand_files "POD_DISRUPTION_BUDGETS" "POD_DISRUPTION_BUDGET_FILES" "pod_disruption_budget.yml"
 
-echo "[blocking jobs]: ${BLOCKING_JOBS[@]}"
 BLOCKING_JOBS_FILES=()
-for i in "${BLOCKING_JOBS[@]}"
-do
-  if [[ -f "$BASEDIR/deploy/$i.blockingjob.yml" ]]; then
-    BLOCKING_JOBS_FILES+=($BASEDIR/deploy/$i.blockingjob.yml)
-  fi
-done
-echo "[blocking_jobs_files]: ${BLOCKING_JOBS_FILES[@]}"
+expand_files "BLOCKING_JOBS" "BLOCKING_JOBS_FILES" "blockingjob.yml"
+
+CRONJOB_FILES=()
+expand_files "CRONJOBS" "CRONJOB_FILES" "cronjob.yml"
 
 CLUSTER_NAME=${CLUSTER_NAME}
 echo "[cluster_name]: $CLUSTER_NAME"
-
-echo ""
-
-
-echo "[cronjobs]: ${CRONJOBS[@]}"
-CRONJOB_FILES=()
-for i in "${CRONJOBS[@]}"
-do
-  CRONJOB_FILES+=($BASEDIR/deploy/$i.cronjob.yml)
-done
-echo "[cronjobs_files]: ${CRONJOB_FILES[@]}"
 echo ""
