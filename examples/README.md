@@ -23,3 +23,8 @@ Deployment Features:
 * Volume mounting of Secrets and ConfigMap
 * Resource requests and limits
 * Liveness Probe
+
+## Optional-Components
+
+An example where production uses a Horizontal Pod Autoscaler but staging does
+not.
