@@ -20,8 +20,8 @@ dependencies:
 
 test:
   override:
-    - k8s-lint -f staging.config
-    - k8s-lint -f production.config
+    - k8s-lint -f deploy/staging.config
+    - k8s-lint -f deploy/production.config
 
 deployment:
   staging:
