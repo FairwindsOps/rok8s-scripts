@@ -19,7 +19,7 @@ if test -f $CONFIG ; then
 fi
 
 cat <<EOT >> $CONFIG
-# Configuration for https://www.npmjs.com/package/k8s-scripts
+# Configuration for https://www.npmjs.com/package/rok8s-scripts
 
 # Dockerfile to build
 DOCKERFILE='Dockerfile'
@@ -74,7 +74,7 @@ HORIZONTAL_POD_AUTOSCALERS=()
 # List of files ending in '.job.yml' in the kube directory
 JOBS=()
 
-# List of files ending in '.blockingjob.yml' in the kube directory (Not supported yet)
+# List of files ending in '.blockingjob.yml' in the kube directory
 BLOCKING_JOBS=()
 
 # List of files ending in '.cronjob.yml' in the kube directory
