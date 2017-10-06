@@ -29,7 +29,7 @@ while [  $COUNTER -lt $POLL_TRIES ]; do
   echo $JOB_NAME Blocking job check: ${COUNTER}
   ACTIVE=$(kubectl get job -o 'jsonpath={.status.active}' $JOB_NAME --namespace=${2:=default})
   SUCCEEDED=$(kubectl get job -o 'jsonpath={.status.succeeded}' $JOB_NAME --namespace=${2:=default})
-  if [ "$ACTIVE" == "null" ] && [ "$SUCCEEDED" == "1" ]; then
+  if ([ "$ACTIVE" == "null" ] || [[ -z "$ACTIVE" ]] ) && [ "$SUCCEEDED" == "1" ]; then
     echo "Blocking job $JOB_NAME succesfully completed, deleting"
     kubectl delete job ${JOB_NAME} --namespace=${2:=default}
     exit $?
