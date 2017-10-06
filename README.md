@@ -304,13 +304,12 @@ of all services that are accessible from your local machine
 Makes sure kubectl is installed and available for use. Customize the version
 by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.4.0`.
 
-### prepare-kubectl
-Initializes the Kubernetes config to be used with kubectl using a base64-encoded
-config file from the `KUBECONFIG_DATA` variable. If `KUBECONFIG_DATA` is defined
-this script will `base64 --decode` and place the value into `KUBECONFIG` to be
-used by kubectl.
+### prepare-awscli
+Uses `aws` to configure Docker to use ECR. This requires:
 
-To generate a `KUBECONFIG_DATA` value you can use `cat ~/.kube/config | base64`.
+* `AWS_ECR_ACCOUNT_ID` - The account ID for the ECR account to use.
+* `AWS_DEFAULT_REGION` - The region to use
+* Standard AWS credentials for `aws`
 
 ### prepare-gcloud
 Uses `gcloud` to download and configure `kubectl`, configures Docker to use
@@ -321,12 +320,13 @@ Container Registry and sets the default GCP projecct. This requires:
 * `GCP_PROJECT` - The GCP project name (as passed to `gcloud` with `--project`)
 * `GCLOUD_KEY` - The base64-encoded service account credentials
 
-### prepare-awscli
-Uses `aws` to configure Docker to use ECR. This requires:
+### prepare-kubectl
+Initializes the Kubernetes config to be used with kubectl using a base64-encoded
+config file from the `KUBECONFIG_DATA` variable. If `KUBECONFIG_DATA` is defined
+this script will `base64 --decode` and place the value into `KUBECONFIG` to be
+used by kubectl.
 
-* `AWS_ECR_ACCOUNT_ID` - The account ID for the ECR account to use.
-* `AWS_DEFAULT_REGION` - The region to use
-* Standard AWS credentials for `aws`
+To generate a `KUBECONFIG_DATA` value you can use `cat ~/.kube/config | base64`.
 
 ## Assumptions
 
