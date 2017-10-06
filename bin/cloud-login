@@ -6,7 +6,7 @@ then
   return 0
 fi
 
-if [ ! -z "${AWS_ACCESS_KEY_ID}" ]; then
+if [[ (! -z "${AWS_ACCESS_KEY_ID}"  && ! -z "${AWS_ACCESS_KEY_ID}" ) || ( -f ~/.aws/config && -f ~/.aws/credentials ) ]]; then
     prepare-awscli
     CLOUD_LOGGED_IN=true
     return 0
