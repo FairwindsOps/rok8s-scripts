@@ -6,7 +6,6 @@
     "docker-build": "./bin/docker-build",
     "docker-pull": "./bin/docker-pull",
     "docker-push": "./bin/docker-push",
-    "ensure-kubectl": "./bin/ensure-kubectl",
     "install-rok8s-requirements": "./bin/install-rok8s-requirements",
     "k8s-apply": "./bin/k8s-apply",
     "k8s-delete": "./bin/k8s-delete",

@@ -300,10 +300,6 @@ of any services defined in the config file that are accessible from your local m
 Switches to the minikube kubectl context and prints all the accessible ip:port
 of all services that are accessible from your local machine
 
-### ensure-kubectl
-Makes sure kubectl is installed and available for use. Customize the version
-by specifying the `KUBECTL_VERSION` envrionmental variable. Default: `v1.4.0`.
-
 ### prepare-awscli
 Uses `aws` to configure Docker to use ECR. This requires:
 

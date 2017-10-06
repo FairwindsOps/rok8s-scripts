@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "DEPRECATED. Please use install-rok8s-requirements"
-install-rok8s-requirements
