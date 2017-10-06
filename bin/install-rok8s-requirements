@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # MODIFIED by Ross Kukulinski <ross@kukulinski.com>
 # Copyright 2016 Ross Kukulinski All rights reserved
@@ -26,37 +26,41 @@
 PKG_MANAGER=$( command -v yum || command -v apt-get ) || echo "Neither yum nor apt-get found"
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.4.0}"
 #make sure sudo is installed
-if [ ! -e "/usr/bin/sudo" ]; then
-   "${PKG_MANAGER}" install -y sudo
+if ! hash sudo 2>/dev/null; then
+  echo Installing sudo...
+  "${PKG_MANAGER}" install -y sudo
 fi
 
 # remove default setting of requiretty if it exists
 #sed -i '/Defaults requiretty/d' /etc/sudoers
 
 #make sure wget is installed
-if [ ! -e "/usr/bin/wget" ]; then
-   sudo "${PKG_MANAGER}" install -y wget
+if ! hash wget 2>/dev/null; then
+  echo Installing wget...
+  sudo "${PKG_MANAGER}" install -y wget
 fi
 
 #make sure jq is installed
-if [ ! -e "/usr/bin/jq" ]; then
-    sudo "${PKG_MANAGER}" install -y jq
+if ! hash jq 2>/dev/null; then
+  echo Installing jq...
+  sudo "${PKG_MANAGER}" install -y jq
 fi
 
-#make sure envsubst is installed
-if [ ! -e "/usr/bin/envsubst" ]; then
-    sudo "${PKG_MANAGER}" install -y gettext
+#make sure gcloud is installed
+if ! hash gcloud 2>/dev/null; then
+  echo Installing gcloud...
+  sudo "${PKG_MANAGER}" install google-cloud-sdk
+fi
+
+#make sure awscli is installed
+if ! hash aws 2>/dev/null && hash pip 2>/dev/null; then
+  echo Installing aws...
+  pip install awscli
 fi
 
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
-  # If being run from the CircleCI platform, install as below
-  if [ -n "$CIRCLE_BUILD_NUM" ] ; then
-    cloud-login
-    #This requires sudo for CircleCI 1.0 when installed from the OS package
-    sudo "$(which gcloud)" --quiet components update kubectl
-  else
-    wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl
-    chmod +x /usr/local/bin/kubectl
-  fi
+  echo Installing kubectl...
+  wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl
+  chmod +x /usr/local/bin/kubectl
 fi

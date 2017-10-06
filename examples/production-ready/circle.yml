@@ -27,17 +27,15 @@ deployment:
   staging:
     branch: [master]
     commands:
+      - install-rok8s-requirements
       - docker-push -f deploy/staging.config
-      - ensure-kubectl
-      - prepare-kubectl -f deploy/staging.config
+      - prepare-kubectl
       - k8s-deploy-and-verify -f deploy/staging.config
 
   production:
     branch: [production]
     commands:
+      - install-rok8s-requirements
       - docker-push -f deploy/production.config
-      - ensure-kubectl
-      - prepare-kubectl -f deploy/production.config
+      - prepare-kubectl
       - k8s-deploy-and-verify -f deploy/production.config
-
-
