@@ -24,7 +24,7 @@
 
 
 PKG_MANAGER=$( command -v yum || command -v apt-get ) || echo "Neither yum nor apt-get found"
-KUBECTL_VERSION="${KUBECTL_VERSION:-v1.4.0}"
+KUBECTL_VERSION="${KUBECTL_VERSION:-v1.7.2}"
 #make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
   echo Installing sudo...
@@ -61,9 +61,9 @@ fi
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
   echo Installing kubectl...
-  wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl
-  chmod +x /usr/local/bin/kubectl
+  sudo wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O /usr/local/bin/kubectl
+  sudo chmod +x /usr/local/bin/kubectl
   if [[ -d /var/lib/jenkins/tools ]]; then
-    cp /usr/local/bin/kubectl /var/lib/jenkins/tools/kubectl
+    suo cp /usr/local/bin/kubectl /var/lib/jenkins/tools/kubectl
   fi
 fi
