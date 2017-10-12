@@ -154,6 +154,7 @@ do
   fi
   kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
   if [ $? -ne 0 ]
+  then
     kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
   else
     kubectl replace -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
