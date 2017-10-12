@@ -152,13 +152,7 @@ do
     echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
   fi
-  kubectl get deployment ${DEPLOYMENT} --namespace=$NAMESPACE &>/dev/null
-  if [ $? -ne 0 ]
-  then
-    kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
-  else
-    kubectl replace -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
-  fi
+  kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Deployments"
 echo ""
