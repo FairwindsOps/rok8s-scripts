@@ -152,6 +152,24 @@ do
     echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
   fi
+  if [[ $( grep -i replicas $DEPLOYMENT_FILE | awk -F: {'print $2'} | grep -i hpa ) ]]
+  then
+    REPLICA_COUNT=$( kubectl get deployment kube-flask --namespace=staging |
+                       awk -v subj="CURRENT" '{
+                         for(n=1;n<=NF;n++){
+                           if ($n==subj){
+                             subp=n;nrr=NR
+                           }
+                         };
+                         if(NR!=nrr){
+                           print $subp
+                         }
+                       }'
+                   )
+    echo "Updating replica count to ${REPLICA_COUNT} for ${DEPLOYMENT_FILE}"
+    sed -e 's/relicas: hpa/'${REPLICA_COUNT}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-hpa
+    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-hpa
+  fi
   kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Deployments"
