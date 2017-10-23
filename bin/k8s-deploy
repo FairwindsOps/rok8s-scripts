@@ -154,7 +154,7 @@ do
   fi
   if [[ $( grep -i replicas $DEPLOYMENT_FILE | awk -F: {'print $2'} | grep -i hpa ) ]]
   then
-    REPLICA_COUNT=$( kubectl get deployment kube-flask --namespace=staging |
+    REPLICA_COUNT=$( kubectl get deployment $DEPLOYMENT --namespace=$NAMESPACE |
                        awk -v subj="CURRENT" '{
                          for(n=1;n<=NF;n++){
                            if ($n==subj){
