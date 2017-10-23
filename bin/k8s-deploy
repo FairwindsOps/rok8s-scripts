@@ -162,7 +162,7 @@ do
   if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS][[:space:]]*:[[:space:]]*+[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
   then
     # Get the replica count and sed it into the deployment file in place of 'hpa'
-    REPLICA_COUNT=$(kubectl get deployment kube-flask --namespace=staging -o json | jq '.status.readyReplicas')
+    REPLICA_COUNT=$(kubectl get deployment ${DEPLOYMENT} --namespace=${NAMESPACE} -o json | jq '.status.readyReplicas')
     echo "Updating replica count to ${REPLICA_COUNT} for ${DEPLOYMENT_FILE}"
     sed -e 's/replicas: hpa/replicas: '${REPLICA_COUNT}'/gI;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-hpa
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-hpa
