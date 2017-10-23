@@ -152,24 +152,22 @@ do
     echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
   fi
-  if [[ $( grep -i replicas $DEPLOYMENT_FILE | awk -F: {'print $2'} | grep -i hpa ) ]]
+
+
+  # This is workaround attended to address an HPA issue where the correct number of pods are not deployed when
+  # 'kubectl apply' is used to redeploy a deployment that has been scaled by an HPA.  There is an open issue for
+  # this: https://github.com/kubernetes/kubernetes/issues/25238
+
+  # If we can match 'replicas: hpa' in te deployment file
+  if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS][[:space:]]*:[[:space:]]*+[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
   then
-    REPLICA_COUNT=$( kubectl get deployment $DEPLOYMENT --namespace=$NAMESPACE |
-                       awk -v subj="CURRENT" '{
-                         for(n=1;n<=NF;n++){
-                           if ($n==subj){
-                             subp=n;nrr=NR
-                           }
-                         };
-                         if(NR!=nrr){
-                           print $subp
-                         }
-                       }'
-                   )
+    # Get the replica count and sed it into the deployment file in place of 'hpa'
+    REPLICA_COUNT=$(kubectl get deployment kube-flask --namespace=staging -o json | jq '.status.readyReplicas')
     echo "Updating replica count to ${REPLICA_COUNT} for ${DEPLOYMENT_FILE}"
     sed -e 's/replicas: hpa/replicas: '${REPLICA_COUNT}'/gI;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-hpa
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-hpa
   fi
+
   kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Deployments"
