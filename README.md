@@ -164,6 +164,8 @@ And either `CI_BRANCH` or `CI_TAG`
 
 Leverages kubernetes annotations with `--record` when creating objects.
 
+If using an HPA, set `replicas: hpa` in the deployment file to have k8s-deploy get the current number of replicas from the cluster and deploy that number of replicas. This is a workaround for an open issue (https://github.com/kubernetes/kubernetes/issues/25238).
+
 ### k8s-verify
 
 Verifies your deployment was successful within a specified timeout.
@@ -327,6 +329,7 @@ To generate a `KUBECONFIG_DATA` value you can use `cat ~/.kube/config | base64`.
 ## Assumptions
 
 * In your Deployment file, specify imagePullPolicy: IfNotPresent
+* When using HPA in your Deployment file, the value of $DEPLOYMENT must match the deployment name or rok8s-scripts will not be able to determine the current number of replicas.
 
 # Releasing
 
