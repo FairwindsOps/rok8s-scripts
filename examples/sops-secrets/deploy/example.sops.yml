@@ -1,0 +1,11 @@
+sops:
+    kms: []
+    gcp_kms:
+    -   resource_id: projects/example-project/locations/global/keyRings/example-keyring/cryptoKeys/example-key
+        created_at: '2017-10-26T13:53:56Z'
+        enc: CiQA4tS6wpAXxmjE4PJB6oYxPNIN4KleaGTa/+UiH1dfHbY5LsQSSQDqtgI9iu/6QrWOh6uJI5wpaJyOuKGUE4vpm7rnHAOYbEv/CGit4LlFzw1bNFCyARe0I3CIffsrDXSQytCabQ44QWssNAOWF8M=
+    lastmodified: '2017-10-26T13:53:57Z'
+    mac: ENC[AES256_GCM,data:dX9WD6Zc1B1vYszslovEOipu5/+XDxwZTnz6OgVRoxst927uwVajMgXQv7nbI5IzxCiMfjtbSeFjCxRMpz8ovylHwfm1sd+lf7Ycmq5X2HbtVP7VxLBqvmT4ec9HWoYs4ET6mdzGgeH6mA3JDKrbXSnf0RgjFdnuA2nMjYW+j84=,iv:s1QzHLtWVVTZZ/aVB4m6MFB2GIEz1cNC+JBgCtsQcpw=,tag:SCsj7PoBU/klY6UIssFYfA==,type:str]
+    pgp: []
+    unencrypted_suffix: _unencrypted
+    version: 3.0.0

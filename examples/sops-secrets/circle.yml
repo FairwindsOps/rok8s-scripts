@@ -1,0 +1,29 @@
+machine:
+  environment:
+    PATH: $PATH:node_modules/.bin
+
+    CI_SHA1: $CIRCLE_SHA1
+    CI_BRANCH: $CIRCLE_BRANCH
+    CI_BUILD_NUM: $CIRCLE_BUILD_NUM
+    SOPS_GCP_KMS_ID: "projects/example-project/locations/global/keyRings/example-keyring/cryptoKeys/example-key"
+
+dependencies:
+  pre:
+    - npm install
+    - install-rok8s-requirements
+    - k8s-sops-secret-decrypt -f secrets.config
+
+  override:
+    - echo "overriding inferred dependencies"
+
+test:
+  override:
+    - echo "overriding any inferred tests"
+
+deployment:
+  production:
+    branch: [master]
+    commands:
+      - install-rok8s-requirements
+      - prepare-kubectl
+      - k8s-deploy -f deploy/secrets.config
