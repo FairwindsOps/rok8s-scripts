@@ -250,9 +250,9 @@ data:
 
 ### k8s-sops-secret-decrypt
 
-Given an [AWS KMS](https://aws.amazon.com/kms/) key id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.
+Given an [AWS KMS](https://aws.amazon.com/kms/) key id or [Google KMS](https://cloud.google.com/kms/) resource id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.
 
-The script assumes [sops](https://github.com/mozilla/sops.git) is installed and the `SOPS_KMS_ARN` environment variable is set. Ensure your `circle.yml` installs sops. I.e. add, `go get -u go.mozilla.org/sops/cmd/sops` to the `dependencies` level.
+The script assumes [sops](https://github.com/mozilla/sops.git) is installed and the `SOPS_KMS_ARN` or `SOPS_GCP_KMS_ID` environment variable is set. Ensure your `circle.yml` installs sops. I.e. add, `go get -u go.mozilla.org/sops/cmd/sops` to the `dependencies` level.
 
 If run from circleci, the script also assumes that the circleci IAM user has proper privileges to decrypt secrets using the set key.
 
@@ -281,7 +281,9 @@ A procedure for _encrypting_ secrets with sops might look this this:
 
 Encrypt [secret spec files](https://kubernetes.io/docs/concepts/configuration/secret/) with [sops](https://github.com/mozilla/sops)
   eg. `sops --kms="<your kms key arn>" --encrypt mysecret.yaml` _
+  or  `sops --gcp-kms="<your kms key resource id>" --encrypt mysecret.yaml` _
 
+sops [has more documentation about encrypting with GCP KMS](https://github.com/mozilla/sops#22encrypting-using-gcp-kms) in their repository.
 
 
 ### minikube-build
