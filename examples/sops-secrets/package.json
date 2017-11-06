@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "0.0.0",
+  "description": "Example app deployment with rok8s-scripts",
+  "repository": {
+    "type": "git",
+    "url": "+https://github.com/reactiveops/rok8s-scripts.git"
+  },
+  "author": "ReactiveOps",
+  "license": "Apache-2.0",
+  "dependencies": {
+     "rok8s-scripts": "*"
+  }
+}
+
