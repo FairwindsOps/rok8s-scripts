@@ -287,6 +287,9 @@ Current checks:
 
 * Files referenced in config file exist (does not check for secrets files)
 * Deployments contain a `revisionHistoryLimit`
+* CronJobs contain a `JobsHistoryLimit`
+  * History Limits are supported on kubernetes versions greater than 1.6
+  * If cluster version =<1.6, the lint will fail.
 
 ### minikube-build
 Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.
