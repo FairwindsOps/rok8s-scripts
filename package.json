@@ -14,7 +14,6 @@
     "k8s-lint": "./bin/k8s-lint",
     "k8s-example-config": "./bin/k8s-example-config",
     "k8s-read-config": "./bin/k8s-read-config",
-    "k8s-sops-secret-decrypt": "./bin/k8s-sops-secret-decrypt",
     "k8s-verify-deployment": "./bin/k8s-verify-deployment",
     "manage-context": "./bin/manage-context",
     "minikube-apply": "./bin/minikube-apply",
