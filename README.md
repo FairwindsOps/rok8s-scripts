@@ -248,6 +248,8 @@ data:
   password: example-password
 ```
 
+Most text editors add a newline character to the end of a file which could cause an issue with the secrets on S3 because that newline character will be included in the base64 encoded value in the `deploy/${SECRET}.secret.yaml` file. To strip all newline characters from the end of a file pass the `-s` flag to the `k8s-secrets-from-s3` command.
+
 ### k8s-sops-secret-decrypt
 
 Given an [AWS KMS](https://aws.amazon.com/kms/) key id or [Google KMS](https://cloud.google.com/kms/) resource id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.
