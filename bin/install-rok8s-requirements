@@ -49,7 +49,9 @@ fi
 #make sure gcloud is installed
 if ! hash gcloud 2>/dev/null; then
   echo Installing gcloud...
-  sudo "${PKG_MANAGER}" install google-cloud-sdk
+  gcloud components update --quiet || \
+    curl https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | \
+      bash -s -- --disable-prompts
 fi
 
 #make sure awscli is installed
