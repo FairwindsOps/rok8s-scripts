@@ -31,17 +31,21 @@ echo "Deploying Object Store Secrets"
 for OBJSTORE_SECRET_FILE in "${OBJSTORE_SECRET_FILES[@]}"
 do
   # Make a place to put the files
-  SECRETS_PATH=$(mktemp -d -t rok8s)
+  SECRETS_PATH=$(mktemp -d)
   trap "rm -rf ${SECRETS_PATH}" EXIT
 
   # Use the filename as the secret name
   SECRET_NAME=${OBJSTORE_SECRET_FILE##*/}
   SECRET_NAME=${SECRET_NAME%.secret.objecturl}
 
-  # Copy and apply
-  gsutil rsync -r \
-    "$(cat ${OBJSTORE_SECRET_FILE})" \
-    "${SECRETS_PATH}"
+  OBJSTORE_URL="$(cat ${OBJSTORE_SECRET_FILE})"
+  if [[ "$OBJSTORE_URL" == s3* ]]; then
+    OBJSTORE_UTIL="aws s3 cp --recursive"
+  else
+    OBJSTORE_UTIL="gsutil rsync -r"
+  fi
+
+  ${OBJSTORE_UTIL} "${OBJSTORE_URL}" "${SECRETS_PATH}"
   kubectl create secret \
     generic "${SECRET_NAME}" \
     --from-file "${SECRETS_PATH}" \
