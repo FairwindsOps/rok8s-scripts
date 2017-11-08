@@ -2,8 +2,6 @@
 
 set -eo pipefail
 
-ROK8S_DEPLOY=true
-
 . k8s-read-config
 
 echo "Deploying Namespace"
