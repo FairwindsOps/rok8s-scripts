@@ -6,6 +6,10 @@ ROK8S_DEPLOY=true
 
 . k8s-read-config
 
+echo "Deploying Namespace"
+kubectl get ns "${NAMESPACE}" >/dev/null 2>&1 || kubectl create ns "${NAMESPACE}"
+echo "Done deploying Namespace"
+
 echo "Deploying ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"; do
   CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
