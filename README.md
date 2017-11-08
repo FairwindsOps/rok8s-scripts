@@ -195,59 +195,6 @@ Current checks:
 * Files referenced in config file exist (does not check for secrets files)
 * Deployments contain a `revisionHistoryLimit`
 
-### k8s-secrets-from-s3
-
-Generates a kubernetes secrets YAML file from the contents of a path within an S3 bucket. This will copy files from `${S3_BUCKET}/${NAMESPACE}/${SECRET}` and generate a file into `deploy/${SECRET}.secret.yaml`, suitable for deployment with `k8s-deploy`.
-
-This script assumes that [`aws-cli`](https://pypi.python.org/pypi/awscli) is installed and that AWS credentials with appropriate permissions are available to the CLI.
-
-Example permissions:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-      {
-          "Effect": "Allow",
-          "Action": [
-              "s3:Get*",
-              "s3:List*"
-          ],
-          "Resource": [
-            "arn:aws:s3:::${S3_BUCKET}",
-            "arn:aws:s3:::${S3_BUCKET}/*"
-          ]
-      }
-  ]
-}
-```
-
-Secrets across clusters in the same namespace are not easily supported with this method as cluster names are not used. If you need to use the same namespace across different clusters (`kube-system` for example) then you should create separate buckets.
-
-Each file in `${S3_BUCKET}/${NAMESPACE}/${SECRET}` will be a single entry in the Kubernetes Secret `${SECRET}`
-
-An S3 bucket layout of:
-
-```
-production/
-  example-secret/
-    username
-    password
-```
-
-With the file `username` containing `example-username` and `password` containing `example-password` would generate a secret of
-
-```
-apiVersion: v1
-kind: Secret
-metadata:
-  creationTimestamp: null
-  name: example-secret
-data:
-  username: example-username
-  password: example-password
-```
-
 ### k8s-sops-secret-decrypt
 
 Given an [AWS KMS](https://aws.amazon.com/kms/) key id or [Google KMS](https://cloud.google.com/kms/) resource id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.

@@ -13,7 +13,7 @@ dependencies:
 
 test:
   override:
-    - shellcheck bin/docker-* bin/install-rok8s-requirements bin/k8s-apply bin/k8s-secrets-from-s3 bin/verify-deployment bin/k8s-lint bin/prepare-*
+    - shellcheck bin/docker-* bin/install-rok8s-requirements bin/k8s-apply bin/verify-deployment bin/k8s-lint bin/prepare-*
     - cd examples/production-ready; k8s-lint -f staging.config
     - cd examples/production-ready; k8s-lint -f production.config
 

@@ -83,7 +83,8 @@ expand_files "CONFIGMAPS" "CONFIGMAP_FILES" "configmap.yml"
 SECRET_FILES=()
 expand_files "SECRETS" "SECRET_FILES" "secret.yml"
 
-echo "[s3-secrets]: ${S3_SECRETS[@]}"
+OBJSTORE_SECRET_FILES=()
+expand_files "OBJSTORE_SECRETS" "OBJSTORE_SECRET_FILES" "secret.objecturl"
 
 SOPS_SECRET_FILES=()
 expand_files "SOPS_SECRETS" "SOPS_SECRET_FILES" "secret.sops.yml"
