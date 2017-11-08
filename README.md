@@ -41,8 +41,8 @@ SECRETS=('example-app')
 # List of files ending in '.secret.sops.yml' in the kube directory
 SOPS_SECRETS=('example-app')
 
-# List of secrets to pull from S3
-S3_SECRETS=()
+# List of files ending in '.objecturl' in the kube directory
+OBJSTORE_SECRETS=()
 
 # List of files ending in '.persistent_volume.yml' in the kube directory
 PERSISTENT_VOLUMES=('example-app')
@@ -104,7 +104,9 @@ specify `<env>.conf` for each of your environments.
 Your kubernetes API object files should all be stored in the /deploy top level directory using consistent naming:
 
 * Deployments end in `deployment.yml`
-* Secrets end in `secret.yml`
+* Unencrypted Secrets end in `secret.yml`
+* Encrypted Secrets end in `secret.sops.yml`
+* External Secrets end in `objecturl`
 * ConfigMaps end in `configmap.yml`
 * Persistent Volumes end in `persistent_volume.yml`
 * Persistent Volume Claims end in `persistent_volume_claim.yml`
@@ -130,6 +132,58 @@ If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS 
 
 In order to connect to a Kubernets cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clustuers, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
 
+## Secrets
+
+There are multiple ways to handle Kubernetes Secrets. Examples of each can be
+found in [here](examples/sops-secrets).
+
+### Unencrypted
+
+This isn't recommended, but you can store you `Secret` manifests directly in your
+source code. Use the `SECRETS=` configuration to specify the manifests to deploy.
+
+### Encrypted
+
+Using an [AWS KMS](https://aws.amazon.com/kms/) ARN or [Google KMS](https://cloud.google.com/kms/) ID, `Secret` manifests are encrypted in the source code and decrypted at deployment time.
+
+Whenever encrypting or decrypting data, `sops` requires credentials for the appropriate
+cloud provider (GCP or AWS). You can read more about `sops` usage [here](https://github.com/mozilla/sops#usage).
+
+```bash
+sops "--kms=arn:aws:kms:us-east-1:123456123456:key/e836b432-b1db-4b84-a124-6c54948d787c" --encrypt secret.yml > deploy/encrypted.secret.sops.yml
+echo 'SOPS_SECRETS=(encrypted)' >> app.config
+echo 'SOPS_KMS_ARN=arn:aws:kms:us-east-1:123456123456:key/e836b432-b1db-4b84-a124-6c54948d787c' >> app.config
+```
+
+### External
+
+You can also store your secrets in either the Google Storage or S3 object store.
+During deployment, secrets are copied from the object store into `Secret` manifests so
+they are never committed to the repository. You edit and manage permissions for them
+using the IAM permissions for your cloud provider.
+
+When deploying, credentials for the cloud provider must be available.
+
+Doing something like this:
+```bash
+mkdir mysecrets
+echo 'asdfasdf' > mysecrets/password.txt
+echo 'root' > mysecrets/username.txt
+gsutil rsync mysecrets/ s3://exampleorg/production/mysecrets
+echo 's3://exampleorg/production/mysecrets' > deploy/web-config.objecturl
+echo 'OBJSTORE_SECRETS=(web-config)' >> app.config
+```
+
+Will generate a secret like this:
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-config
+data:
+  username.txt: cm9vdCAtbgo=
+  password.txt: YXNkZmFkc2YgLW4K
+```
 
 ## Commands
 
