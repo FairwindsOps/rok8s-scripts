@@ -128,3 +128,15 @@ expand_files "CRONJOBS" "CRONJOB_FILES" "cronjob.yml"
 CLUSTER_NAME=${CLUSTER_NAME}
 echo "[cluster_name]: $CLUSTER_NAME"
 echo ""
+
+# Validate we have a sops key if need it
+if [[ -n "${SOPS_SECRET_FILES}" ]]; then
+  if [[ -n "${SOPS_KMS_ARN+x}" ]]; then
+    SOPS_OPTIONS="--kms ${SOPS_KMS_ARN}"
+  elif [[ -n "${SOPS_GCP_KMS_ID+x}" ]]; then
+    SOPS_OPTIONS="--gcp-kms ${SOPS_GCP_KMS_ID}"
+  else
+    echo SOPS_KMS_ARN or SOPS_GCP_KMS_ID must bet set to use SOPS_SECRET_FILES!
+    exit 1
+  fi
+fi

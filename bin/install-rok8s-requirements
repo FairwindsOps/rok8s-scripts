@@ -69,3 +69,10 @@ if ! hash kubectl 2>/dev/null; then
     sudo cp /usr/local/bin/kubectl /var/lib/jenkins/tools/kubectl
   fi
 fi
+
+# make sure sops is installed
+if ! hash sops 2>/dev/null; then
+  echo Installing sops...
+  curl -sSLo /usr/local/bin/sops https://github.com/mozilla/sops/releases/download/3.0.0/sops-3.0.0.$(uname | tr '[:upper:]' '[:lower:]')
+  chmod +x /usr/local/bin/sops
+fi

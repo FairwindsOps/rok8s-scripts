@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
 ROK8S_DEPLOY=true
 
@@ -43,12 +43,22 @@ do
   kubectl create secret \
     generic "${SECRET_NAME}" \
     --from-file "${SECRETS_PATH}" \
-    --dry-run -o yaml | kubectl apply -f -
+    --dry-run -o yaml | kubectl apply "--namespace=${NAMESPACE}" -f -
 
   # Remove local copy
   rm -rf ${SECRETS_PATH}
 done
 echo "Done deploying Object Store Secrets"
+echo ""
+
+echo "Deploying Encrypted Secrets"
+for SOPS_SECRET_FILE in "${SOPS_SECRET_FILES[@]}"
+do
+  set -x
+  sops ${SOPS_OPTIONS} --decrypt "${SOPS_SECRET_FILE}" | \
+  kubectl apply "--namespace=${NAMESPACE}" -f -
+done
+echo "Done deploying Encrypted Secrets"
 echo ""
 
 echo "Deploying Services"
