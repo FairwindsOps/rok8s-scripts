@@ -38,10 +38,14 @@ do
   SECRET_NAME=${OBJSTORE_SECRET_FILE##*/}
   SECRET_NAME=${SECRET_NAME%.secret.objecturl}
 
-  # Copy and apply
-  gsutil rsync -r \
-    "$(cat ${OBJSTORE_SECRET_FILE})" \
-    "${SECRETS_PATH}"
+  OBJSTORE_URL="$(cat ${OBJSTORE_SECRET_FILE})"
+  if [[ "$OBJSTORE_URL" == s3* ]]; then
+    OBJSTORE_UTIL="aws s3 cp --recursive"
+  else
+    OBJSTORE_UTIL="gsutil rsync -r"
+  fi
+
+  ${OBJSTORE_UTIL} "${OBJSTORE_URL}" "${SECRETS_PATH}"
   kubectl create secret \
     generic "${SECRET_NAME}" \
     --from-file "${SECRETS_PATH}" \
