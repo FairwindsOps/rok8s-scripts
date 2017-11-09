@@ -52,8 +52,8 @@ if ! hash gcloud 2>/dev/null; then
   gcloud components update --quiet || \
     curl https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | \
       bash -s -- --disable-prompts
-  ln -s ${HOME}/google-cloud-sdk/bin/gcloud ${ROK8S_INSTALL_PATH}/gcloud
-  ln -s ${HOME}/google-cloud-sdk/bin/gsutil ${ROK8S_INSTALL_PATH}/gsutil
+  ln -s "${HOME}/google-cloud-sdk/bin/gcloud" "${ROK8S_INSTALL_PATH}/gcloud"
+  ln -s "${HOME}/google-cloud-sdk/bin/gsutil" "${ROK8S_INSTALL_PATH}/gsutil"
 fi
 
 #make sure awscli is installed
@@ -65,13 +65,13 @@ fi
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
   echo Installing kubectl...
-  wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O ${ROK8S_INSTALL_PATH}/kubectl
-  chmod +x ${ROK8S_INSTALL_PATH}/kubectl
+  wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O "${ROK8S_INSTALL_PATH}/kubectl"
+  chmod +x "${ROK8S_INSTALL_PATH}/kubectl"
 fi
 
 # make sure sops is installed
 if ! hash sops 2>/dev/null; then
   echo Installing sops...
-  curl -sSLo ${ROK8S_INSTALL_PATH}/sops "https://github.com/mozilla/sops/releases/download/3.0.0/sops-3.0.0.$(uname | tr '[:upper:]' '[:lower:]')"
-  chmod +x ${ROK8S_INSTALL_PATH}/sops
+  curl -sSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/3.0.0/sops-3.0.0.$(uname | tr '[:upper:]' '[:lower:]')"
+  chmod +x "${ROK8S_INSTALL_PATH}/sops"
 fi
