@@ -31,7 +31,7 @@ echo "Deploying Object Store Secrets"
 for OBJSTORE_SECRET_FILE in "${OBJSTORE_SECRET_FILES[@]}"
 do
   # Make a place to put the files
-  SECRETS_PATH=$(mktemp -d -t rok8s)
+  SECRETS_PATH=$(mktemp -d)
   trap "rm -rf ${SECRETS_PATH}" EXIT
 
   # Use the filename as the secret name
