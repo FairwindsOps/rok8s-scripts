@@ -167,8 +167,8 @@ When deploying, credentials for the cloud provider must be available.
 Doing something like this:
 ```bash
 mkdir mysecrets
-echo 'asdfasdf' > mysecrets/password.txt
-echo 'root' > mysecrets/username.txt
+echo -n 'asdfasdf' > mysecrets/password.txt
+echo -n 'root' > mysecrets/username.txt
 gsutil rsync mysecrets/ s3://exampleorg/production/mysecrets
 echo 's3://exampleorg/production/mysecrets' > deploy/web-config.objecturl
 echo 'OBJSTORE_SECRETS=(web-config)' >> app.config
