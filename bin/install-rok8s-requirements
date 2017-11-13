@@ -72,6 +72,6 @@ fi
 # make sure sops is installed
 if ! hash sops 2>/dev/null; then
   echo Installing sops...
-  curl -sSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/3.0.0/sops-3.0.0.$(uname | tr '[:upper:]' '[:lower:]')"
+  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/3.0.0/sops-3.0.0.$(uname | tr '[:upper:]' '[:lower:]')"
   chmod +x "${ROK8S_INSTALL_PATH}/sops"
 fi

@@ -210,6 +210,12 @@ This requires the environment variables:
 
 And either `CI_BRANCH` or `CI_TAG`
 
+### install-rok8s-requirements
+
+Installs all the external requirements for rok8s-scripts. Installs are done
+via package management (requiring `sudo`) or by installing things to
+`$ROK8S_INSTALL_PATH` which is `/usr/local/bin` by default
+
 ### k8s-deploy
 
 `kubectl apply`'s files in the config.
