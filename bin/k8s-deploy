@@ -28,17 +28,17 @@ echo "Done deploying Secrets"
 echo ""
 
 echo "Deploying Object Store Secrets"
-for OBJSTORE_SECRET_FILE in "${OBJSTORE_SECRET_FILES[@]}"
+for EXTERNAL_SECRET_FILE in "${EXTERNAL_SECRET_FILES[@]}"
 do
   # Make a place to put the files
   SECRETS_PATH=$(mktemp -d)
   trap "rm -rf ${SECRETS_PATH}" EXIT
 
   # Use the filename as the secret name
-  SECRET_NAME=${OBJSTORE_SECRET_FILE##*/}
-  SECRET_NAME=${SECRET_NAME%.secret.objecturl}
+  SECRET_NAME=${EXTERNAL_SECRET_FILE##*/}
+  SECRET_NAME=${SECRET_NAME%.secret.external}
 
-  OBJSTORE_URL="$(cat ${OBJSTORE_SECRET_FILE})"
+  OBJSTORE_URL="$(cat ${EXTERNAL_SECRET_FILE})"
   if [[ "$OBJSTORE_URL" == s3* ]]; then
     OBJSTORE_UTIL="aws s3 cp --recursive"
   else

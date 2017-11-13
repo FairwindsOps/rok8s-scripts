@@ -41,8 +41,8 @@ SECRETS=('example-app')
 # List of files ending in '.secret.sops.yml' in the kube directory
 SOPS_SECRETS=('example-app')
 
-# List of files ending in '.objecturl' in the kube directory
-OBJSTORE_SECRETS=()
+# List of files ending in '.external' in the kube directory
+EXTERNAL_SECRETS=()
 
 # List of files ending in '.persistent_volume.yml' in the kube directory
 PERSISTENT_VOLUMES=('example-app')
@@ -106,7 +106,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Deployments end in `deployment.yml`
 * Unencrypted Secrets end in `secret.yml`
 * Encrypted Secrets end in `secret.sops.yml`
-* External Secrets end in `objecturl`
+* External Secrets end in `external`
 * ConfigMaps end in `configmap.yml`
 * Persistent Volumes end in `persistent_volume.yml`
 * Persistent Volume Claims end in `persistent_volume_claim.yml`
@@ -170,8 +170,8 @@ mkdir mysecrets
 echo -n 'asdfasdf' > mysecrets/password.txt
 echo -n 'root' > mysecrets/username.txt
 gsutil rsync mysecrets/ s3://exampleorg/production/mysecrets
-echo 's3://exampleorg/production/mysecrets' > deploy/web-config.objecturl
-echo 'OBJSTORE_SECRETS=(web-config)' >> app.config
+echo 's3://exampleorg/production/mysecrets' > deploy/web-config.secret.external
+echo 'EXTERNAL_SECRETS=(web-config)' >> app.config
 ```
 
 Will generate a secret like this:

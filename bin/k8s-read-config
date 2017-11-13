@@ -77,8 +77,8 @@ expand_files "CONFIGMAPS" "CONFIGMAP_FILES" "configmap.yml"
 SECRET_FILES=()
 expand_files "SECRETS" "SECRET_FILES" "secret.yml"
 
-OBJSTORE_SECRET_FILES=()
-expand_files "OBJSTORE_SECRETS" "OBJSTORE_SECRET_FILES" "secret.objecturl"
+EXTERNAL_SECRET_FILES=()
+expand_files "EXTERNAL_SECRETS" "EXTERNAL_SECRET_FILES" "secret.external"
 
 SOPS_SECRET_FILES=()
 expand_files "SOPS_SECRETS" "SOPS_SECRET_FILES" "secret.sops.yml"
