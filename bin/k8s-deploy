@@ -8,25 +8,6 @@ echo "Deploying Namespace"
 kubectl get ns "${NAMESPACE}" >/dev/null 2>&1 || kubectl create ns "${NAMESPACE}"
 echo "Done deploying Namespace"
 
-echo "Deploying ConfigMaps"
-for index in "${!CONFIGMAP_FILES[@]}"; do
-  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
-  echo "Applying ${CONFIGMAP_FILE}"
-  kubectl apply -f ${CONFIGMAP_FILE} --namespace=$NAMESPACE --record
-done
-echo "Done deploying ConfigMaps"
-echo ""
-
-echo "Deploying Secrets"
-for index in "${!SECRET_FILES[@]}"
-do
-  SECRET_FILE=${SECRET_FILES[$index]}
-  echo "Applying ${SECRET_FILE}"
-  kubectl apply -f ${SECRET_FILE} --namespace=$NAMESPACE --record
-done
-echo "Done deploying Secrets"
-echo ""
-
 echo "Deploying Object Store Secrets"
 for EXTERNAL_SECRET_FILE in "${EXTERNAL_SECRET_FILES[@]}"
 do
@@ -65,6 +46,25 @@ do
   kubectl apply "--namespace=${NAMESPACE}" -f -
 done
 echo "Done deploying Encrypted Secrets"
+echo ""
+
+echo "Deploying Secrets"
+for index in "${!SECRET_FILES[@]}"
+do
+  SECRET_FILE=${SECRET_FILES[$index]}
+  echo "Applying ${SECRET_FILE}"
+  kubectl apply -f ${SECRET_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Secrets"
+echo ""
+
+echo "Deploying ConfigMaps"
+for index in "${!CONFIGMAP_FILES[@]}"; do
+  CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
+  echo "Applying ${CONFIGMAP_FILE}"
+  kubectl apply -f ${CONFIGMAP_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying ConfigMaps"
 echo ""
 
 echo "Deploying Services"
