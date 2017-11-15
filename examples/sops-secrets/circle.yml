@@ -11,7 +11,6 @@ dependencies:
   pre:
     - npm install
     - install-rok8s-requirements
-    - k8s-sops-secret-decrypt -f secrets.config
 
   override:
     - echo "overriding inferred dependencies"

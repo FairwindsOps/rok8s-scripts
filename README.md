@@ -41,8 +41,8 @@ SECRETS=('example-app')
 # List of files ending in '.secret.sops.yml' in the kube directory
 SOPS_SECRETS=('example-app')
 
-# List of secrets to pull from S3
-S3_SECRETS=()
+# List of files ending in '.external' in the kube directory
+EXTERNAL_SECRETS=()
 
 # List of files ending in '.persistent_volume.yml' in the kube directory
 PERSISTENT_VOLUMES=('example-app')
@@ -104,7 +104,9 @@ specify `<env>.conf` for each of your environments.
 Your kubernetes API object files should all be stored in the /deploy top level directory using consistent naming:
 
 * Deployments end in `deployment.yml`
-* Secrets end in `secret.yml`
+* Unencrypted Secrets end in `secret.yml`
+* Encrypted Secrets end in `secret.sops.yml`
+* External Secrets end in `external`
 * ConfigMaps end in `configmap.yml`
 * Persistent Volumes end in `persistent_volume.yml`
 * Persistent Volume Claims end in `persistent_volume_claim.yml`
@@ -130,6 +132,58 @@ If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS 
 
 In order to connect to a Kubernets cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clustuers, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
 
+## Secrets
+
+There are multiple ways to handle Kubernetes Secrets. Examples of each can be
+found in [here](examples/sops-secrets).
+
+### Unencrypted
+
+This isn't recommended, but you can store you `Secret` manifests directly in your
+source code. Use the `SECRETS=` configuration to specify the manifests to deploy.
+
+### Encrypted
+
+Using an [AWS KMS](https://aws.amazon.com/kms/) ARN or [Google KMS](https://cloud.google.com/kms/) ID, `Secret` manifests are encrypted in the source code and decrypted at deployment time.
+
+Whenever encrypting or decrypting data, `sops` requires credentials for the appropriate
+cloud provider (GCP or AWS). You can read more about `sops` usage [here](https://github.com/mozilla/sops#usage).
+
+```bash
+sops "--kms=arn:aws:kms:us-east-1:123456123456:key/e836b432-b1db-4b84-a124-6c54948d787c" --encrypt secret.yml > deploy/encrypted.secret.sops.yml
+echo 'SOPS_SECRETS=(encrypted)' >> app.config
+echo 'SOPS_KMS_ARN=arn:aws:kms:us-east-1:123456123456:key/e836b432-b1db-4b84-a124-6c54948d787c' >> app.config
+```
+
+### External
+
+You can also store your secrets in either the Google Storage or S3 object store.
+During deployment, secrets are copied from the object store into `Secret` manifests so
+they are never committed to the repository. You edit and manage permissions for them
+using the IAM permissions for your cloud provider.
+
+When deploying, credentials for the cloud provider must be available.
+
+Doing something like this:
+```bash
+mkdir mysecrets
+echo -n 'asdfasdf' > mysecrets/password.txt
+echo -n 'root' > mysecrets/username.txt
+gsutil rsync mysecrets/ s3://exampleorg/production/mysecrets
+echo 's3://exampleorg/production/mysecrets' > deploy/web-config.secret.external
+echo 'EXTERNAL_SECRETS=(web-config)' >> app.config
+```
+
+Will generate a secret like this:
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: web-config
+data:
+  username.txt: cm9vdCAtbgo=
+  password.txt: YXNkZmFkc2YgLW4K
+```
 
 ## Commands
 
@@ -155,6 +209,12 @@ This requires the environment variables:
 * `CI_BUILD_NUM`
 
 And either `CI_BRANCH` or `CI_TAG`
+
+### install-rok8s-requirements
+
+Installs all the external requirements for rok8s-scripts. Installs are done
+via package management (requiring `sudo`) or by installing things to
+`$ROK8S_INSTALL_PATH` which is `/usr/local/bin` by default
 
 ### k8s-deploy
 
@@ -194,97 +254,6 @@ Current checks:
 
 * Files referenced in config file exist (does not check for secrets files)
 * Deployments contain a `revisionHistoryLimit`
-
-### k8s-secrets-from-s3
-
-Generates a kubernetes secrets YAML file from the contents of a path within an S3 bucket. This will copy files from `${S3_BUCKET}/${NAMESPACE}/${SECRET}` and generate a file into `deploy/${SECRET}.secret.yaml`, suitable for deployment with `k8s-deploy`.
-
-This script assumes that [`aws-cli`](https://pypi.python.org/pypi/awscli) is installed and that AWS credentials with appropriate permissions are available to the CLI.
-
-Example permissions:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-      {
-          "Effect": "Allow",
-          "Action": [
-              "s3:Get*",
-              "s3:List*"
-          ],
-          "Resource": [
-            "arn:aws:s3:::${S3_BUCKET}",
-            "arn:aws:s3:::${S3_BUCKET}/*"
-          ]
-      }
-  ]
-}
-```
-
-Secrets across clusters in the same namespace are not easily supported with this method as cluster names are not used. If you need to use the same namespace across different clusters (`kube-system` for example) then you should create separate buckets.
-
-Each file in `${S3_BUCKET}/${NAMESPACE}/${SECRET}` will be a single entry in the Kubernetes Secret `${SECRET}`
-
-An S3 bucket layout of:
-
-```
-production/
-  example-secret/
-    username
-    password
-```
-
-With the file `username` containing `example-username` and `password` containing `example-password` would generate a secret of
-
-```
-apiVersion: v1
-kind: Secret
-metadata:
-  creationTimestamp: null
-  name: example-secret
-data:
-  username: example-username
-  password: example-password
-```
-
-### k8s-sops-secret-decrypt
-
-Given an [AWS KMS](https://aws.amazon.com/kms/) key id or [Google KMS](https://cloud.google.com/kms/) resource id, decrypts a file which is a kubernetes secret YAML. The encrypted secret file is safe to store in git.
-
-The script assumes [sops](https://github.com/mozilla/sops.git) is installed and the `SOPS_KMS_ARN` or `SOPS_GCP_KMS_ID` environment variable is set. Ensure your `circle.yml` installs sops. I.e. add, `go get -u go.mozilla.org/sops/cmd/sops` to the `dependencies` level.
-
-If run from circleci, the script also assumes that the circleci IAM user has proper privileges to decrypt secrets using the set key.
-
-An example IAM policy might look like this:
-
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "circle-decrypt",
-            "Effect": "Allow",
-            "Action": [
-                "kms:Decrypt",
-                "kms:DescribeKey"
-            ],
-            "Resource": [
-                "arn:aws:kms:<region>:<accountId>:key/<key>"
-            ]
-        }
-    ]
-}
-```
-
-A procedure for _encrypting_ secrets with sops might look this this:
-
-Encrypt [secret spec files](https://kubernetes.io/docs/concepts/configuration/secret/) with [sops](https://github.com/mozilla/sops)
-  eg. `sops --kms="<your kms key arn>" --encrypt mysecret.yaml` _
-  or  `sops --gcp-kms="<your kms key resource id>" --encrypt mysecret.yaml` _
-
-sops [has more documentation about encrypting with GCP KMS](https://github.com/mozilla/sops#22encrypting-using-gcp-kms) in their repository.
-
 
 ### minikube-build
 Switches to the minikube kubectl context, builds a Docker image from your current directory within the minikube Docker environment.

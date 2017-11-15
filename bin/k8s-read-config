@@ -33,12 +33,6 @@ else
   exit 1
 fi
 
-if [[ -n ${ROK8S_DEPLOY} ]] && [[ -z ${ROK8S_ENABLE_OPTIONAL_CONFIGS} ]]; then
-    allow_missing_files=false
-else
-    allow_missing_files=true
-fi
-
 echo "[dockerfile]: $DOCKERFILE"
 echo "[dockertag]: $DOCKERTAG"
 
@@ -66,11 +60,11 @@ function expand_files() {
     filename="$BASEDIR/deploy/$i.${FILE_ENDING}"
     if [[ -f "${filename}" ]]; then
       eval "$OUTPUT_NAME+=("${filename}")"
-    elif [[ "${allow_missing_files}" == true ]]; then
-      echo "INFO: Skipping optional ${filename}"
-    else
+    elif [[ -z "${ROK8S_ENABLE_OPTIONAL_CONFIGS}" ]]; then
       echo "ERROR: Missing ${filename}"
       exit 1
+    else
+      echo "INFO: Skipping optional ${filename}"
     fi
   done
 
@@ -83,7 +77,8 @@ expand_files "CONFIGMAPS" "CONFIGMAP_FILES" "configmap.yml"
 SECRET_FILES=()
 expand_files "SECRETS" "SECRET_FILES" "secret.yml"
 
-echo "[s3-secrets]: ${S3_SECRETS[@]}"
+EXTERNAL_SECRET_FILES=()
+expand_files "EXTERNAL_SECRETS" "EXTERNAL_SECRET_FILES" "secret.external"
 
 SOPS_SECRET_FILES=()
 expand_files "SOPS_SECRETS" "SOPS_SECRET_FILES" "secret.sops.yml"
@@ -127,3 +122,15 @@ expand_files "CRONJOBS" "CRONJOB_FILES" "cronjob.yml"
 CLUSTER_NAME=${CLUSTER_NAME}
 echo "[cluster_name]: $CLUSTER_NAME"
 echo ""
+
+# Validate we have a sops key if need it
+if [[ -n "${SOPS_SECRET_FILES}" ]]; then
+  if [[ -n "${SOPS_KMS_ARN+x}" ]]; then
+    SOPS_OPTIONS="--kms ${SOPS_KMS_ARN}"
+  elif [[ -n "${SOPS_GCP_KMS_ID+x}" ]]; then
+    SOPS_OPTIONS="--gcp-kms ${SOPS_GCP_KMS_ID}"
+  else
+    echo SOPS_KMS_ARN or SOPS_GCP_KMS_ID must bet set to use SOPS_SECRET_FILES!
+    exit 1
+  fi
+fi
