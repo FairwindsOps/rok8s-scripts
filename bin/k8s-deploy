@@ -203,7 +203,7 @@ do
   # this: https://github.com/kubernetes/kubernetes/issues/25238
 
   # If we can match 'replicas: hpa' in te deployment file
-  if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS][[:space:]]*:[[:space:]]*+[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
+  if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS] *: +[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
   then
     # Get the replica count and sed it into the deployment file in place of 'hpa'
     REPLICA_COUNT=$(kubectl get deployment ${DEPLOYMENT} --namespace=${NAMESPACE} -o json | jq '.status.readyReplicas')
