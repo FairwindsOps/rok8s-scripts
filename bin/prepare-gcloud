@@ -11,7 +11,7 @@ if [[ -z ${GCP_PROJECT+x} ]] || [[ -z ${GCP_ZONE+x} ]] || [[ -z ${GCLOUD_KEY+x} 
   exit 1
 fi
 
-export GOOGLE_APPLICATION_CREDENTIALS="./gcloud-service-key.json"
+export GOOGLE_APPLICATION_CREDENTIALS="${HOME}/gcloud-service-key.json"
 gcloud auth activate-service-account --key-file <(echo "${GCLOUD_KEY}" | base64 --decode) --project "${GCP_PROJECT}"
 
 # Set GCP Project
