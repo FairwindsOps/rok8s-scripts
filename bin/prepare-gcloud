@@ -11,11 +11,13 @@ if [[ -z ${GCP_PROJECT+x} ]] || [[ -z ${GCP_ZONE+x} ]] || [[ -z ${GCLOUD_KEY+x} 
   exit 1
 fi
 
-export GOOGLE_APPLICATION_CREDENTIALS="./gcloud-service-key.json"
 if ! gcloud config configurations describe "rok8s-${GCP_PROJECT}" 2>/dev/null; then
   gcloud config configurations create "rok8s-${GCP_PROJECT}"
 fi
-gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --key-file <(echo "${GCLOUD_KEY}" | base64 --decode) --project "${GCP_PROJECT}"
+
+export GOOGLE_APPLICATION_CREDENTIALS="./gcloud-service-key.json"
+echo "${GCLOUD_KEY}" | base64 --decode > $GOOGLE_APPLICATION_CREDENTIALS
+gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --key-file $GOOGLE_APPLICATION_CREDENTIALS --project "${GCP_PROJECT}"
 
 # Set GCP Project
 gcloud config set project "${GCP_PROJECT}"
