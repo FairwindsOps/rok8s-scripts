@@ -22,6 +22,9 @@
 # set -xv
 
 ROK8S_INSTALL_PATH="${ROK8S_INSTALL_PATH:-/usr/local/bin}"
+if [ ! -d ${ROK8S_INSTALL_PATH} ]; then
+  mkdir -p ${ROK8S_INSTALL_PATH};
+fi
 
 PKG_MANAGER=$( command -v yum || command -v apt-get ) || echo "Neither yum nor apt-get found"
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.7.2}"
