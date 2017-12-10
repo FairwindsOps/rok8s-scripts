@@ -119,7 +119,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 
 ## Credentials
 
-If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS or GCP you will need to provide credentials as enviconrment variables. `rok8s-scripts` will automatically login if the following variables exist:
+If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS or GCP you will need to provide credentials as environment variables. `rok8s-scripts` will automatically login if the following variables exist:
 
 ### AWS [Access Keys](http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)
 * `AWS_ACCESS_KEY_ID`
@@ -130,7 +130,7 @@ If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS 
 
 ## Kubernetes Access
 
-In order to connect to a Kubernets cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clustuers, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
+In order to connect to a Kubernets cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clusters, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
 
 ## Secrets
 
