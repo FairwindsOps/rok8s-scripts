@@ -206,13 +206,12 @@ do
   if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS][[:space:]]*:[[:space:]]*+[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
   then
     # Check to see if the deployment exists yet. If it does then get current replicas, if not set to default.
-    DEPLOYMENT_MATCH=$(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT})
-    if [[ ! -z ${DEPLOYMENT_MATCH} ]]
+    if [[ ! -z $(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT}) ]]
     then
-      echo 'Deployment exists, getting current replicas'
+      echo "Deployment exists, getting current replicas"
       REPLICA_COUNT=$(kubectl get deployment ${DEPLOYMENT} --namespace=${NAMESPACE} -o json | jq '.status.readyReplicas')
     else
-      echo 'Deployment doesnt exist, set replica count to default'
+      echo "Deployment doesnt exist, set replica count to default"
       REPLICA_COUNT=${DEFAULT_REPLICA_COUNT}
     fi
     # Sed replica count into the deployment file in place of 'hpa'
