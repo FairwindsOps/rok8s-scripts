@@ -208,10 +208,8 @@ do
     # Check to see if the deployment exists yet. If it does then get current replicas, if not set to default.
     if [[ ! -z $(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT}) ]]
     then
-      echo "Deployment exists, getting current replicas"
       REPLICA_COUNT=$(kubectl get deployment ${DEPLOYMENT} --namespace=${NAMESPACE} -o json | jq '.status.readyReplicas')
     else
-      echo "Deployment doesnt exist, set replica count to default"
       REPLICA_COUNT=${DEFAULT_REPLICA_COUNT}
     fi
     # Sed replica count into the deployment file in place of 'hpa'
