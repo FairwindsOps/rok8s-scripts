@@ -207,7 +207,8 @@ do
   then
     # Check to see if the deployment exists yet. If it does then get current replicas, if not set to default.
     DEPLOYMENT_MATCH=$(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT})
-    if [[ ! -z ${DEPLOYMENT_MATCH} ]]; then
+    if [[ ! -z ${DEPLOYMENT_MATCH} ]]
+    then
       echo 'Deployment exists, getting current replicas'
       REPLICA_COUNT=$(kubectl get deployment ${DEPLOYMENT} --namespace=${NAMESPACE} -o json | jq '.status.readyReplicas')
     else
