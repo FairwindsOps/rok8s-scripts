@@ -203,7 +203,7 @@ do
   # this: https://github.com/kubernetes/kubernetes/issues/25238
 
   # If we can match 'replicas: hpa' in te deployment file
-  if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS][[:space:]]*:[[:space:]]*+[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
+  if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS] *: +[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
   then
     # Check to see if the deployment exists yet. If it does then get current replicas, if not set to default.
     if [[ ! -z $(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT}) ]]
