@@ -18,8 +18,8 @@ fi
 ROK8S_TMP="${ROK8S_TMP:-${HOME}}"
 mkdir -p "${ROK8S_TMP}"
 export GOOGLE_APPLICATION_CREDENTIALS="${ROK8S_TMP}/gcloud-service-key.json"
-echo "${GCLOUD_KEY}" | base64 --decode > $GOOGLE_APPLICATION_CREDENTIALS
-gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --key-file $GOOGLE_APPLICATION_CREDENTIALS --project "${GCP_PROJECT}"
+echo "${GCLOUD_KEY}" | base64 --decode > "$GOOGLE_APPLICATION_CREDENTIALS"
+gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --key-file "$GOOGLE_APPLICATION_CREDENTIALS" --project "${GCP_PROJECT}"
 
 # Set GCP Project
 gcloud config set project "${GCP_PROJECT}"
