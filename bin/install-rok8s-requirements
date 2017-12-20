@@ -22,9 +22,10 @@
 # set -xv
 
 ROK8S_INSTALL_PATH="${ROK8S_INSTALL_PATH:-/usr/local/bin}"
+mkdir -p "${ROK8S_INSTALL_PATH}"
 
 PKG_MANAGER=$( command -v yum || command -v apt-get ) || echo "Neither yum nor apt-get found"
-KUBECTL_VERSION="${KUBECTL_VERSION:-v1.7.2}"
+KUBECTL_VERSION="${KUBECTL_VERSION:-v1.8.5}"
 #make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
   echo Installing sudo...
