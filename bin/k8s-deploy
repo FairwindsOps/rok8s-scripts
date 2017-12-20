@@ -237,6 +237,6 @@ for index in "${!POD_DISRUPTION_BUDGET_FILES[@]}"
 do
   POD_DISRUPTION_BUDGET_FILE=${POD_DISRUPTION_BUDGET_FILES[$index]}
   echo "Replacing ${POD_DISRUPTION_BUDGET_FILE}"
-  kubectl replace --force -f ${POD_DISRUPTION_BUDGET_FILE} --namespace=$NAMESPACE --record
+  kubectl replace --force --cascade -f ${POD_DISRUPTION_BUDGET_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Pod Disruption Budget"
