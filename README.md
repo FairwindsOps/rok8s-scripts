@@ -185,6 +185,29 @@ data:
   password.txt: YXNkZmFkc2YgLW4K
 ```
 
+### Updating an existing Secret file
+
+#### Setup
+
+1. From the repo's `deploy` directory, run `gcloud auth application-default login`.
+1. A browser window will open.  Log in with your Google account.
+1. Your terminal will return saying that credentials have been saved.
+1. Run `unset GOOGLE_APPLICATION_CREDENTIALS`
+
+#### Decrypting
+
+1. open your `<app>.secret.sops.yml`, and grab the value for `sops/kms/gcp_kms/resource_id`
+1. `sops --decrypt --input-type yml --gcp-kms <resource_id> <env>/<app>.secret.sops.yml > <env>/<app>.secret.yml`
+  * Note that the encrypted file lacks the 'sops' portion of the name.
+
+#### Encrypting
+
+With the above `resource_id` in-hand...
+
+1. `sops --encrypt --input-type yml --gcp-kms <resource_id> <env>/<app>.secret.yml > <env>/<app>.secret.sops.yml`
+1. Ensure that you delete your unencrypted files, `<env>/<app>.secret.yml`
+
+
 ## Commands
 
 ### docker-build
