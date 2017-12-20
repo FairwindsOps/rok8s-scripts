@@ -6,8 +6,14 @@ if [ -z "$BASEDIR" ];    then echo BASEDIR must be set; exit 1; fi
 if [ -z "$DOCKERTAG" ];  then echo DOCKERTAG must be set; exit 1; fi
 if [ -z "$DOCKERFILE" ]; then echo DOCKERFILE must be set; exit 1; fi
 
+PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
+CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
+
 echo "Building ${DOCKERTAG} from ${BASEDIR}/${DOCKERFILE}"
-docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" "${BASEDIR}"
+docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" \
+  --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" \
+  --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" \
+  "${BASEDIR}"
 if [ $? -ne 0 ]
 then
   echo "Docker build failed! Aborting"

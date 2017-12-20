@@ -203,7 +203,7 @@ do
   # this: https://github.com/kubernetes/kubernetes/issues/25238
 
   # If we can match 'replicas: hpa' in te deployment file
-  if [[ -n $( awk -F: '/[rR][eE][pP][lL][iI][cC][aA][sS][[:space:]]*:[[:space:]]*+[hH][pP][aA]/' $DEPLOYMENT_FILE ) ]]
+  if [[ -n $( awk -F: '/replicas: hpa/' $DEPLOYMENT_FILE ) ]]
   then
     # Check to see if the deployment exists yet. If it does then get current replicas, if not set to default.
     if [[ ! -z $(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT}) ]]
@@ -236,7 +236,7 @@ echo "Deploying Pod Disruption Budgets"
 for index in "${!POD_DISRUPTION_BUDGET_FILES[@]}"
 do
   POD_DISRUPTION_BUDGET_FILE=${POD_DISRUPTION_BUDGET_FILES[$index]}
-  echo "Applying ${POD_DISRUPTION_BUDGET_FILE}"
-  kubectl apply -f ${POD_DISRUPTION_BUDGET_FILE} --namespace=$NAMESPACE --record
+  echo "Replacing ${POD_DISRUPTION_BUDGET_FILE}"
+  kubectl replace --force --cascade -f ${POD_DISRUPTION_BUDGET_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Pod Disruption Budget"
