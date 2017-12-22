@@ -185,7 +185,7 @@ data:
   password.txt: YXNkZmFkc2YgLW4K
 ```
 
-### Updating an existing Secret file
+### Updating an existing Secret file for use with Google Cloud
 
 #### Setup
 
@@ -198,7 +198,7 @@ data:
 
 1. open your `<app>.secret.sops.yml`, and grab the value for `sops/kms/gcp_kms/resource_id`
 1. `sops --decrypt --input-type yml --gcp-kms <resource_id> <env>/<app>.secret.sops.yml > <env>/<app>.secret.yml`
-  * Note that the encrypted file lacks the 'sops' portion of the name.
+  * "Note that the first filename in this command is the encrypted file (i.e. with `.sops`) and the second filename is the decrypted file (i.e. without `.sops`)"
 
 #### Encrypting
 
