@@ -1,0 +1,5 @@
+# Your normal Ignored files go here
+Dockerfile.build
+
+# Ignoring the unencrypted secrets that you work from and should delete
+deploy/*/*.secrets.yml

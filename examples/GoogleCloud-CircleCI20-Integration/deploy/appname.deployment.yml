@@ -1,0 +1,98 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: appname
+  labels:
+    app: appname
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: appname
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: appname
+    spec:
+      containers:
+      - image: us.gcr.io/company-prod/appname:latest
+        imagePullPolicy: Always
+        name: ms-appname
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "10m"
+          limits:
+            memory: "275Mi"
+            cpu: "10m"
+        ports:
+        - name: endpoint
+          containerPort: 10000
+        livenessProbe:
+          httpGet:
+            path: /appname/_health/shallow
+            port: 10000
+          initialDelaySeconds: 30
+          timeoutSeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /appname/_health/shallow
+            port: 10000
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
+          periodSeconds: 30
+        env:
+          # configmaps
+          - name: APP_ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                name: appname
+                key: app_environment
+          - name: SEARCH_SVC
+            valueFrom:
+              configMapKeyRef:
+                name: appname
+                key: search-svc
+          - name: MYSQL_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: reports
+                key: mysql_host
+          - name: MYSQL_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: reports
+                key: mysql_port
+          - name: MYSQL_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: reports
+                key: mysql_name
+          # inline secrets
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: reports
+                key: mysql_user
+          - name: MYSQL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: reports
+                key: mysql_pass
+        # secrets
+        volumeMounts:
+        - name: google-application-credentials
+          readOnly: true
+          mountPath: "/opt/company/google-cloud-svc.json"
+          subPath: google-cloud-svc.json
+      volumes:
+      - name: google-application-credentials
+        secret:
+          secretName: google-application-credentials

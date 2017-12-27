@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appname
+  labels:
+    name: appname
+    type: microservice
+    discover: route
+    route: appname
+spec:
+  selector:
+    app: appname
+  ports:
+  - name: appname
+    port: 10000
+    targetPort: endpoint

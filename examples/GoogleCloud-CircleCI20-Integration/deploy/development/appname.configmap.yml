@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appname
+data:
+  app_environment: develop
+  search-svc: 'http://search:1234/search'
+  mysql_host: dev.msql.db
+  mysql_port: 3306
+  mysql_name: appname_dev
