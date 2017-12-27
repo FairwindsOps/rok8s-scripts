@@ -1,0 +1,9 @@
+# Your normal Ignored files go here
+.git
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+
+# Kubernetes
+deploy/

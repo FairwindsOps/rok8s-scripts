@@ -38,3 +38,7 @@ The encrypted file can be created with a command similar to:
 ```
 sops --encrypt --gcp-kms projects/example-project/locations/global/keyRings/example-keyring/cryptoKeys/example-key example.secret.yml
 ```
+
+## Integrating CircleCI 2.0 with Google Cloud
+
+An example demonstrating the configs that could be used to integrate CircleCI 2.0 with GCP, including ConfigMap and Secrets Map, as well as recommendations for `.gitignore` and `.dockerignore`.

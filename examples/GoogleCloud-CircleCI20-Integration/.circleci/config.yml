@@ -1,0 +1,226 @@
+version: 2
+
+references:
+  interpolate_environment_variables: &interpolate_environment_variables
+    run:
+      name: Interpolate Environment Variables
+      command: |
+        echo 'set -o allexport' >> ${BASH_ENV}
+        echo 'ROK8S_INSTALL_PATH=${HOME}/rok8s-scripts' >> ${BASH_ENV}
+        echo "source ${CIRCLE_WORKING_DIRECTORY}/${GCP_ENV_FILE}" >> ${BASH_ENV}
+        echo 'GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-service-key.json' >> ${BASH_ENV}
+        echo 'PATH=$PATH:${HOME}/google-cloud-sdk/bin:node_modules/.bin:${HOME}/rok8s-scripts' >> ${BASH_ENV}
+        echo 'CI_SHA1=$CIRCLE_SHA1' >> ${BASH_ENV}
+        echo 'CI_BRANCH=$CIRCLE_BRANCH' >> ${BASH_ENV}
+        echo 'CI_BUILD_NUM=$CIRCLE_BUILD_NUM' >> ${BASH_ENV}
+        echo 'CI_TAG=$CIRCLE_TAG' >> ${BASH_ENV}
+        echo 'EXTERNAL_REGISTRY_BASE_DOMAIN="us.gcr.io/${GCP_PROJECT}"' >> ${BASH_ENV}
+        echo 'REPOSITORY_NAME=$DOCKERTAG' >> ${BASH_ENV}
+        echo 'set +o allexport' >> ${BASH_ENV}
+
+  install_packages: &install_packages
+    run:
+      name: Install packages
+      command: |
+        npm install --silent git://github.com/reactiveops/rok8s-scripts.git#pc/icitizen
+        install-rok8s-requirements
+
+  build_image: &build_image
+    run:
+        name: Build image
+        command: |
+          docker-pull -f deploy/build.config
+          docker build --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:latest" \
+            --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:${CIRCLE_SHA1}" \
+            --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:${CIRCLE_BRANCH}" \
+            --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:build_${CIRCLE_PREVIOUS_BUILD_NUM}" \
+            --rm=false -t "${DOCKERTAG}:latest" .
+
+  push_image: &push_image
+    run:
+        name: Push image
+        command: |
+          docker-push -f deploy/build.config
+
+  tag_and_release_image: &tag_and_release_image
+    run:
+      name: Tag and release image
+      command: |
+          docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:${CI_SHA1}"
+          docker tag "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:${CI_SHA1}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:${CIRCLE_TAG}"
+          docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${DOCKERTAG}:${CIRCLE_TAG}"
+
+  install_gcloud: &install_gcloud
+    run:
+        name: Install gcloud
+        command: |
+          gcloud components update --quiet || curl https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | bash -s -- --disable-prompts
+          gcloud components install kubectl
+
+  configure_gcloud: &configure_gcloud
+    run:
+      name: Configure gcloud
+      command: |
+        prepare-gcloud
+
+  job_defaults: &job_defaults
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/app
+
+  build_and_push_steps: &build_and_push_steps
+    steps:
+      - checkout
+      - setup_remote_docker
+      - *interpolate_environment_variables
+      - restore_cache:
+          keys:
+            - v1-google-cloud-sdk-rok8s
+      - *install_packages
+      - *install_gcloud
+      - save_cache:
+          key: v1-google-cloud-sdk-rok8s
+          paths:
+            - ~/google-cloud-sdk
+            - ~/node_modules
+      - *configure_gcloud
+      - *build_image
+      - *push_image
+
+  tag_steps: &tag_steps
+    steps:
+      - checkout
+      - setup_remote_docker
+      - *interpolate_environment_variables
+      - restore_cache:
+          keys:
+            - v1-google-cloud-sdk-rok8s
+      - *install_packages
+      - *install_gcloud
+      - save_cache:
+          key: v1-google-cloud-sdk-rok8s
+          paths:
+            - ~/google-cloud-sdk
+            - ~/node_modules
+      - *configure_gcloud
+      - *tag_and_release_image
+
+  deploy_steps: &deploy_steps
+    steps:
+      - checkout
+      - setup_remote_docker
+      - *interpolate_environment_variables
+      - restore_cache:
+          keys:
+            - v1-google-cloud-sdk-rok8s
+      - *install_packages
+      - *install_gcloud
+      - save_cache:
+          key: v1-google-cloud-sdk-rok8s
+          paths:
+            - ~/google-cloud-sdk
+            - ~/node_modules
+      - *configure_gcloud
+      - run:
+          name: Prepare kubectl
+          command: |
+            prepare-kubectl
+      - run: 
+          name: Create kubectl Context
+          command: |
+            kubectl config set-context $NAMESPACE --user $CLUSTER_NICKNAME_WORKING --cluster $CLUSTER_NICKNAME_WORKING --namespace $NAMESPACE
+            kubectl config use-context $NAMESPACE
+      - deploy:
+          name: Deploy 
+          command: |
+            k8s-deploy-and-verify -f deploy/$ENVIRONMENT.config
+
+jobs:
+  build:
+    <<: *job_defaults
+    environment:
+      DOCKERTAG: today
+      GCP_ENV_FILE: .circleci/environments/company-prod.env
+    <<: *build_and_push_steps
+
+  tag_release:
+    <<: *job_defaults
+    environment:
+      DOCKERTAG: today
+      GCP_ENV_FILE: .circleci/environments/company-prod.env
+    <<: *tag_steps
+
+  deploy-dev:
+    <<: *job_defaults
+    environment:
+      DOCKERTAG: today
+      GCP_ENV_FILE: .circleci/environments/company-development.env
+    <<: *deploy_steps
+
+  deploy-staging:
+    <<: *job_defaults
+    environment:
+      DOCKERTAG: today
+      GCP_ENV_FILE: .circleci/environments/company-staging.env
+    <<: *deploy_steps
+
+  deploy-prod:
+    <<: *job_defaults
+    environment:
+      DOCKERTAG: today
+      GCP_ENV_FILE: .circleci/environments/company-prod.env
+    <<: *deploy_steps
+
+workflows:
+  version: 2
+  build_default:
+    jobs:
+      - build:
+          context: org-global
+          filters:
+            branches:
+              ignore: 
+                - develop
+                - staging
+            tags:
+              ignore: /^v.*/
+  tag_release:
+    jobs:
+      - tag_release:
+          context: org-global
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+
+  deploy-dev:
+    jobs:
+      - build:
+          context: org-global
+          filters:
+            branches:
+              only: develop
+      - deploy-dev:
+          context: org-global
+          filters:
+            branches:
+              only: develop
+          requires:
+            - build
+
+  deploy-staging:
+    jobs:
+      - deploy-staging:
+          context: org-global
+          filters:
+            branches:
+              only: staging
+
+  deploy-prod:
+    jobs:
+      - deploy-prod:
+          context: org-global
+          filters:
+            branches:
+              only: prod
