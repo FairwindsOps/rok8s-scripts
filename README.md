@@ -376,3 +376,19 @@ git push $REMOTE $VERSION
 ```
 
 A Github Release will be created by CircleCI and an NPM package will be pushed to NPMjs.
+
+## Git Hooks
+
+Living in the `githooks` directory are a collection of scripts that may be  
+included as git hooks.  The intention is to present a collection of scripts to
+present a basic level of validation in an automated fashion.
+
+If there is a single script that you would like to include as a hook, you may
+simply symlink it directly.  For example, if I want to verify that my yaml is
+valid before a commit, I can symlink that script to the pre-commit hook like so:
+
+`ln -s githooks/lint_yaml .git/hooks/pre-commit`
+
+Note that this will be only impact the local copy of the repo; hooks enabled
+will not be committed and pushed, so they will not be received on a pull.  This
+effectively makes them "opt-in".

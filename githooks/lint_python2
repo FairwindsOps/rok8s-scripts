@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Based on filename
+# TODO: look for better indicators, such as shebang
+
+# Redirect output to stderr.
+exec 1>&2
+
+### Python LINT
+for i in $(find . -name '*.py'); do
+	echo $i;
+
+	if ! $(python -m py_compile $i); then
+		echo
+		echo "VALIDATION ERROR:"
+		echo "$i has bad Python syntax."
+		echo "Aborting Commit."
+		echo "You should fix $i"
+		echo
+		exit 1
+	fi
+
+done

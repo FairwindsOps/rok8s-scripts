@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Based on filename
+# TODO: look for better indicators, such as shebang
+
+# Redirect output to stderr.
+exec 1>&2
+
+### Ruby LINT
+for i in $(find . -name '*.rb'); do
+	echo $i;
+
+	if ! $(ruby -c $i | grep -q Syntax\ OK) ; then
+		echo
+		echo "VALIDATION ERROR:"
+		echo "$i has bad Ruby syntax."
+		echo "Aborting Commit."
+		echo "You should fix $i"
+		echo
+		exit 1
+	fi
+done
