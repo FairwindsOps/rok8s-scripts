@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Redirect output to stderr.
+exec 1>&2
+
+### YAML LINT
+for i in $(find . -name '*.yml' -o -name '*.yaml'); do
+	echo $i;
+
+	if ! $(python -c 'import yaml,sys;yaml.safe_load(sys.stdin)' < $i); then
+		echo
+		echo "VALIDATION ERROR:"
+		echo "$i failed yaml lint."
+		echo "Aborting Commit."
+		echo "You should fix $i"
+		echo
+		exit 1
+	fi
+done
