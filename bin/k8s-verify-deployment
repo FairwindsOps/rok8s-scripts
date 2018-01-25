@@ -3,6 +3,7 @@
 . k8s-read-config
 
 echo "Verifying successful deployments"
+
 for index in "${!DEPLOYMENTS[@]}"
 do
   DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
@@ -15,13 +16,13 @@ do
   elif [ "$result" == "143" ] ; then
     echo "------- DEPLOYMENT TIMEOUT FAIL --------"
     if [[ -z "${ROK8S_ROLLBACK_DEPLOYMENTS}" ]]; then
-      rollback-deployment $DEPLOYMENT $NAMESPACE
+      rollback-deployment ${DEPLOYMENTS}
     fi
     exit 1
   else
     echo "DEPLOY FAILED"
     if [[ -z "${ROK8S_ROLLBACK_DEPLOYMENTS}" ]]; then
-      rollback-deployment $DEPLOYMENT $NAMESPACE
+      rollback-deployment ${DEPLOYMENTS}
     fi
     exit $result
   fi
