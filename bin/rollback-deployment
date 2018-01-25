@@ -1,0 +1,10 @@
+#!/bin/bash -e
+
+if [ -z "$1" ]
+then
+  echo "ERROR: No deployment specified"
+  exit 1
+fi
+
+echo "Rolling back deployment"
+kubectl --namespace="${2:=default}" rollout undo deployment/"${1}"
