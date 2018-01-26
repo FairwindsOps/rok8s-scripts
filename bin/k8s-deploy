@@ -214,11 +214,13 @@ do
     fi
     # Sed replica count into the deployment file in place of 'hpa'
     echo "Updating replica count to ${REPLICA_COUNT} for ${DEPLOYMENT_FILE}"
-    sed -e 's/replicas: hpa/replicas: '${REPLICA_COUNT}'/gI;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-hpa
+    sed -e 's/replicas: hpa/replicas: '${REPLICA_COUNT}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-hpa
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-hpa
   fi
 
   kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
+  rm -f ${DEPLOYMENT_FILE}-hpa
+
 done
 echo "Done deploying Deployments"
 echo ""
