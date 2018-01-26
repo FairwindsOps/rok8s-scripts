@@ -1,15 +1,21 @@
-#!/bin/bash -e
-
-if [ -z "$1" ]
-then
-  echo "ERROR: No deployments specified"
-  exit 1
-fi
+#!/bin/bash
 
 echo "Rolling back deployments"
 
-for index in "${!1[@]}"
+if [ -z "$1" ]
+then
+  echo "ERROR: No deployment specified"
+  exit 1
+fi
+
+deployments=("$@")
+
+for index in "${!deployments[@]}"
 do
-  DEPLOYMENT=${1[$index]##*/}
+  DEPLOYMENT=${deployments[$index]##*/}
+  echo "Rolling back deployment for $DEPLOYMENT"
   kubectl --namespace="${NAMESPACE:=default}" rollout undo deployment/"${DEPLOYMENT}"
 done
+
+echo "All deployments rolled back"
+echo ""
