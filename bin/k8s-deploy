@@ -202,6 +202,15 @@ done
 echo "Done deploying Deployments"
 echo ""
 
+echo "Deploying Horizontal Pod Autoscalers"
+for index in "${!HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
+do
+  HORIZONTAL_POD_AUTOSCALER_FILE=${HORIZONTAL_POD_AUTOSCALER_FILES[$index]}
+  echo "Applying ${HORIZONTAL_POD_AUTOSCALER_FILE}"
+  kubectl apply -f ${HORIZONTAL_POD_AUTOSCALER_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Horizontal Pod Autoscalers"
+
 echo "Deploying Blue Green Deployments"
 for index in "${!BG_DEPLOYMENT_FILES[@]}"
 do
@@ -209,20 +218,22 @@ do
   DEPLOYMENT_FILE=${BG_DEPLOYMENT_FILES[$index]}
   if [ -n "$CI_SHA1" ]
   then
+    cp ${DEPLOYMENT_FILE} ${DEPLOYMENT_FILE}-tmp
     echo "Updating image tag from latest to ${CI_SHA1} for ${DEPLOYMENT_FILE}"
-    sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
-    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
+    sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE}-tmp > ${DEPLOYMENT_FILE}-${CI_SHA1}
+    mv ${DEPLOYMENT_FILE}-${CI_SHA1} ${DEPLOYMENT_FILE}-tmp
 
     echo "Updating deployment label with version: ${CI_SHA1} for ${DEPLOYMENT_FILE}"
-    sed 's/version: latest/'version: ${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
-    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
+    sed 's/version: latest/version: '${CI_SHA1}'/g;' ${DEPLOYMENT_FILE}-tmp > ${DEPLOYMENT_FILE}-${CI_SHA1}
+    mv ${DEPLOYMENT_FILE}-${CI_SHA1} ${DEPLOYMENT_FILE}-tmp
 
     echo "Updating deployment name with version: ${CI_SHA1} for ${DEPLOYMENT_FILE}"
-    sed '/name:.*-latest/s/latest/'${CI_SHA1}'/g' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
+    sed '/name:.*-latest/s/latest/'${CI_SHA1}'/g' ${DEPLOYMENT_FILE}-tmp > ${DEPLOYMENT_FILE}-${CI_SHA1}
+    
+    rm ${DEPLOYMENT_FILE}-tmp
+    
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
 
-    echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
-    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}    
   fi
 
   # This is workaround attended to address an HPA issue where the correct number of pods are not deployed when
@@ -246,40 +257,49 @@ do
   fi
 
   kubectl apply -f ${DEPLOYMENT_FILE} --namespace=$NAMESPACE --record
-  
-  DEPLOYMENTNAME=$(cat ${DEPLOYMENT_FILE} | shyaml get-value metadata | grep name | awk '{ print $2 }') 
-  rm ${DEPLOYMENT_FILE}
+  DEPLOYMENT_NAME=$(cat ${DEPLOYMENT_FILE} | shyaml get-value metadata | grep name | awk '{ print $2 }') 
   
   # Wait until the Deployment is ready by checking the MinimumReplicasAvailable condition.
-  READY=$(kubectl get deploy $DEPLOYMENTNAME -o json | jq '.status.conditions[] | select(.reason == "MinimumReplicasAvailable") | .status' | tr -d '"')
+  READY=$(kubectl -n $NAMESPACE get deploy $DEPLOYMENT_NAME -o json | jq '.status.conditions[] | select(.reason == "MinimumReplicasAvailable") | .status' | tr -d '"')
   while [[ "$READY" != "True" ]]; do
-    READY=$(kubectl get deploy $DEPLOYMENTNAME -o json | jq '.status.conditions[] | select(.reason == "MinimumReplicasAvailable") | .status' | tr -d '"')
+    READY=$(kubectl -n $NAMESPACE get deploy $DEPLOYMENT_NAME -o json | jq '.status.conditions[] | select(.reason == "MinimumReplicasAvailable") | .status' | tr -d '"')
     sleep 5
   done
 
-  echo "Deploying Blue Green Services"
-  for index in "${!BG_SERVICE_FILES[@]}"
+  echo "Updating Service for Blue Green Deployment"
+  for index in "${!SERVICE_FILES[@]}"
   do
     SERVICE_FILE=${SERVICE_FILES[$index]}
     SERVICE=$(cat $SERVICE_FILE | shyaml get-value metadata | grep name | awk '{ print $2 }') 
     # Update the service selector with the new version
-    kubectl patch svc $SERVICE -p "{\"spec\":{\"selector\": {\"name\": \"${SERVICE}\", \"version\": \"${CI_SHA1}\"}}}"
+    kubectl -n $NAMESPACE patch svc $SERVICE -p "{\"spec\":{\"selector\": {\"name\": \"${SERVICE}\", \"version\": \"${CI_SHA1}\"}}}"
   done
-  echo "Done deploying Blue Green Services"
+  echo "Done updating Blue Green Services"
   echo ""
 
+  echo "Updating HPA for Blue/Green Deployment"
+  for index in "${!HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
+  do
+    HORIZONTAL_POD_AUTOSCALER_FILE=${HORIZONTAL_POD_AUTOSCALER_FILES[$index]}
+    echo "Applying ${HORIZONTAL_POD_AUTOSCALER_FILE}"
+    kubectl apply -f ${HORIZONTAL_POD_AUTOSCALER_FILE} --namespace=$NAMESPACE --record
+  done  
+  echo "Done updating Blue Green Deployment"
+  echo ""
+  set -x
+  echo "Removing Previous Deployments"
+  DEPLOYMENT_BASE_NAME=${DEPLOYMENT_NAME%${CI_SHA1}}
+  for index in $(kubectl -n $NAMESPACE get deployments | grep ${DEPLOYMENT_BASE_NAME} | grep -v ${CI_SHA1} | awk '{ print $1 }')
+  do
+    echo "Removing deployment: $index"
+    kubectl -n $NAMESPACE delete deployment $index
+  done
+  echo ""
+  echo "Removing file: ${DEPLOYMENT_FILE}"
+  rm ${DEPLOYMENT_FILE}
 done
 echo "Done deploying Blue Green Deployments"
 echo ""
-
-echo "Deploying Horizontal Pod Autoscalers"
-for index in "${!HORIZONTAL_POD_AUTOSCALER_FILES[@]}"
-do
-  HORIZONTAL_POD_AUTOSCALER_FILE=${HORIZONTAL_POD_AUTOSCALER_FILES[$index]}
-  echo "Applying ${HORIZONTAL_POD_AUTOSCALER_FILE}"
-  kubectl apply -f ${HORIZONTAL_POD_AUTOSCALER_FILE} --namespace=$NAMESPACE --record
-done
-echo "Done deploying Horizontal Pod Autoscalers"
 
 echo "Deploying Pod Disruption Budgets"
 for index in "${!POD_DISRUPTION_BUDGET_FILES[@]}"

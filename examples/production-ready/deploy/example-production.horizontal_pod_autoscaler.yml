@@ -9,6 +9,6 @@ spec:
   scaleTargetRef:
     apiVersion: extensions/v1beta1
     kind: Deployment
-    name: example
+    name: example-latest
   targetCPUUtilizationPercentage: 75
 
