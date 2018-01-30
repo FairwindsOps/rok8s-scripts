@@ -1,6 +1,6 @@
 {
   "name": "rok8s-scripts",
-  "version": "7.2.1",
+  "version": "",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
     "docker-build": "./bin/docker-build",
