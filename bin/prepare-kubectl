@@ -2,6 +2,11 @@
 
 mkdir -p ~/.kube
 
+DECODE="--decode"
+if base64 --help 2>&1 | grep -q BusyBox; then
+    DECODE="-d"
+fi
+
 if [ -n "$KUBECONFIG_DATA" ]; then
-  echo "${KUBECONFIG_DATA}" | base64 --decode > "${KUBECONFIG:-$HOME/.kube/config}"
+  echo "${KUBECONFIG_DATA}" | base64 ${DECODE} > "${KUBECONFIG:-$HOME/.kube/config}"
 fi
