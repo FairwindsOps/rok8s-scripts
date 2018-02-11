@@ -20,8 +20,9 @@ echo "Deploying Helm Charts"
 for index in "${!CHARTS[@]}"
 do
   CHART_NAME=${CHARTS[$index]}
+  CHARTS_VALUES=${CHART_VALUES[$index]}
   echo "Applying ${CHART_NAME}"
-  helm upgrade --install $CHART_NAME ./deploy/charts/$CHART_NAME -f ./deploy/${NAMESPACE}.yml --set replicas=$REPLICA_COUNT --set image.tag=$CI_SHA --namespace=$NAMESPACE
+  helm upgrade --install $CHART_NAME ./deploy/charts/$CHART_NAME -f ./deploy/${CHART_VALUES}.yml --set replicas=$REPLICA_COUNT --set image.tag=$CI_SHA1 --namespace=$NAMESPACE
 done
 echo "Done deploying Helm Charts"
 echo ""
