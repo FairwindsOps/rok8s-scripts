@@ -79,6 +79,12 @@ BLOCKING_JOBS=()
 
 # List of files ending in '.cronjob.yml' in the kube directory
 CRONJOBS=()
+
+# List of helm charts to deploy
+CHARTS=()
+
+# List of helm chart values to deploy
+CHARTS_VALUES=()
 EOT
 
 echo "Wrote example config to $CONFIG"

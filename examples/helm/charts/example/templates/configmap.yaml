@@ -1,0 +1,9 @@
+{{- if .Values.configmap }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "chart.name" . }}
+data:
+{{ toYaml .Values.configmap.data | indent 2 }}
+{{- end }}
