@@ -1,28 +1,21 @@
 #!/bin/bash
-
 #helm-deploy
 
-DEFAULT_REPLICA_COUNT=1
 set -eo pipefail
 
 . k8s-read-config
 k8s-deploy-secrets
 
 
-if [[ ! -z $(kubectl get deployments --namespace=${NAMESPACE} -o json | jq -r '.items[].metadata.name' | grep -x ${DEPLOYMENT}) ]]
-then
-  REPLICA_COUNT=$(kubectl get deployment ${DEPLOYMENT} --namespace=${NAMESPACE} -o json | jq '.status.readyReplicas')
-else
-  REPLICA_COUNT=${DEFAULT_REPLICA_COUNT}
-fi
-
 echo "Deploying Helm Charts"
 for index in "${!CHARTS[@]}"
 do
+
   CHART_NAME=${CHARTS[$index]}
-  CHARTS_VALUES=${CHART_VALUES[$index]}
+  CHART_VALUES=${CHARTS_VALUES[$index]}
   echo "Applying ${CHART_NAME}"
-  helm upgrade --install $CHART_NAME ./deploy/charts/$CHART_NAME -f ./deploy/${CHART_VALUES}.yml --set replicas=$REPLICA_COUNT --set image.tag=$CI_SHA1 --namespace=$NAMESPACE
+  helm upgrade --install $CHART_NAME "./deploy/charts/${CHART_NAME}" -f "./deploy/${CHART_VALUES}.yml" --set image.tag="${CI_SHA1}" --namespace="{$NAMESPACE}"
+
 done
 echo "Done deploying Helm Charts"
 echo ""
