@@ -13,6 +13,8 @@ do
 
   CHART_NAME=${CHARTS[$index]}
   CHART_VALUES=${CHARTS_VALUES[$index]}
+  echo "Intializing Helm"
+  helm init
   echo "Applying ${CHART_NAME}"
   helm upgrade --install "${CHART_NAME}" "./deploy/charts/${CHART_NAME}" -f "./deploy/${CHART_VALUES}.yml" --set image.tag="${CI_SHA1}" --namespace="${NAMESPACE}"
 
