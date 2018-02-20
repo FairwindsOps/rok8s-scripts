@@ -2,16 +2,10 @@
 
 # shellcheck disable=SC2086
 
-if docker login --help | grep email > /dev/null 2>&1; then
-  echo "Using old version of Docker, including email for login"
-  EMAIL_FLAG='--include-email'
-else
-  EMAIL_FLAG='--no-include-email'
-fi
-
+. docker-resolve
 
 if [ -z "$AWS_ECR_ACCOUNT_ID" ]; then
-  eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} $EMAIL_FLAG)"
+  eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} $DOCKER_EMAIL_FLAG)"
 else
-  eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} --registry-ids ${AWS_ECR_ACCOUNT_ID} $EMAIL_FLAG)"
+  eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} --registry-ids ${AWS_ECR_ACCOUNT_ID} $DOCKER_EMAIL_FLAG)"
 fi
