@@ -6,3 +6,10 @@ if docker login --help | grep email > /dev/null 2>&1; then
 else
   export DOCKER_EMAIL_FLAG='--no-include-email'
 fi
+
+if docker build --help | grep cache-from> /dev/null 2>&1; then
+  export DOCKER_BUILD_CACHE_FROM='available'
+else
+  echo "Using old version of Docker, --cache-from not supported"
+  export DOCKER_BUILD_CACHE_FROM='unavailable'
+fi
