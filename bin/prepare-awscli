@@ -1,8 +1,8 @@
 #!/bin/bash -e
 
-# shellcheck disable=SC2086
-
 . docker-resolve
+
+# shellcheck disable=SC2086
 
 if [ -z "$AWS_ECR_ACCOUNT_ID" ]; then
   eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} $DOCKER_EMAIL_FLAG)"
