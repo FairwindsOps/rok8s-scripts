@@ -1,0 +1,25 @@
+#!/bin/bash
+#helm-deploy
+
+set -eo pipefail
+
+ . k8s-read-config
+k8s-deploy-secrets
+
+
+echo "Deploying Helm Charts"
+for index in "${!CHARTS[@]}"
+do
+
+  CHART_NAME=${CHARTS[$index]}
+  CHART_VALUES=${CHARTS_VALUES[$index]}
+  echo "Intializing Helm"
+  helm init
+  echo "Applying ${CHART_NAME}"
+  helm upgrade --install "${CHART_NAME}" "./deploy/charts/${CHART_NAME}" -f "./deploy/${CHART_VALUES}.yml" --set image.tag="${CI_SHA1}" --namespace="${NAMESPACE}"
+
+done
+echo "Done deploying Helm Charts"
+echo ""
+
+

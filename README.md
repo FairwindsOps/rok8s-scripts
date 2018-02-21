@@ -80,6 +80,12 @@ BLOCKING_JOBS=()
 # List of files ending in '.cronjob.yml' in the kube directory
 CRONJOBS=()
 
+# List of helm charts to deploy from ./charts/
+CHARTS=()
+
+# List of helm chart values files ending in '.yml' to deploy with the helm charts
+CHARTS_VALUES=()
+
 ```
 
 ### Generating a config
@@ -232,6 +238,10 @@ This requires the environment variables:
 * `CI_BUILD_NUM`
 
 And either `CI_BRANCH` or `CI_TAG`
+
+### helm-deploy
+
+Using helm chart(s) to manage release. Helm allows more templateing and DRYer config but increase the complexity of the Kubernetes spec files. Reference the example `./examples/helm` and the helm documentation for assitance creating charts.
 
 ### install-rok8s-requirements
 
