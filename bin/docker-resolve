@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+if docker login --help | grep email > /dev/null 2>&1; then
+  echo "Using old version of Docker, including email for login"
+  export DOCKER_EMAIL_FLAG='--include-email'
+else
+  export DOCKER_EMAIL_FLAG='--no-include-email'
+fi
