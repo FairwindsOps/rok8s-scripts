@@ -8,7 +8,7 @@ echo "Deploying Namespace"
 kubectl get ns "${NAMESPACE}" >/dev/null 2>&1 || kubectl create ns "${NAMESPACE}"
 echo "Done deploying Namespace"
 
-k8s-deploy-secrets
+. k8s-deploy-secrets
 
 echo "Deploying ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"; do
