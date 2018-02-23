@@ -119,6 +119,9 @@ expand_files "BLOCKING_JOBS" "BLOCKING_JOBS_FILES" "blockingjob.yml"
 CRONJOB_FILES=()
 expand_files "CRONJOBS" "CRONJOB_FILES" "cronjob.yml"
 
+DAEMONSET_FILES=()
+expand_files "DAEMONSET" "DAEMONSET" "daemonset.yml"
+
 CLUSTER_NAME=${CLUSTER_NAME}
 echo "[cluster_name]: $CLUSTER_NAME"
 echo ""
