@@ -1,0 +1,78 @@
+version: 2
+jobs:
+  test:
+    # environment:
+    #   ROK8S_INSTALL_PATH: $HOME/rok8s-scripts
+    #   PATH: $PATH:node_modules/.bin:$ROK8S_INSTALL_PATH
+    docker:
+      - image: node:8.9.4
+    steps:
+      - checkout
+
+      - run:
+          name: Install Dependencies
+          command: |
+            apt-get update
+            apt-get install -y shellcheck
+
+      - run:
+          name: Test NPM Install and ensure scripts are added to path
+          command: |
+            npm install -g git://github.com/reactiveops/rok8s-scripts.git#${CIRCLE_SHA1}
+
+      - run:
+          name: Run Shellcheck
+          command: |
+            shellcheck bin/docker-* \
+              bin/install-rok8s-requirements \
+              bin/k8s-apply \
+              bin/verify-deployment \
+              bin/k8s-lint \
+              bin/prepare-* \
+              bin/helm-*
+
+      - run:
+          name: Run basic linting
+          command: |
+            cd examples/production-ready
+            k8s-lint -f staging.config
+            k8s-lint -f production.config
+
+
+  release:
+    environment:
+      GITHUB_ORGANIZATION: $CIRCLE_PROJECT_USERNAME
+      GITHUB_REPOSITORY: $CIRCLE_PROJECT_REPONAME
+    docker:
+      - image: node:8.9.4
+    steps:
+      - checkout
+
+      - run:
+          name: Load NPM Credentials
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+
+      - run:
+          name: NPM release
+          command: |
+            echo $CIRCLE_TAG | xargs npm version --no-git-tag-version
+            npm publish
+
+      - run:
+          name: GitHub release
+          command: |
+            git fetch --tags
+            curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
+            /bin/bash release
+
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  # release:
+  #   requires:
+  #     - test
+  #   jobs:
+  #     - release
