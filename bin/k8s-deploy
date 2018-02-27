@@ -149,6 +149,23 @@ do
     DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
   fi
 
+echo "Deploying DaemonSets"
+for index in "${!DAEMONSET_FILES[@]}"
+do
+  DAEMONSET=${DAEMONSETS[$index]##*/}
+  DAEMONSET_FILE=${DAEMONSET_FILES[$index]}
+  if [ -n "$CI_SHA1" ]
+  then
+    echo "Updating image tag from latest to ${CI_SHA1} for ${DAEMONSET_FILE}"
+    sed 's/:latest/':${CI_SHA1}'/g;' ${DAEMONSET_FILE} > ${DAEMONSET_FILE}-${CI_SHA1}
+    echo "Updating ${DAEMONSET_FILE}-${CI_SHA1}"
+    DAEMONSET_FILE=${DAEMONSET_FILE}-${CI_SHA1}
+  fi
+  kubectl apply -f ${DAEMONSET_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying DaemonSets"
+echo ""
+
 
   # This is workaround attended to address an HPA issue where the correct number of pods are not deployed when
   # 'kubectl apply' is used to redeploy a deployment that has been scaled by an HPA.  There is an open issue for
