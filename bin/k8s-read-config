@@ -120,7 +120,7 @@ CRONJOB_FILES=()
 expand_files "CRONJOBS" "CRONJOB_FILES" "cronjob.yml"
 
 DAEMONSET_FILES=()
-expand_files "DAEMONSET" "DAEMONSET" "daemonset.yml"
+expand_files "DAEMONSETS" "DAEMONSET_FILES" "daemonset.yml"
 
 CLUSTER_NAME=${CLUSTER_NAME}
 echo "[cluster_name]: $CLUSTER_NAME"
