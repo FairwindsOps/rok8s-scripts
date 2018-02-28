@@ -1,22 +1,19 @@
 version: 2
 jobs:
-  test:
-    # environment:
-    #   ROK8S_INSTALL_PATH: $HOME/rok8s-scripts
-    #   PATH: $PATH:node_modules/.bin:$ROK8S_INSTALL_PATH
+  test_npm:
     docker:
       - image: node:8.9.4
     steps:
       - checkout
 
       - run:
-          name: Install Dependencies
+          name: Install dependencies
           command: |
             apt-get update
             apt-get install -y shellcheck
 
       - run:
-          name: Test NPM Install and ensure scripts are added to path
+          name: Test npm install and ensure scripts are added to path
           command: |
             npm install -g git://github.com/reactiveops/rok8s-scripts.git#${CIRCLE_SHA1}
 
@@ -38,6 +35,43 @@ jobs:
             k8s-lint -f staging.config
             k8s-lint -f production.config
 
+  test_pip:
+    environment:
+      PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/google-cloud-sdk/bin
+
+    docker:
+      - image: python:2.7
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            apt-get update
+            apt-get install -y shellcheck
+
+      - run:
+          name: Test pip install and ensure scripts are added to path
+          command: |
+            pip install git+https://github.com/reactiveops/rok8s-scripts.git@$CIRCLE_SHA1
+
+      - run:
+          name: Run Shellcheck
+          command: |
+            shellcheck bin/docker-* \
+              bin/install-rok8s-requirements \
+              bin/k8s-apply \
+              bin/verify-deployment \
+              bin/k8s-lint \
+              bin/prepare-* \
+              bin/helm-*
+
+      - run:
+          name: Run basic linting
+          command: |
+            cd examples/production-ready
+            k8s-lint -f staging.config
+            k8s-lint -f production.config
 
   release:
     environment:
@@ -70,9 +104,13 @@ workflows:
   version: 2
   test:
     jobs:
-      - test
-  # release:
-  #   requires:
-  #     - test
-  #   jobs:
-  #     - release
+      - test_npm
+      - test_pip
+  release:
+    jobs:
+      - release:
+          filters:
+            tags:
+              only: /^v*/
+            branches:
+              ignore: /.*/
