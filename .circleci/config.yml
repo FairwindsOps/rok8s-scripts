@@ -54,7 +54,7 @@ jobs:
       - run:
           name: Test pip install and ensure scripts are added to path
           command: |
-            pip install git+https://github.com/reactiveops/rok8s-scripts.git@$CIRCLE_SHA1
+            pip install .
 
       - run:
           name: Run Shellcheck
@@ -90,19 +90,19 @@ jobs:
 
       - run:
           name: Build Node 7 Docker Image
-          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:node7-$CIRCLE_SHA1 .
+          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-node7 .
 
-      # - run:
-      #     name: Push Node 7 Docker Image
-      #     command: docker push quay.io/reactiveops/ci-images:node7-$CIRCLE_SHA1
+      - run:
+          name: Push Node 7 Docker Image
+          command: docker push quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-node7
 
       - run:
           name: Build Alpine Docker Image
-          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:alpine-$CIRCLE_SHA1 .
+          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-alpine .
 
-      # - run:
-      #     name: Push Alpine Docker Image
-      #     command: docker push quay.io/reactiveops/ci-images:alpine-$CIRCLE_SHA1
+      - run:
+          name: Push Alpine Docker Image
+          command: docker push quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-alpine
 
 
   release:
@@ -130,6 +130,23 @@ jobs:
             git fetch --tags
             curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
             /bin/bash release
+
+      - run:
+          name: Docker login
+          command: |
+            docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
+
+      - run:
+          name: Release Node 7 Docker Image
+            docker pull quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-node7
+            docker tag quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-node7 quay.io/reactiveops/ci-images:$CIRCLE_TAG-node7
+            docker push quay.io/reactiveops/ci-images:$CIRCLE_TAG-node7
+
+      - run:
+          name: Release Alpine Docker Image
+            docker pull quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-alpine
+            docker tag quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-alpine quay.io/reactiveops/ci-images:$CIRCLE_TAG-alpine
+            docker push quay.io/reactiveops/ci-images:$CIRCLE_TAG-alpine
 
 
 workflows:
