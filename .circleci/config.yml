@@ -85,6 +85,10 @@ jobs:
       - setup_remote_docker
 
       - run:
+          name: docker login
+          command: docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
+
+      - run:
           name: Build Node 7 Docker Image
           command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:node7-$CIRCLE_SHA1 .
 
