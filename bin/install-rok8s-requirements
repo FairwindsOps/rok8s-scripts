@@ -27,7 +27,7 @@ mkdir -p "${ROK8S_INSTALL_PATH}"
 PKG_MANAGER=$( command -v yum || command -v apt-get || command -v apk || command -v brew ) || echo "Supported package manager not found"
 
 if [[ $PKG_MANAGER = *"apk"* ]]; then
-  PKG_INSTALL="$(command -v apk) add"
+  PKG_INSTALL="${PKG_MANAGER} add"
 else
   PKG_INSTALL="${PKG_MANAGER} install -y"
 fi
