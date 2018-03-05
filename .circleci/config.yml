@@ -90,7 +90,7 @@ jobs:
 
       - run:
           name: Build Node 7 Docker Image
-          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-node7 .
+          command: docker build -f ci-images/node7/Dockerfile -t quay.io/reactiveops/ci-images:dev-$CIRCLE_SHA1-node7 .
 
       - run:
           name: Push Node 7 Docker Image
