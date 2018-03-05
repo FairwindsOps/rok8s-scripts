@@ -35,6 +35,7 @@ jobs:
             k8s-lint -f staging.config
             k8s-lint -f production.config
 
+
   test_pip:
     environment:
       PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/google-cloud-sdk/bin
@@ -73,6 +74,33 @@ jobs:
             k8s-lint -f staging.config
             k8s-lint -f production.config
 
+
+  build:
+    docker:
+      - image: circleci/buildpack-deps:jessie
+
+    steps:
+      - checkout
+
+      - setup_remote_docker
+
+      - run:
+          name: Build Node 7 Docker Image
+          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:node7-$CIRCLE_SHA1 .
+
+      # - run:
+      #     name: Push Node 7 Docker Image
+      #     command: docker push quay.io/reactiveops/ci-images:node7-$CIRCLE_SHA1
+
+      - run:
+          name: Build Alpine Docker Image
+          command: docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:alpine-$CIRCLE_SHA1 .
+
+      # - run:
+      #     name: Push Alpine Docker Image
+      #     command: docker push quay.io/reactiveops/ci-images:alpine-$CIRCLE_SHA1
+
+
   release:
     environment:
       GITHUB_ORGANIZATION: $CIRCLE_PROJECT_USERNAME
@@ -102,10 +130,11 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  build_and_test:
     jobs:
       - test_npm
       - test_pip
+      - build
   release:
     jobs:
       - release:
