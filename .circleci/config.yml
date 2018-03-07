@@ -1,0 +1,139 @@
+version: 2
+
+references:
+  install_test_dependencies: &install_test_dependencies
+    run:
+      name: Install dependencies
+      command: |
+        apt-get update
+        apt-get install -y shellcheck
+
+  npm_install: &npm_install
+    run:
+      name: Test npm install
+      command: npm install -g git://github.com/reactiveops/rok8s-scripts.git#${CIRCLE_SHA1}
+
+  pip_install: &pip_install
+    run:
+      name: Test pip install
+      command: pip install .
+
+  run_shellcheck: &run_shellcheck
+    run:
+      name: Run Shellcheck
+      command: |
+        shellcheck bin/docker-* \
+          bin/install-rok8s-requirements \
+          bin/k8s-apply \
+          bin/verify-deployment \
+          bin/k8s-lint \
+          bin/prepare-* \
+          bin/helm-*
+
+  run_basic_linting: &run_basic_linting
+    run:
+      name: Run basic linting
+      command: |
+        cd examples/production-ready
+        k8s-lint -f staging.config
+        k8s-lint -f production.config
+
+  docker_login: &docker_login
+    run:
+      name: Docker login
+      command: docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
+
+  docker_build: &docker_build
+    run:
+      name: Docker build
+      command: |
+        docker build -f ci-images/node7/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node7 .
+        docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-alpine .
+
+  docker_push: &docker_push
+    run:
+      name: Docker push
+      command: |
+        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node7
+        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-alpine
+
+  npm_release: &npm_release
+    run:
+      name: NPM release
+      command: |
+        echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+        echo $CIRCLE_TAG | xargs npm version --no-git-tag-version
+        npm publish
+
+  github_release: &github_release
+    run:
+      name: GitHub release
+      command: |
+        git fetch --tags
+        curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
+        /bin/bash release
+
+
+jobs:
+  test_npm:
+    docker:
+      - image: node:8.9.4
+    steps:
+      - checkout
+      - *install_test_dependencies
+      - *npm_install
+      - *run_shellcheck
+      - *run_basic_linting
+
+  test_pip:
+    docker:
+      - image: python:2.7
+    steps:
+      - checkout
+      - *install_test_dependencies
+      - *pip_install
+      - *run_shellcheck
+      - *run_basic_linting
+
+  build:
+    docker:
+      - image: circleci/buildpack-deps:jessie
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: echo 'export DOCKER_BASE_TAG=dev-$CIRCLE_SHA1' >> $BASH_ENV
+      - *docker_login
+      - *docker_build
+      - *docker_push
+
+  release:
+    docker:
+      - image: circleci/node:8.9.4
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
+      - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
+      - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
+      - *npm_release
+      - *github_release
+      - *docker_login
+      - *docker_build
+      - *docker_push
+
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - test_npm
+      - test_pip
+      - build
+  release:
+    jobs:
+      - release:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
