@@ -108,7 +108,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:8.9.4
+      - image: circleci/node:boron-stretch
     steps:
       - checkout
       - setup_remote_docker
