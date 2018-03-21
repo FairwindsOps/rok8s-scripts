@@ -136,19 +136,6 @@ do
 done
 echo ""
 
-echo "Deploying Deployments"
-for index in "${!DEPLOYMENT_FILES[@]}"
-do
-  DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
-  DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
-  if [ -n "$CI_SHA1" ]
-  then
-    echo "Updating image tag from latest to ${CI_SHA1} for ${DEPLOYMENT_FILE}"
-    sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
-    echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
-    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
-  fi
-
 echo "Deploying DaemonSets"
 for index in "${!DAEMONSET_FILES[@]}"
 do
@@ -166,6 +153,19 @@ done
 echo "Done deploying DaemonSets"
 echo ""
 
+
+echo "Deploying Deployments"
+for index in "${!DEPLOYMENT_FILES[@]}"
+do
+  DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
+  DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
+  if [ -n "$CI_SHA1" ]
+  then
+    echo "Updating image tag from latest to ${CI_SHA1} for ${DEPLOYMENT_FILE}"
+    sed 's/:latest/':${CI_SHA1}'/g;' ${DEPLOYMENT_FILE} > ${DEPLOYMENT_FILE}-${CI_SHA1}
+    echo "Updating ${DEPLOYMENT_FILE}-${CI_SHA1}"
+    DEPLOYMENT_FILE=${DEPLOYMENT_FILE}-${CI_SHA1}
+  fi
 
   # This is workaround attended to address an HPA issue where the correct number of pods are not deployed when
   # 'kubectl apply' is used to redeploy a deployment that has been scaled by an HPA.  There is an open issue for
