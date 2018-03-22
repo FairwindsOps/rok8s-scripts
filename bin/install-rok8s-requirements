@@ -33,7 +33,9 @@ else
 fi
 
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.8.10}"
-#make sure sudo is installed
+HELM_VERSION="${HELM_VERSION:-v2.8.2}"
+
+# make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
   echo Installing sudo...
   # shellcheck disable=SC2086
@@ -43,21 +45,21 @@ fi
 # remove default setting of requiretty if it exists
 #sed -i '/Defaults requiretty/d' /etc/sudoers
 
-#make sure wget is installed
+# make sure wget is installed
 if ! hash wget 2>/dev/null; then
   echo Installing wget...
   # shellcheck disable=SC2086
   sudo $PKG_INSTALL wget
 fi
 
-#make sure jq is installed
+# make sure jq is installed
 if ! hash jq 2>/dev/null; then
   echo Installing jq...
   # shellcheck disable=SC2086
   sudo $PKG_INSTALL jq
 fi
 
-#make sure gcloud is installed
+# make sure gcloud is installed
 if ! hash gcloud 2>/dev/null; then
   echo Installing gcloud...
   gcloud components update --quiet || \
@@ -67,7 +69,7 @@ if ! hash gcloud 2>/dev/null; then
   ln -s "${HOME}/google-cloud-sdk/bin/gsutil" "${ROK8S_INSTALL_PATH}/gsutil"
 fi
 
-#make sure awscli is installed
+# make sure awscli is installed
 if ! hash aws 2>/dev/null && hash pip 2>/dev/null; then
   echo Installing aws...
   pip install awscli
@@ -85,4 +87,14 @@ if ! hash sops 2>/dev/null; then
   echo Installing sops...
   curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/3.0.0/sops-3.0.0.$(uname | tr '[:upper:]' '[:lower:]')"
   chmod +x "${ROK8S_INSTALL_PATH}/sops"
+fi
+
+# make sure helm is installed
+if ! hash helm 2>/dev/null; then
+  echo Installing helm...
+  mkdir "${ROK8S_INSTALL_PATH}/helm-tmp"
+  curl "https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz" | tar xzvf - -C "${ROK8S_INSTALL_PATH}/helm-tmp"
+  mv "${ROK8S_INSTALL_PATH}/helm-tmp/linux-amd64/helm" "${ROK8S_INSTALL_PATH}/helm"
+  chmod +x "${ROK8S_INSTALL_PATH}/helm"
+  rm -rf "${ROK8S_INSTALL_PATH}/helm-tmp"
 fi
