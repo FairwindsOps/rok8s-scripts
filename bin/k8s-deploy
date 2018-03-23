@@ -83,6 +83,14 @@ for index in "${!JOBS_FILES[@]}"
 do
   JOB=${JOBS[$index]##*/}
   JOB_FILE=${JOBS_FILES[$index]}
+  if [ -n "$CI_SHA1" ]
+  then
+    echo "Updating image tag from latest to ${CI_SHA1} for ${JOB_FILE}"
+    sed 's/:latest/':${CI_SHA1}'/g;' ${JOB_FILE} > ${JOB_FILE}-${CI_SHA1}
+    echo "Updating ${JOB_FILE}-${CI_SHA1}"
+    JOB_FILE=${JOB_FILE}-${CI_SHA1}
+  fi
+  kubectl delete --namespace="${NAMESPACE}" job "${JOB}" 2>/dev/null || true
   kubectl apply -f ${JOB_FILE} --namespace=$NAMESPACE --record
 done
 echo "Done deploying Jobs"
