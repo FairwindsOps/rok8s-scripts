@@ -3,8 +3,8 @@
 
 set -eo pipefail
 
- . k8s-read-config
-k8s-deploy-secrets
+. k8s-read-config
+. k8s-deploy-secrets
 
 
 echo "Deploying Helm Charts"
