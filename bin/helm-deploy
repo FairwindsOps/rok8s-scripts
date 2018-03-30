@@ -6,17 +6,15 @@ set -eo pipefail
 . k8s-read-config
 . k8s-deploy-secrets
 
-
 echo "Deploying Helm Charts"
-for index in "${!CHARTS[@]}"
+for index in "${!HELM_CHARTS[@]}"
 do
 
-  CHART_NAME=${CHARTS[$index]}
-  CHART_VALUES=${CHARTS_VALUES[$index]}
-  echo "Intializing Helm"
-  helm init
-  echo "Applying ${CHART_NAME}"
-  helm upgrade --install "${CHART_NAME}" "./deploy/charts/${CHART_NAME}" -f "./deploy/${CHART_VALUES}.yml" --set image.tag="${CI_SHA1}" --namespace="${NAMESPACE}"
+  CHART_PATH=${HELM_CHARTS[$index]}
+  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-$CHARTS[$index]}
+  CHART_VALUES=${HELM_VALUES[$index]}
+  echo "Applying ${CHART_PATH} with ${CHART_VALUES}"
+  helm upgrade --install "${CHART_RELEASE_NAME}" "./deploy/${CHART_PATH}" -f "./deploy/${CHART_VALUES}.values.yml" --set image.tag="${CI_SHA1}" --namespace="${NAMESPACE}"
 
 done
 echo "Done deploying Helm Charts"
