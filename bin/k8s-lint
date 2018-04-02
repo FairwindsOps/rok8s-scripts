@@ -43,6 +43,31 @@ check_deployment () {
     fi
 }
 
+check_cronjobs () {
+    local FILE
+    for FILE in "${@}"
+    do
+      check_cronjob "${FILE}"
+    done
+}
+
+check_cronjob () {
+    local FILE=$1
+
+    #check for JobsHistoryLimit - actually we want both
+    #- failedJobsHistoryLimit + successfulJobsHistoryLimit, so grep for LCD
+    grep 'JobsHistoryLimit' "${FILE}" > /dev/null
+    RC=$?
+
+    if [[ $RC -eq 0 ]]
+    then
+      echo -e "${CHECKMARK} " "${FILE} includes JobsHistoryLimit"
+    else
+      echo -e "${SKULL} " "ERROR ${FILE} does not include 'JobsHistoryLimit' https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits"
+        LINT_ERROR=1
+    fi
+}
+
 
 
 main() {
@@ -62,6 +87,7 @@ main() {
     files_exist "${POD_DISRUPTION_BUDGET_FILES[@]}"
 
     check_deployments "${DEPLOYMENT_FILES[@]}"
+    check_cronjobs "${CRONJOB_FILES[@]}"
 
     echo "Exit: ${LINT_ERROR}"
     exit $LINT_ERROR
