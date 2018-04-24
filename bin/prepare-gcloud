@@ -1,4 +1,7 @@
 #!/bin/bash -e
+
+# shellcheck disable=SC2016
+
 echo "Preparing the gcloud command line tools."
 echo 'Ensure that the following environment variable is also set'
 echo 'export GOOGLE_APPLICATION_CREDENTIALS="${ROK8S_TMP}/gcloud-service-key.json"'
