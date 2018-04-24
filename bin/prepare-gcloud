@@ -1,10 +1,12 @@
 #!/bin/bash -e
+
 echo "Preparing the gcloud command line tools."
 
-if [[ -z ${GCP_PROJECT+x} ]] || [[ -z ${GCLOUD_KEY+x} ]] ; then
+if [[ -z ${GCP_PROJECT+x} ]] || [[ -z ${GCLOUD_KEY+x} ]] || [[ -z ${GOOGLE_APPLICATION_CREDENTIALS+x} ]] ; then
   echo -n "Missing required variable(s):"
   [[ -n ${GCP_PROJECT+x} ]] || echo -n " GCP_PROJECT"
   [[ -n ${GCLOUD_KEY+x} ]] || echo -n " GCLOUD_KEY"
+  [[ -n ${GOOGLE_APPLICATION_CREDENTIALS+x} ]] || echo -n " GOOGLE_APPLICATION_CREDENTIALS"
   echo ""
   exit 1
 fi
@@ -15,7 +17,7 @@ fi
 
 ROK8S_TMP="${ROK8S_TMP:-${HOME}}"
 mkdir -p "${ROK8S_TMP}"
-export GOOGLE_APPLICATION_CREDENTIALS="${ROK8S_TMP}/gcloud-service-key.json"
+
 echo "${GCLOUD_KEY}" | base64 --decode > "$GOOGLE_APPLICATION_CREDENTIALS"
 gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --key-file "$GOOGLE_APPLICATION_CREDENTIALS" --project "${GCP_PROJECT}"
 
@@ -25,10 +27,11 @@ gcloud config set project "${GCP_PROJECT}"
 # Authorize the docker client to work with GCR
 gcloud docker --authorize-only
 
-if [[ ${GCP_ZONE+x} ]] || [[ ${CLUSTER_NAME+x} ]] ; then
+if [[ -z ${GCP_ZONE+x} ]] || [[ -z ${CLUSTER_NAME+x} ]] ; then
+  echo "Missing required variables to get cluster credentials (GCP_ZONE and CLUSTER_NAME)"
+else
   echo "Configuring cluster credentials."
   # Setup cluster credentials
   gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${GCP_ZONE}" --project "${GCP_PROJECT}"
   echo ""
-  exit 0
 fi
