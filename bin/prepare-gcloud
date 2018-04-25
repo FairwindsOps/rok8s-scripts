@@ -18,7 +18,12 @@ fi
 ROK8S_TMP="${ROK8S_TMP:-${HOME}}"
 mkdir -p "${ROK8S_TMP}"
 
-echo "${GCLOUD_KEY}" | base64 --decode > "$GOOGLE_APPLICATION_CREDENTIALS"
+DECODE="--decode"
+if base64 --help 2>&1 | grep -q BusyBox; then
+    DECODE="-d"
+fi
+
+echo "${GCLOUD_KEY}" | base64 ${DECODE} > "$GOOGLE_APPLICATION_CREDENTIALS"
 gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --key-file "$GOOGLE_APPLICATION_CREDENTIALS" --project "${GCP_PROJECT}"
 
 # Set GCP Project
