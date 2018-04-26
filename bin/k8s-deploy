@@ -23,10 +23,10 @@ echo "Deploying From File Configmaps"
 for index in "${!FROMFILE_CONFIGMAP_FILES[@]}"; do
   CONFIGMAP_FILE=${FROMFILE_CONFIGMAP_FILES[$index]}
 
-  CONFIGMAP_NAME=${EXTERNAL_SECRET_FILE##*/}
+  CONFIGMAP_NAME=${CONFIGMAP_FILE##*/}
   CONFIGMAP_NAME=${CONFIGMAP_NAME%.configmap.fromfile}
 
-  FROMFILES="$(cat ${CONFIGMAP_FILE}[$index])"
+  FROMFILES="$(cat ${CONFIGMAP_FILE})"
   FROMFILE_ARGS=""
   for FROMFILE in $FROMFILES
   do
