@@ -75,6 +75,9 @@ function expand_files() {
 CONFIGMAP_FILES=()
 expand_files "CONFIGMAPS" "CONFIGMAP_FILES" "configmap.yml"
 
+FROMFILE_CONFIGMAP_FILES=()
+expand_files "FROMFILE_CONFIGMAPS" "FROMFILE_CONFIGMAP_FILES" "configmap.fromfile"
+
 SECRET_FILES=()
 expand_files "SECRETS" "SECRET_FILES" "secret.yml"
 

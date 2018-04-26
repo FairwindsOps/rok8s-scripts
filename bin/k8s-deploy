@@ -19,6 +19,26 @@ done
 echo "Done deploying ConfigMaps"
 echo ""
 
+echo "Deploying From File Configmaps"
+for index in "${!FROMFILE_CONFIGMAP_FILES[@]}"; do
+  CONFIGMAP_FILE=${FROMFILE_CONFIGMAP_FILES[$index]}
+
+  CONFIGMAP_NAME=${EXTERNAL_SECRET_FILE##*/}
+  CONFIGMAP_NAME=${CONFIGMAP_NAME%.configmap.fromfile}
+
+  FROMFILES="$(cat ${CONFIGMAP_FILE}[$index])"
+  FROMFILE_ARGS=""
+  for FROMFILE in $FROMFILES
+  do
+    FROMFILE_ARGS+=" --from-file=$FROMFILE "
+  done
+
+  echo "Applying ${FROMFILE_CONFIGMAP_FILES}"
+  kubectl create ${CONFIGMAP_NAME} --namespace=$NAMESPACE --record ${FROMFILE_ARGS} --dry-run -o yaml | kubectl apply --namespace=$NAMESPACE -f -
+done
+echo "Done deploying From File ConfigMaps"
+echo ""
+
 echo "Deploying Services"
 for index in "${!SERVICE_FILES[@]}"
 do
