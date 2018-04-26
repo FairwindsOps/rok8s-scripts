@@ -117,11 +117,11 @@ jobs:
       - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
       - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
       - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
-      - *npm_release
       - *github_release
       - *docker_login
       - *docker_build
       - *docker_push
+      - *npm_release
 
 
 workflows:
