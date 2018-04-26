@@ -10,6 +10,14 @@ do
 done
 echo "Done deleting ConfigMaps"
 
+echo "Deleting ConfigMaps"
+for index in "${!FROMFILE_CONFIGMAP_FILES[@]}"
+do
+  FROMFILE_CONFIGMAP_FILE=${FROMFILE_CONFIGMAP_FILES[$index]}
+  kubectl delete -f $FROMFILE_CONFIGMAP_FILE --namespace=$NAMESPACE || true
+done
+echo "Done deleting From File ConfigMaps"
+
 echo "Deleting Secrets"
 for index in "${!SECRET_FILES[@]}"
 do
