@@ -34,7 +34,7 @@ for index in "${!FROMFILE_CONFIGMAP_FILES[@]}"; do
   done
 
   echo "Applying ${FROMFILE_CONFIGMAP_FILES}"
-  kubectl create configmap ${CONFIGMAP_NAME} --namespace=$NAMESPACE --record ${FROMFILE_ARGS} --dry-run -o yaml | kubectl apply --namespace=$NAMESPACE -f -
+  kubectl create configmap ${CONFIGMAP_NAME} --namespace=$NAMESPACE ${FROMFILE_ARGS} --dry-run -o yaml | kubectl apply --namespace=$NAMESPACE -f -
 done
 echo "Done deploying From File ConfigMaps"
 echo ""
