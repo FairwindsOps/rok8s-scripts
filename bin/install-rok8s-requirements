@@ -83,7 +83,7 @@ if ! hash gcloud 2>/dev/null; then
 fi
 
 # make sure awscli is installed
-if ! hash aws 2>/dev/null then
+if ! hash aws 2>/dev/null; then
   echo Installing aws...
   pip install awscli
 fi
