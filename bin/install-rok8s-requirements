@@ -59,6 +59,19 @@ if ! hash jq 2>/dev/null; then
   sudo $PKG_INSTALL jq
 fi
 
+if ! hash pip 2>/dev/null; then
+  echo Installing pip
+  if [[ $PKG_MANAGER = *"apk"* ]]; then
+    sudo $PKG_INSTALL py-pip python-dev
+  elif [[ $PKG_MANAGER = *"yum"* ]]; then
+    sudo $PKG_INSTALL python-pip python-devel
+  elif [[ $PKG_MANAGER = *"apt"* ]]; then
+    sudo $PKG_INSTALL python-pip python-dev
+  elif [[ $PKG_MANAGER = *"brew"* ]]; then
+    sudo $PKG_INSTALL python
+  fi
+fi
+
 # make sure gcloud is installed
 if ! hash gcloud 2>/dev/null; then
   echo Installing gcloud...
@@ -70,7 +83,7 @@ if ! hash gcloud 2>/dev/null; then
 fi
 
 # make sure awscli is installed
-if ! hash aws 2>/dev/null && hash pip 2>/dev/null; then
+if ! hash aws 2>/dev/null then
   echo Installing aws...
   pip install awscli
 fi
