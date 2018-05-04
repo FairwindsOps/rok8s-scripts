@@ -19,7 +19,7 @@ if test -f $CONFIG ; then
 fi
 
 cat <<EOT >> $CONFIG
-# Configuration for https://www.npmjs.com/package/rok8s-scripts
+# Configuration for https://github.com/reactiveops/rok8s-scripts
 
 # Dockerfile to build
 DOCKERFILE='Dockerfile'
@@ -79,12 +79,6 @@ BLOCKING_JOBS=()
 
 # List of files ending in '.cronjob.yml' in the kube directory
 CRONJOBS=()
-
-# List of helm charts to deploy from ./charts/
-CHARTS=()
-
-# List of helm chart values files ending in '.yml' to deploy with the helm charts
-CHARTS_VALUES=()
 EOT
 
 echo "Wrote example config to $CONFIG"
