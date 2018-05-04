@@ -13,7 +13,7 @@ while getopts ":o:" opt; do
 done
 CONFIG=${CONFIG_FILE:-k8s-scripts.config}
 
-if test -f $CONFIG ; then
+if test -f "$CONFIG" ; then
   echo "Configuration file, $CONFIG, already exists"
   exit 0
 fi
