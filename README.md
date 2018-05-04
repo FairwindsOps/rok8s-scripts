@@ -5,22 +5,58 @@ Opinionated scripts for managing application development and deployment lifecycl
 ## How to Install
 
 ```
-npm install rok8s-scripts
-export PATH="$(PWD)/node_modules/.bin:$PATH"
+npm install -g rok8s-scripts
 ```
 
-Then in your top-level project directory:
+To view example configuration for Helm deployments, run:
+```
+helm-example-config
+```
+
+To view example configuration for Kubernetes deployments, run:
 ```
 k8s-example-config
 ```
 
 ## Examples
 
-Explore the `examples/` directory for example files.
+Explore the `examples/` directory for example configuration files. These scripts
+all function based on a simple bash config file in the root of your project directory
+named `k8s-scripts.config` by default:
 
-## Config file
+### Sample Helm Deployment Configuration File
+```
+# Dockerfile to build
+DOCKERFILE='Dockerfile'
 
-k8s-scripts all function based on a simple bash config file in the root of your project directory named 'k8s-scripts.config'.
+# External registry domain
+EXTERNAL_REGISTRY_BASE_DOMAIN=quay.io/example-org
+
+# Name of repository/project
+REPOSITORY_NAME='example-app'
+
+# Docker tag that will be created
+# Defaults to concatenation of your external registry + repository name, i.e.:
+# DOCKERTAG=quay.io/example-org/example-app
+DOCKERTAG="${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
+
+# Namespace to work in
+NAMESPACE='default'
+
+# List of Helm charts to deploy (paths relative to deploy directory)
+HELM_CHARTS=('charts/example')
+
+# Corresponding release name(s) for charts listed above
+HELM_RELEASE_NAMES=('example')
+
+# Corresponding values files to use for charts listed above (paths relative to deploy directory)
+HELM_VALUES=('values/development')
+
+# Corresponding Helm timeout values for charts listed above (number of seconds to wait for deployment to succeed)
+HELM_TIMEOUTS=('400')
+```
+
+## Sample Kubernetes Deployment Configuration File
 
 ```
 # Dockerfile to build
@@ -82,18 +118,11 @@ BLOCKING_JOBS=()
 
 # List of files ending in '.cronjob.yml' in the kube directory
 CRONJOBS=()
-
-# List of helm charts to deploy from ./charts/
-CHARTS=()
-
-# List of helm chart values files ending in '.yml' to deploy with the helm charts
-CHARTS_VALUES=()
-
 ```
 
 ### Generating a config
 
-There is a `k8s-example-config` script that will output an example config for you.
+There are `helm-example-config` and `k8s-example-config` scripts that will output a example configs for you.
 
 `k8s-example-config`
 Outputs an example config to k8s-scripts.config
@@ -108,7 +137,7 @@ All scripts take an `-f configfile` option that allows you to specify which conf
 We recommend having the default, k8s-scripts.config, setup for your minikube environment, then
 specify `<env>.conf` for each of your environments.
 
-## deploy directory
+## Deploy directory
 
 Your kubernetes API object files should all be stored in the /deploy top level directory using consistent naming:
 
@@ -125,6 +154,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Jobs end in `job.yml`
 * Ingress Resources end in `ingress.yml`
 * Pod Disruption Budgets end in `pod_disruption_budget.yml`
+* Helm Values Files end in `values.yml`
 
 ## Credentials
 
@@ -136,6 +166,8 @@ If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS 
 
 ### GCP
 * `GCLOUD_KEY` [Service Account Keys](https://cloud.google.com/iam/docs/creating-managing-service-account-keys)
+* `GCP_PROJECT` GCP project name
+* `GOOGLE_APPLICATION_CREDENTIALS` A path to store Google Application Credentials
 
 ## Kubernetes Access
 
@@ -395,7 +427,7 @@ A Github Release will be created by CircleCI and an NPM package will be pushed t
 
 ## Git Hooks
 
-Living in the `githooks` directory are a collection of scripts that may be  
+Living in the `githooks` directory are a collection of scripts that may be
 included as git hooks.  The intention is to present a collection of scripts to
 present a basic level of validation in an automated fashion.
 
