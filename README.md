@@ -440,3 +440,9 @@ valid before a commit, I can symlink that script to the pre-commit hook like so:
 Note that this will be only impact the local copy of the repo; hooks enabled
 will not be committed and pushed, so they will not be received on a pull.  This
 effectively makes them "opt-in".
+
+## CI Docker Images
+
+We host images that you can use to run your own CI. They can be found on [quay](https://quay.io/repository/reactiveops/ci-images)
+
+NOTE: The images on Docker Hub are deprecated in favor of the images on Quay.
