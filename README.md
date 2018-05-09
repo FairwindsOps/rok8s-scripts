@@ -288,7 +288,7 @@ via package management (requiring `sudo`) or by installing things to
 
 `kubectl apply`'s files in the config.
 
-**If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` is are deployed, a new file will be created with that value as part of the filename.
+**If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` are deployed, a new file will be created with that value as part of the filename.
 
 Leverages kubernetes annotations with `--record` when creating objects.
 
