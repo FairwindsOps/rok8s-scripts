@@ -288,7 +288,7 @@ via package management (requiring `sudo`) or by installing things to
 
 `kubectl apply`'s files in the config.
 
-**If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` is are deployed, a new file will be created with that value as part of the filename.
+**If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` are deployed, a new file will be created with that value as part of the filename.
 
 Leverages kubernetes annotations with `--record` when creating objects.
 
@@ -440,3 +440,9 @@ valid before a commit, I can symlink that script to the pre-commit hook like so:
 Note that this will be only impact the local copy of the repo; hooks enabled
 will not be committed and pushed, so they will not be received on a pull.  This
 effectively makes them "opt-in".
+
+## CI Docker Images
+
+We host images that you can use to run your own CI. They can be found on [quay](https://quay.io/repository/reactiveops/ci-images)
+
+NOTE: The images on Docker Hub are deprecated in favor of the images on Quay.
