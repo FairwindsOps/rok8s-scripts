@@ -74,6 +74,9 @@ CONFIGMAPS=()
 # List of files ending in '.configmap.fromfile' in the kube directory
 FROMFILE_CONFIGMAPS=()
 
+# List of files ending in '.service_account.yml' in the kube directory
+SERVICE_ACCOUNTS=()
+
 # List of files ending in '.secret.yml' in the kube directory
 SECRETS=('example-app')
 

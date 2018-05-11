@@ -18,6 +18,14 @@ do
 done
 echo "Done deleting From File ConfigMaps"
 
+echo "Deleting Service Accounts"
+for index in "${!SERVICE_ACCOUNT_FILES[@]}"
+do
+  SERVICE_ACCOUNT_FILE=${SERVICE_ACCOUNT_FILES[$index]}
+  kubectl delete -f $SERVICE_ACCOUNT_FILE --namespace=$NAMESPACE || true
+done
+echo "Done deleting Service Accounts"
+
 echo "Deleting Secrets"
 for index in "${!SECRET_FILES[@]}"
 do

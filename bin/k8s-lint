@@ -76,6 +76,7 @@ main() {
     files_exist "${PERSISTENT_VOLUME_FILES[@]}"
     files_exist "${PERSISTENT_VOLUME_CLAIM_FILES[@]}"
     files_exist "${STATEFULSET_FILES[@]}"
+    files_exist "${SERVICE_ACCOUNT_FILES[@]}"
     files_exist "${SERVICE_FILES[@]}"
     files_exist "${ENDPOINT_FILES[@]}"
     files_exist "${INGRESS_FILES[@]}"
