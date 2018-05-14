@@ -39,6 +39,16 @@ done
 echo "Done deploying From File ConfigMaps"
 echo ""
 
+echo "Deploying Service Accounts"
+for index in "${!SERVICE_ACCOUNT_FILES[@]}"
+do
+  SERVICE_ACCOUNT_FILE=${SERVICE_ACCOUNT_FILES[$index]}
+  echo "Applying ${SERVICE_ACCOUNT_FILE}"
+  kubectl apply -f ${SERVICE_ACCOUNT_FILE} --namespace=$NAMESPACE --record
+done
+echo "Done deploying Service Accounts"
+echo ""
+
 echo "Deploying Services"
 for index in "${!SERVICE_FILES[@]}"
 do

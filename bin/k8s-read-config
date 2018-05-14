@@ -78,6 +78,9 @@ expand_files "CONFIGMAPS" "CONFIGMAP_FILES" "configmap.yml"
 FROMFILE_CONFIGMAP_FILES=()
 expand_files "FROMFILE_CONFIGMAPS" "FROMFILE_CONFIGMAP_FILES" "configmap.fromfile"
 
+SERVICE_ACCOUNT_FILES=()
+expand_files "SERVICE_ACCOUNTS" "SERVICE_ACCOUNT_FILES" "service_account.yml"
+
 SECRET_FILES=()
 expand_files "SECRETS" "SECRET_FILES" "secret.yml"
 
