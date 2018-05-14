@@ -152,6 +152,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Persistent Volumes end in `persistent_volume.yml`
 * Persistent Volume Claims end in `persistent_volume_claim.yml`
 * Statefulsets end in `statefulset.yml`
+* Service accounts end in `service_account.yml`
 * Services end in `service.yml`
 * Blocking Jobs end in `blockingjob.yml`
 * Jobs end in `job.yml`
