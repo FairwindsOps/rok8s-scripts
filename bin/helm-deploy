@@ -7,8 +7,10 @@ set -eo pipefail
 
 HELM_DEFAULT_TIMEOUT=300
 
-if [[ ! `kubectl get namespace $NAMESPACE` ]]; then
+# shellcheck disable=SC2086
+if [[ ! $(kubectl get namespace $NAMESPACE) ]]; then
   echo "Creating ${NAMESPACE} namespace"
+  # shellcheck disable=SC2086
   kubectl create namespace $NAMESPACE;
 fi
 
