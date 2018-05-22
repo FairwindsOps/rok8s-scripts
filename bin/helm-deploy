@@ -1,5 +1,4 @@
 #!/bin/bash
-#helm-deploy
 
 set -eo pipefail
 
@@ -7,6 +6,13 @@ set -eo pipefail
 . k8s-deploy-secrets
 
 HELM_DEFAULT_TIMEOUT=300
+
+# shellcheck disable=SC2086
+if [[ ! $(kubectl get namespace $NAMESPACE) ]]; then
+  echo "Creating ${NAMESPACE} namespace"
+  # shellcheck disable=SC2086
+  kubectl create namespace $NAMESPACE;
+fi
 
 echo "Deploying Helm Charts"
 for index in "${!HELM_CHARTS[@]}"
