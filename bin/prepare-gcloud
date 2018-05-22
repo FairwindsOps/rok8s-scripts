@@ -30,7 +30,7 @@ gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --ke
 gcloud config set project "${GCP_PROJECT}"
 
 # Authorize the docker client to work with GCR
-gcloud docker --authorize-only
+gcloud auth configure-docker --quiet
 
 if [[ -z ${GCP_ZONE+x} ]] || [[ -z ${CLUSTER_NAME+x} ]] ; then
   echo "Missing required variables to get cluster credentials (GCP_ZONE and CLUSTER_NAME)"
