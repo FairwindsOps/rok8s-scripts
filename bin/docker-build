@@ -12,6 +12,8 @@ CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
 
 if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   echo "Using --cache-from to improve performance"
+  docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" || true
+  docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" || true
   docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" \
