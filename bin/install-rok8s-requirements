@@ -34,6 +34,7 @@ fi
 
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.8.10}"
 HELM_VERSION="${HELM_VERSION:-v2.8.2}"
+SOPS_VERSION="${SOPS_VERSION:-3.0.3}"
 
 # make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
@@ -106,7 +107,7 @@ fi
 # make sure sops is installed
 if ! hash sops 2>/dev/null; then
   echo Installing sops...
-  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/3.0.3/sops-3.0.3.$(uname | tr '[:upper:]' '[:lower:]')"
+  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.$(uname | tr '[:upper:]' '[:lower:]')"
   chmod +x "${ROK8S_INSTALL_PATH}/sops"
 fi
 
