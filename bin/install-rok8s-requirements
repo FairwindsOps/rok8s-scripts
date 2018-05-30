@@ -34,7 +34,7 @@ fi
 
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.8.10}"
 HELM_VERSION="${HELM_VERSION:-v2.8.2}"
-SOPS_VERSION="${SOPS_VERSION:-3.0.3}"
+SOPS_VERSION="${SOPS_VERSION:-3.0.5}"
 
 # make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
