@@ -24,7 +24,7 @@
 ROK8S_INSTALL_PATH="${ROK8S_INSTALL_PATH:-/usr/local/bin}"
 mkdir -p "${ROK8S_INSTALL_PATH}"
 
-PKG_MANAGER=$( command -v yum || command -v apt-get || command -v apk || command -v brew ) || echo "Supported package manager not found"
+PKG_MANAGER=$( command -v dnf || command -v yum || command -v apt-get || command -v apk || command -v brew ) || echo "Supported package manager not found"
 
 if [[ $PKG_MANAGER = *"apk"* ]]; then
   PKG_INSTALL="${PKG_MANAGER} add"
@@ -64,6 +64,9 @@ if ! hash pip 2>/dev/null; then
   if [[ $PKG_MANAGER = *"apk"* ]]; then
     # shellcheck disable=SC2086
     sudo $PKG_INSTALL py-pip python-dev
+  elif [[ $PKG_MANAGER = *"dnf"* ]]; then
+    # shellcheck disable=SC2086
+    sudo $PKG_INSTALL python-pip python-devel
   elif [[ $PKG_MANAGER = *"yum"* ]]; then
     # shellcheck disable=SC2086
     sudo $PKG_INSTALL python-pip python-devel
