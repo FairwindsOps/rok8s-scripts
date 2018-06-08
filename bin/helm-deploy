@@ -29,7 +29,7 @@ for index in "${!HELM_CHARTS[@]}"
 do
 
   CHART_PATH=${HELM_CHARTS[$index]}
-  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-$CHARTS[$index]}
+  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-${CHARTS[$index]}}
   CHART_VALUES=${HELM_VALUES[$index]}
 
   # if there is more than one values files listed

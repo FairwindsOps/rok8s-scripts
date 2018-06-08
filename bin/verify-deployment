@@ -1,5 +1,5 @@
 #!/bin/bash -e
-
+# shellcheck disable=2030,2031,1117
 if [ -z "$1" ]
 then
   echo "ERROR: No deployment specified"
