@@ -19,7 +19,7 @@ for index in "${!HELM_CHARTS[@]}"
 do
 
   CHART_PATH=${HELM_CHARTS[$index]}
-  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-$CHARTS[$index]}
+  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-${CHARTS[$index]}}
   CHART_VALUES=${HELM_VALUES[$index]}
   echo "Applying ${CHART_PATH} with ${CHART_VALUES}"
   helm upgrade --install "${CHART_RELEASE_NAME}" "./deploy/${CHART_PATH}" -f "./deploy/${CHART_VALUES}.values.yml" --set image.tag="${CI_SHA1}" --namespace="${NAMESPACE}" --wait --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}"

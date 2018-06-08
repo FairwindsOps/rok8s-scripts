@@ -18,14 +18,13 @@ CI_REF=$(echo "${CI_REF}" | tr / _)
 
 echo "Pushing ${DOCKERTAG}:latest as ${CI_SHA1}, ${CI_REF}, ${CI_BUILD_NUM} to ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}"
 
-docker tag "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_SHA1}"
-if [ $? -ne 0 ]
+if ! docker tag "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_SHA1}"
 then
   echo "Unable to tag image, aborting"
   exit 1
 fi
-docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_SHA1}"
-if [ $? -ne 0 ]
+
+if ! docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_SHA1}"
 then
   echo "Unable to push docker image, aborting."
   exit 1
@@ -41,28 +40,27 @@ then
   DOCKER_TAG_COM="${DOCKER_TAG_COM} -f "
 fi
 
-$DOCKER_TAG_COM "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_REF}"
 
-if [ $? -ne 0 ]
+if ! $DOCKER_TAG_COM "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_REF}"
 then
   echo "Unable to tag image, aborting"
   exit 1
 fi
-docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_REF}"
-if [ $? -ne 0 ]
+
+if ! docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${CI_REF}"
 then
   echo "Unable to push docker image, aborting."
   exit 1
 fi
 
-$DOCKER_TAG_COM "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
-if [ $? -ne 0 ]
+
+if ! $DOCKER_TAG_COM "${DOCKERTAG}:latest" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
 then
   echo "Unable to tag image, aborting"
   exit 1
 fi
-docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
-if [ $? -ne 0 ]
+
+if ! docker push "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:build_${CI_BUILD_NUM}"
 then
   echo "Unable to push docker image, aborting."
   exit 1

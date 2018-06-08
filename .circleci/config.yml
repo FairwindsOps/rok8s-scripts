@@ -5,8 +5,14 @@ references:
     run:
       name: Install dependencies
       command: |
-        apt-get update
-        apt-get install -y shellcheck
+        scversion="v0.5.0"
+        wget "https://storage.googleapis.com/shellcheck/shellcheck-$scversion.linux.x86_64.tar.xz"
+        tar --xz -xvf "shellcheck-$scversion.linux.x86_64.tar.xz"
+        mv shellcheck-$scversion/shellcheck /usr/bin/shellcheck
+        chmod +x /usr/bin/shellcheck
+        touch /tmp/libc.so.6
+        export LD_LIBRARY_PATH=/tmp # hack to work around a bug with a statically linked lib https://github.com/koalaman/shellcheck/issues/1053
+        shellcheck --version
 
   npm_install: &npm_install
     run:
@@ -22,13 +28,15 @@ references:
     run:
       name: Run Shellcheck
       command: |
-        shellcheck bin/docker-* \
-          bin/install-rok8s-requirements \
-          bin/k8s-apply \
-          bin/verify-deployment \
-          bin/k8s-lint \
-          bin/prepare-* \
-          bin/helm-*
+        cd bin
+        export LD_LIBRARY_PATH=/tmp # hack to work around a bug with a statically linked lib https://github.com/koalaman/shellcheck/issues/1053
+        shellcheck -x docker-* \
+          install-rok8s-requirements \
+          k8s-apply \
+          verify-deployment \
+          k8s-lint \
+          prepare-* \
+          helm-*
 
   run_basic_linting: &run_basic_linting
     run:

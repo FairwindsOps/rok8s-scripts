@@ -1,4 +1,5 @@
 #!/bin/bash -e
+# shellcheck disable=SC2153
 
 . k8s-read-config
 

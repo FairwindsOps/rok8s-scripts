@@ -22,7 +22,7 @@ else
   echo "--cache-from not available with this version of Docker"
   docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" "${BASEDIR}"
 fi
-
+# shellcheck disable=2181
 if [ $? -ne 0 ]
 then
   echo "Docker build failed! Aborting"
