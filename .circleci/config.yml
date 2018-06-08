@@ -22,13 +22,14 @@ references:
     run:
       name: Run Shellcheck
       command: |
-        shellcheck bin/docker-* \
-          bin/install-rok8s-requirements \
-          bin/k8s-apply \
-          bin/verify-deployment \
-          bin/k8s-lint \
-          bin/prepare-* \
-          bin/helm-*
+        cd bin
+        shellcheck -x docker-* \
+          install-rok8s-requirements \
+          k8s-apply \
+          verify-deployment \
+          k8s-lint \
+          prepare-* \
+          helm-*
 
   run_basic_linting: &run_basic_linting
     run:

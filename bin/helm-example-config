@@ -18,6 +18,7 @@ if test -f "$CONFIG" ; then
   exit 0
 fi
 
+# shellcheck disable=2086
 cat <<EOT >> $CONFIG
 # Configuration for https://github.com/reactiveops/rok8s-scripts
 
