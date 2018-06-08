@@ -10,11 +10,11 @@ HELM_DEFAULT_TIMEOUT=300
 format_multiple_values_files() {
   values_files="$1"
   formatted_files=""
-  echo "${values_files}" | sed -n 1'p' | tr ',' '\n' | ( while read file_name; do
+  echo "${values_files}" | sed -n 1'p' | tr ',' '\n' | ( while read -r file_name; do
     file="./deploy/${file_name}.values.yml,"
-    formatted_files="$formatted_files$file"
+    formatted_files="${formatted_files}${file}"
   done
-  echo $formatted_files )
+  echo "${formatted_files%?}" )
 }
 
 # shellcheck disable=SC2086
@@ -36,7 +36,7 @@ do
   # then pass all values file to helm upgrade command
   if [[ "${CHART_VALUES}" = *","* ]]; then
     CHART_VALUES=$(format_multiple_values_files "${CHART_VALUES}")
-  else:
+  else
     CHART_VALUES="./deploy/${CHART_VALUES}.values.yml"
   fi
 
