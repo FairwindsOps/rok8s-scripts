@@ -130,8 +130,8 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - test_npm
-      - test_pip
+      # - test_npm
+      # - test_pip
       - build
   release:
     jobs:
