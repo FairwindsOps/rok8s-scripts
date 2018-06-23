@@ -12,11 +12,38 @@ CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
 
 if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   echo "Using --cache-from to improve performance"
+
+  CACHE_FROM_TARGETS=""
+  # shellcheck disable=2086
+  while read -r CACHE_TARGET; do
+    echo "Working on Dockerfile target[${CACHE_TARGET}]..."
+    TARGET_TAG=cache-${CI_BRANCH}-${CACHE_TARGET}
+    TARGET_IMAGE=${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}
+
+    echo "Checking for existing cache image for target[${CACHE_TARGET}]..."
+    docker pull "${TARGET_IMAGE}:${TARGET_TAG}" || true
+    docker pull "${TARGET_IMAGE}:master" || true
+
+    echo "Building Dockerfile target[${CACHE_TARGET}]..."
+    # shellcheck disable=2086
+    docker build --rm=false -t "${TARGET_IMAGE}:${TARGET_TAG}" -f "${BASEDIR}/${DOCKERFILE}" \
+      --target "${CACHE_TARGET}" \
+      ${CACHE_FROM_TARGETS} \
+      --cache-from "${TARGET_IMAGE}:${TARGET_TAG}" \
+      --cache-from "${TARGET_IMAGE}:master" \
+      "${BASEDIR}"
+    CACHE_FROM_TARGETS="${CACHE_FROM_TARGETS} --cache-from ${TARGET_IMAGE}:${TARGET_TAG}"
+  done <<< "$(grep -i '^FROM.* AS ' ${DOCKERFILE} | awk '{print $4}')"
+
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" || true
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" || true
+  docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:master" || true
+  # shellcheck disable=2086
   docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" \
+    ${CACHE_FROM_TARGETS} \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" \
+    --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:master" \
     "${BASEDIR}"
 else
   echo "--cache-from not available with this version of Docker"
