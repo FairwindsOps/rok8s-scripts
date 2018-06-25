@@ -29,6 +29,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
     docker build --rm=false -t "${TARGET_IMAGE}:${TARGET_TAG}" -f "${BASEDIR}/${DOCKERFILE}" \
       --target "${CACHE_TARGET}" \
       ${CACHE_FROM_TARGETS} \
+      ${ROK8S_DOCKER_BUILD_EXTRAARGS} \
       --cache-from "${TARGET_IMAGE}:${TARGET_TAG}" \
       --cache-from "${TARGET_IMAGE}:master" \
       "${BASEDIR}"
@@ -41,13 +42,15 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   # shellcheck disable=2086
   docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" \
     ${CACHE_FROM_TARGETS} \
+    ${ROK8S_DOCKER_BUILD_EXTRAARGS} \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:master" \
     "${BASEDIR}"
 else
   echo "--cache-from not available with this version of Docker"
-  docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" "${BASEDIR}"
+  # shellcheck disable=2086
+  docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" ${ROK8S_DOCKER_BUILD_EXTRAARGS} "${BASEDIR}"
 fi
 # shellcheck disable=2181
 if [ $? -ne 0 ]
