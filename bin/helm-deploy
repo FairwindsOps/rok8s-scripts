@@ -11,9 +11,16 @@ if [[ ! $(kubectl get namespace $NAMESPACE) ]]; then
   kubectl create namespace $NAMESPACE;
 fi
 
-. k8s-deploy-secrets
+# If using k8s-deploy in combination with helm-deploy
+#  while transitioning to helm, set this to avoid deploying
+#  secrets twice
+if [[ -z "${ROK8S_HELM_TRANSITIONING}" ]]; then
+  . k8s-deploy-secrets
+fi
 
 HELM_DEFAULT_TIMEOUT=300
+HELM_HOME=${HELM_HOME}
+helm init --client-only
 
 format_multiple_values_files() {
   values_files="$1"
@@ -23,6 +30,16 @@ format_multiple_values_files() {
     formatted_files="${formatted_files}${file}"
   done
   echo "${formatted_files%?}" )
+}
+
+helm_upgrade() {
+  helm upgrade --install "${CHART_RELEASE_NAME}" \
+    "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" \
+    --set image.tag="${CI_SHA1}" \
+    --namespace="${NAMESPACE}" \
+    --wait \
+    --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}" \
+      2>&1 | tee "${ROK8S_TMP}/helm.out"
 }
 
 echo "Deploying Helm Charts"
@@ -42,8 +59,25 @@ do
   fi
 
   echo "Applying ${CHART_PATH} with ${CHART_VALUES}"
-  helm upgrade --install "${CHART_RELEASE_NAME}" "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" --set image.tag="${CI_SHA1}" --namespace="${NAMESPACE}" --wait --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}"
-
+  helm dep up "./deploy/${CHART_PATH}"
+  set +e
+  helm_upgrade
+  helm_ret=$?
+  set -e
+  if [ $helm_ret -gt 0 ] && grep -q "already exists" "${ROK8S_TMP}/helm.out"; then
+    echo "Detected that there are existing resources."
+    if [ -n "${ROK8S_HELM_ADOPT_EXISTING}" ]; then
+      echo "Attempting to force adoption of existing resources."
+      latest_revision=$(helm get "${CHART_RELEASE_NAME}" | grep REVISION | awk '{print $2}')
+      kubectl -n kube-system label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
+      helm_upgrade
+    else
+      echo "Not attempting adoption. Set ROK8ROK8S_HELM_ADOPT_EXISTING=1 to try adopting existing resources."
+      exit $helm_ret
+    fi
+  elif [ $helm_ret -gt 0 ]; then
+    exit $helm_ret
+  fi
 done
 echo "Done deploying Helm Charts"
 echo ""
