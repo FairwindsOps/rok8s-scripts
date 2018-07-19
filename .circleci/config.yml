@@ -55,6 +55,7 @@ references:
     run:
       name: Docker build
       command: |
+        docker build -f ci-images/node10/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node10 .
         docker build -f ci-images/node8/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node8 .
         docker build -f ci-images/node6/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node6 .
         docker build -f ci-images/stretch/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-stretch .
@@ -64,6 +65,7 @@ references:
     run:
       name: Docker push
       command: |
+        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node10
         docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node8
         docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node6
         docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-stretch
