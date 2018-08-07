@@ -16,6 +16,9 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   CACHE_FROM_TARGETS=""
   # shellcheck disable=2086
   while read -r CACHE_TARGET; do
+    if [ "${CACHE_TARGET}" == "" ]; then
+      break
+    fi
     echo "Working on Dockerfile target[${CACHE_TARGET}]..."
     TARGET_TAG=cache-${CI_BRANCH}-${CACHE_TARGET}
     TARGET_IMAGE=${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}
