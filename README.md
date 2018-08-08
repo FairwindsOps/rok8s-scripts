@@ -121,6 +121,9 @@ BLOCKING_JOBS=()
 
 # List of files ending in '.cronjob.yml' in the kube directory
 CRONJOBS=()
+
+# List of files ending in '.daemonset.yml' in the kube directory
+DAEMONSETS=()
 ```
 
 ### Generating a config
