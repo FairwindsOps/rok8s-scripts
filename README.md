@@ -283,7 +283,7 @@ And either `CI_BRANCH` or `CI_TAG`
 
 ### helm-deploy
 
-Using helm chart(s) to manage release. Helm allows more templating and has DRYer config, but does increase the complexity of the Kubernetes spec files. Reference the example `./examples/helm` and the helm documentation for assitance creating charts.
+Using helm chart(s) to manage release. Helm allows more templating and has DRYer config, but does increase the complexity of the Kubernetes spec files. Reference the example `./examples/helm` and the helm documentation for assistance creating charts.
 
 ### helm-template
 
