@@ -1,0 +1,39 @@
+#!/bin/bash
+
+set -eo pipefail
+
+. k8s-read-config > /dev/null
+
+format_multiple_values_files() {
+  values_files="$1"
+  formatted_files=""
+  echo "${values_files}" | sed -n 1'p' | tr ',' '\n' | ( while read -r file_name; do
+    file="./deploy/${file_name}.values.yml,"
+    formatted_files="${formatted_files}${file}"
+  done
+  echo "${formatted_files%?}" )
+}
+
+for index in "${!HELM_CHARTS[@]}"
+do
+
+  CHART_PATH=${HELM_CHARTS[$index]}
+  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-${HELM_CHARTS[$index]}}
+  CHART_VALUES=${HELM_VALUES[$index]}
+
+  # if there is more than one values files listed
+  # then pass all values file to helm upgrade command
+  if [[ "${CHART_VALUES}" = *","* ]]; then
+    CHART_VALUES=$(format_multiple_values_files "${CHART_VALUES}")
+  else
+    CHART_VALUES="./deploy/${CHART_VALUES}.values.yml"
+  fi
+
+  echo "# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+  echo "# > ${CHART_PATH}: ${CHART_VALUES}"
+  helm template "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" --namespace="${NAMESPACE}"
+  echo "# < ${CHART_PATH}: ${CHART_VALUES}"
+  echo "# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  echo ""
+
+done
