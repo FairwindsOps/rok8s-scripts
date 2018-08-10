@@ -283,7 +283,11 @@ And either `CI_BRANCH` or `CI_TAG`
 
 ### helm-deploy
 
-Using helm chart(s) to manage release. Helm allows more templateing and DRYer config but increase the complexity of the Kubernetes spec files. Reference the example `./examples/helm` and the helm documentation for assitance creating charts.
+Using helm chart(s) to manage release. Helm allows more templating and has DRYer config, but does increase the complexity of the Kubernetes spec files. Reference the example `./examples/helm` and the helm documentation for assistance creating charts.
+
+### helm-template
+
+Using helm chart(s) to see the generated configuration for a release. Similar to `helm-deploy`, but doesn't actually push out any changes.
 
 ### install-rok8s-requirements
 
