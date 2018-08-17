@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+
+if ! hash sops >/dev/null 2>&1; then
+  printf "Can't find sops, exiting!\n"
+  exit 1
+fi
+
+function usage () {
+echo "${0} <service_account_name>"
+}
+
+if [ $# -eq 0 ]; then
+    echo "No arguments provided"
+    usage
+    exit 1
+fi
+
+
+if [[ -z "${K8S_SHORTNAME}" ]] ; then
+  echo "K8S_SHORTNAME unset! Exiting!"
+  echo "K8S_SHORTNAME is the shortname of the cluster - \
+        either working|production"
+  exit 1
+fi
+
+function decrypt () {
+  local CL=${K8S_SHORTNAME}
+  local SERVICE_ACCOUNT_NAME=${1}
+
+  sops -d /tmp/${CL}-${SERVICE_ACCOUNT_NAME}-kubeconfig.kms \
+    | base64 \
+    > /tmp/kubeconfig
+}
+
+
+decrypt $@
+
+
