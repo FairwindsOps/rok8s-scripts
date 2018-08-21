@@ -100,7 +100,7 @@ fi
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
   echo Installing kubectl...
-  wget "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O "${ROK8S_INSTALL_PATH}/kubectl"
+  wget -q "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O "${ROK8S_INSTALL_PATH}/kubectl"
   chmod +x "${ROK8S_INSTALL_PATH}/kubectl"
 fi
 
