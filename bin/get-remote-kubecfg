@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+function usage () {
+echo "${0} <bucketlocation> <bucket_key> <service_account_name>"
+echo "<bucketlocation> must contain protocol - s3|gs"
+}
+
+if [ $# -eq 0 ]; then
+    echo "No arguments provided"
+    usage
+    exit 1
+fi
+
+if [[ -z "${K8S_SHORTNAME}" ]] ; then
+  echo "K8S_SHORTNAME unset! Exiting!"
+  echo "K8S_SHORTNAME is the shortname of the cluster - \
+        either working|production"
+  exit 1
+fi
+
+
+function get_secret () {
+  local BUCKET_ADDRESS=${1}
+  local BUCKET_KEY=${2}
+  local SERVICE_ACCOUNT_NAME=${3}
+  local CL=${K8S_SHORTNAME}
+
+  aws s3 cp ${BUCKET_ADDRESS}/${BUCKET_KEY}/${CL}/${CL}-${SERVICE_ACCOUNT_NAME}-kubeconfig.kms \
+  /tmp/
+
+}
+
+
+
+get_secret $@
