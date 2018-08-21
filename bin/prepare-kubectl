@@ -2,8 +2,8 @@
 
 
 if [[ -e /tmp/kubeconfig ]]; then
-  declare KUBECONFIG_DATA
   KUBECONFIG_DATA=$(cat /tmp/kubeconfig)
+  export KUBECONFIG_DATA
 else
   mkdir -p ~/.kube
   DECODE="--decode"
