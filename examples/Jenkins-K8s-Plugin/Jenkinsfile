@@ -1,0 +1,100 @@
+#!groovy
+
+ROK8S_NO_BUILD = false
+ROK8S_NO_DEPLOY = false
+
+switch (env.BRANCH_NAME) {
+  case "master":
+    env.ROK8S_CONFIG='deploy/staging.config'
+    break
+
+  case ~/v.*/:
+    env.ROK8S_CONFIG='deploy/production.config'
+    ROK8S_NO_BUILD=true
+    break
+
+  case ~/PR-.*/:
+    echo "Building but not deploying ${env.BRANCH_NAME}"
+    env.ROK8S_CONFIG='deploy/staging.config'
+    ROK8S_NO_DEPLOY=true
+    break
+
+  case "develop":
+    echo "Doing development deployment of ${env.BRANCH_NAME}"
+    env.ROK8S_CONFIG='deploy/development.config'
+    break
+
+  default:
+    echo "Skipping build for branch ${env.BRANCH_NAME}"
+    currentBuild.result = 'SUCCESS'
+    return
+    break;
+}
+
+node('rok8s') {
+  try {
+    stage('Checkout'){
+      def scmVars = checkout scm
+      env.GIT_COMMIT = "${scmVars.GIT_COMMIT}"
+    }
+    stage('Set Environment'){
+      env.CI_SHA1 = "${env.GIT_COMMIT}"
+      env.CI_BRANCH = "${env.BRANCH_NAME}"
+      env.CI_BUILD_NUM = "${env.BUILD_NUMBER}"
+      env.ROK8S_TMP = "${env.WORKSPACE}@tmp"
+
+      echo "==== Build info ===="
+      echo "GIT COMMIT SHA: ${env.CI_SHA1}"
+      echo "GIT BRANCH: ${env.CI_BRANCH}"
+    }
+
+    withCredentials() {
+      rok8sEnv = [
+        "CI_SHA1=${env.CI_SHA1}",
+        "CI_BRANCH=${env.CI_BRANCH}",
+        "CI_BUILD_NUM=${env.CI_BUILD_NUM}",
+        "GIT_COMMIT=${env.GIT_COMMIT}",
+        "ROK8S_TMP=${env.ROK8S_TMP}"
+      ]
+    }
+    withEnv(rok8sEnv) {
+      container('rok8s') {
+        stage('Dependencies'){
+          // Add cloud platform authentication here
+        }
+
+        if (!ROK8S_NO_BUILD) {
+          stage('Build Docker'){
+            echo 'Pulling latest image for cache'
+            sh "docker-pull -f ${env.ROK8S_CONFIG}"
+            echo 'Building docker image'
+            sh "docker-build -f ${env.ROK8S_CONFIG}"
+          }
+
+          if (!ROK8S_NO_DEPLOY) {
+            stage('Push Docker image'){
+              echo 'Pushing docker image'
+              sh "docker-push -f ${env.ROK8S_CONFIG}"
+            }
+          }
+
+          stage('Test'){
+            // Add Test execution here
+          }
+        }
+
+        if (!ROK8S_NO_DEPLOY) {
+          timeout(60) {
+            stage('Deploy') {
+              sh "prepare-kubectl"
+              sh "k8s-deploy-and-verify -f ${ROK8S_CONFIG}"
+            }
+          }
+        }
+      }
+    }
+  }
+  catch (err) {
+    throw err
+  }
+}

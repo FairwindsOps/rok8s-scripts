@@ -1,0 +1,38 @@
+# Default values for chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 3
+image:
+  repository: nginx
+  tag: latest
+  pullPolicy: IfNotPresent
+livenessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 3
+  periodSeconds: 1
+  successThreshold: 1
+  timeoutSeconds: 1
+service:
+  name: http
+  type: LoadBalancer
+  externalPort: 80
+  internalPort: 5000
+  annotations:
+    domainName: "default.example.com"
+labels:
+  dns: route53
+resources: 
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+hpa:
+  enabled: False
+
+env:
+  - name: EXAMPLE1
+    value: 'VAlUE_1'
+  - name: EXAMPLE2
+    value: 'VALUE_2'
