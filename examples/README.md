@@ -2,6 +2,10 @@
 
 This examples are to help give a basic overview of what a repository using `rok8-scripts` might look like.
 
+## Jenkins-K8s-Plugin
+
+An example Jenkins [Kubernetes plugin](https://github.com/jenkinsci/kubernetes-plugin) build and deploy via Helm chart with development, staging, and production configuration.
+
 ## CircleCI-20
 
 An example CircleCI 2.0 build and deploy via Helm chart with development, staging, and production configuration.
