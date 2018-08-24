@@ -13,7 +13,6 @@ references:
         touch /tmp/libc.so.6
         export LD_LIBRARY_PATH=/tmp # hack to work around a bug with a statically linked lib https://github.com/koalaman/shellcheck/issues/1053
         shellcheck --version
-        pip install semver
 
   npm_install: &npm_install
     run:
@@ -51,6 +50,7 @@ references:
     run:
       name: Check setup.py version number against git release tag
       command: |
+        pip install semver
         latest_release="$(git describe --abbrev=0 --tags)"
         latest_release="${latest_release#*v}"
         setup_py_version="$(python setup.py --version)"
