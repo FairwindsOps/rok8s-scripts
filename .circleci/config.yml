@@ -46,6 +46,20 @@ references:
         k8s-lint -f staging.config
         k8s-lint -f production.config
 
+  check_setup_py_version: &check_setup_py_version
+    run:
+      name: Check setup.py version number against git release tag
+      command: |
+        pip install semver
+        latest_release="$(git describe --abbrev=0 --tags)"
+        latest_release="${latest_release#*v}"
+        setup_py_version="$(python setup.py --version)"
+
+        if ! python -c "import semver, sys; sys.exit(0 if semver.match('${setup_py_version}', '>=${latest_release}') else 1)"; then
+          echo "Repo setup.py version is stale: $setup_py_version Latest Git tag release: $latest_release"
+          exit 1
+        fi
+
   docker_login: &docker_login
     run:
       name: Docker login
@@ -85,7 +99,6 @@ references:
         curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
         /bin/bash release
 
-
 jobs:
   test_npm:
     docker:
@@ -105,6 +118,7 @@ jobs:
       - *install_test_dependencies
       - *pip_install
       - *run_shellcheck
+      - *check_setup_py_version
       - *run_basic_linting
 
   build:
