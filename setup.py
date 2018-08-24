@@ -31,7 +31,6 @@ __author__ = 'ReactiveOps, Inc.'
 
 
 bin_files = glob.glob('./bin/*')
-print(bin_files)
 
 setup(name='rok8s-scripts',
       version=__version__,
