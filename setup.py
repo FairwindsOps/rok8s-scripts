@@ -26,7 +26,7 @@ except ImportError:
           "pip install setuptools).")
     sys.exit(1)
 
-__version__ = '7.9.1'
+__version__ = '7.11.1'
 __author__ = 'ReactiveOps, Inc.'
 
 
