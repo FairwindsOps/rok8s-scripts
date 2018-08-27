@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "${ROK8S_DEBUG}" == "true" ]; then
+  set -x
+fi
+
 if [ -n "${CONFIG_READ+1}" ]
 then
   echo "Config already read"
