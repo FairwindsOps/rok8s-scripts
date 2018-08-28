@@ -28,7 +28,7 @@ function decrypt () {
   local CL=${K8S_SHORTNAME}
   local SERVICE_ACCOUNT_NAME=${1}
 
-  sops -d /tmp/${CL}-${SERVICE_ACCOUNT_NAME}-kubeconfig.kms \
+  sops -d /tmp/${CL}-${SERVICE_ACCOUNT_NAME}-kubeconfig.yml \
     | base64 \
     > /tmp/kubeconfig
 }

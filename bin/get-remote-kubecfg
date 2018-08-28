@@ -25,7 +25,7 @@ function get_secret () {
   local SERVICE_ACCOUNT_NAME=${3}
   local CL=${K8S_SHORTNAME}
 
-  aws s3 cp ${BUCKET_ADDRESS}/${BUCKET_KEY}/${CL}/${CL}-${SERVICE_ACCOUNT_NAME}-kubeconfig.kms \
+  aws s3 cp ${BUCKET_ADDRESS}/${BUCKET_KEY}/${CL}/${CL}-${SERVICE_ACCOUNT_NAME}-kubeconfig.yml \
   /tmp/
 
 }
