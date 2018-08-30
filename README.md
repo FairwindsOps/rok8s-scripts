@@ -371,6 +371,16 @@ Container Registry and sets the default GCP projecct. This requires:
 * `GCP_PROJECT` - The GCP project name (as passed to `gcloud` with `--project`)
 * `GCLOUD_KEY` - The base64-encoded service account credentials
 
+Additional Variables are also needed depending on the type of GKE cluster:
+
+#### Single Zone Clusters (default)
+* `GCP_ZONE` - The zone of the cluster
+
+#### Regional Clusters
+* `GCP_REGIONAL_CLUSTER` - Set to `yes` to indicate the cluster is regional
+* `GCP_REGION` - The region of the cluster
+
+
 ### prepare-kubectl
 Initializes the Kubernetes config to be used with kubectl using a base64-encoded
 config file from the `KUBECONFIG_DATA` variable. If `KUBECONFIG_DATA` is defined

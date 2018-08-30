@@ -32,11 +32,23 @@ gcloud config set project "${GCP_PROJECT}"
 # Authorize the docker client to work with GCR
 gcloud auth configure-docker --quiet
 
-if [[ -z ${GCP_ZONE+x} ]] || [[ -z ${CLUSTER_NAME+x} ]] ; then
-  echo "Missing required variables to get cluster credentials (GCP_ZONE and CLUSTER_NAME)"
+
+if [[ -z "${GCP_REGIONAL_CLUSTER+x}" ]]; then
+  if [[ -z ${GCP_REGION+x} ]] || [[ -z ${CLUSTER_NAME+x} ]] ; then
+    echo "Missing required variables to get cluster credentials (GCP_REGION and CLUSTER_NAME)"
+  else
+    echo "Configuring cluster credentials."
+    # Setup cluster credentials
+    gcloud container clusters get-credentials "${CLUSTER_NAME}" --region "${GCP_REGION}" --project "${GCP_PROJECT}"
+    echo ""
+  fi
 else
-  echo "Configuring cluster credentials."
-  # Setup cluster credentials
-  gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${GCP_ZONE}" --project "${GCP_PROJECT}"
-  echo ""
+  if [[ -z ${GCP_ZONE+x} ]] || [[ -z ${CLUSTER_NAME+x} ]] ; then
+    echo "Missing required variables to get cluster credentials (GCP_ZONE and CLUSTER_NAME)"
+  else
+    echo "Configuring cluster credentials."
+    # Setup cluster credentials
+    gcloud container clusters get-credentials "${CLUSTER_NAME}" --zone "${GCP_ZONE}" --project "${GCP_PROJECT}"
+    echo ""
+  fi
 fi
