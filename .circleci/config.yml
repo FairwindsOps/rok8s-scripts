@@ -42,8 +42,9 @@ references:
     run:
       name: Run Bats Testing
       command: |
+        mkdir -p ~/.local/bin
         curl -L https://github.com/bats-core/bats-core/archive/v1.1.0.tar.gz -o - | gunzip | tar x
-        ./bats-core-1.1.0/install.sh /usr/local
+        ./bats-core-1.1.0/install.sh ~/.local
         bats tests/
 
   run_basic_linting: &run_basic_linting
