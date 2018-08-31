@@ -11,5 +11,5 @@ function scrub_secret_data() {
     exit 1
   fi
 
-  echo -e "$1" | sed -r 's/.*.?"kind.?":.?"Secret.?".+$/REDACTED OBJECT/'
+  echo -e "$1" | sed -r 's/.*(.?"kind.?":.?"Secret.?"|.?"stringData.?": ?).+$/REDACTED OBJECT/'
 }

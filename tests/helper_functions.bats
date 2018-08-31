@@ -27,6 +27,8 @@ Some data
 {"metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration":"{\"apiVersion\":\"v1\",\"kind\":\"Secret\",\"metadata\":{\"annotations\":{},\"name\":\"baddata-env\",\"namespace\":\"default\"},\"stringData\":{}}
 some more data
 {"apiVersion": "v1", "kind": "Secret", "data": {"data1": "value1"}}
+}},\"stringData\": {}
+}},"stringData": {}
 final line of doc
 EOF
 )
@@ -39,7 +41,9 @@ EOF
   [ "$status" -eq 0 ]
   [ "${lines[1]}" = "REDACTED OBJECT" ]
   [ "${lines[3]}" = "REDACTED OBJECT" ]
-  [ "${lines[4]}" = "final line of doc" ]
+  [ "${lines[4]}" = "REDACTED OBJECT" ]
+  [ "${lines[5]}" = "REDACTED OBJECT" ]
+  [ "${lines[6]}" = "final line of doc" ]
 }
 
 @test "check fail on more than one argument" {
