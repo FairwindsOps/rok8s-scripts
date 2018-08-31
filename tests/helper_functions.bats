@@ -46,5 +46,5 @@ EOF
 
 
 setup() {
-  load ../bin/_functions_k8s-deploy-secrets
+  load ../bin/_functions/helpers
 }
