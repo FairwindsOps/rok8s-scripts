@@ -38,6 +38,16 @@ references:
           prepare-* \
           helm-*
 
+  run_bats_tests: &run_bats_tests
+    run:
+      name: Run Bats Testing
+      command: |
+        mkdir -p ~/.local/bin
+        curl -L https://github.com/bats-core/bats-core/archive/v1.1.0.tar.gz -o - | gunzip | tar x
+        ./bats-core-1.1.0/install.sh ~/.local
+        export PATH="${HOME}/.local/bin:${PATH}"
+        bats tests/
+
   run_basic_linting: &run_basic_linting
     run:
       name: Run basic linting
@@ -121,6 +131,13 @@ jobs:
       - *check_setup_py_version
       - *run_basic_linting
 
+  test_bash:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - *run_bats_tests
+
   build:
     docker:
       - image: circleci/buildpack-deps:jessie
@@ -154,6 +171,7 @@ workflows:
     jobs:
       - test_npm
       - test_pip
+      - test_bash
       - build
   release:
     jobs:
