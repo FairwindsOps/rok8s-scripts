@@ -1,5 +1,9 @@
 #!/usr/bin/env bats
 
+setup() {
+  load ../bin/_functions
+}
+
 @test "check valid input" {
   valid_data="$(cat <<EOF
 some secret was created
@@ -42,9 +46,4 @@ EOF
   run scrub_secret_data "ok" "badarg"
 
   [ "$status" -eq 1 ]
-}
-
-
-setup() {
-  load ../bin/_functions/helpers
 }
