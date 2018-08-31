@@ -42,7 +42,8 @@ references:
     run:
       name: Run Bats Testing
       command: |
-        npm install -g bats
+        curl https://github.com/bats-core/bats-core/archive/v1.1.0.tar.gz -O - | tar xzv
+        ./bats-core-1.1.0/install.sh
         bats tests/
 
   run_basic_linting: &run_basic_linting
