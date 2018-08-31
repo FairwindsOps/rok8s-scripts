@@ -38,6 +38,13 @@ references:
           prepare-* \
           helm-*
 
+  run_bats_tests: &run_bats_tests
+    run:
+      name: Run Bats Testing
+      command: |
+        npm install -g bats
+        bats tests/
+
   run_basic_linting: &run_basic_linting
     run:
       name: Run basic linting
@@ -120,6 +127,13 @@ jobs:
       - *run_shellcheck
       - *check_setup_py_version
       - *run_basic_linting
+
+  test_bash:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - *run_bats_tests
 
   build:
     docker:
