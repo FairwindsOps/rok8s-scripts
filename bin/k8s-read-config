@@ -106,6 +106,9 @@ expand_files "STATEFULSETS" "STATEFULSET_FILES" "statefulset.yml"
 SERVICE_FILES=()
 expand_files "SERVICES" "SERVICE_FILES" "service.yml"
 
+BG_SERVICE_FILES=()
+expand_files "BG_SERVICES" "BG_SERVICE_FILES" "bg_service.yml"
+
 ENDPOINT_FILES=()
 expand_files "ENDPOINTS" "ENDPOINT_FILES" "endpoint.yml"
 
@@ -117,6 +120,9 @@ expand_files "JOBS" "JOBS_FILES" "job.yml"
 
 DEPLOYMENT_FILES=()
 expand_files "DEPLOYMENTS" "DEPLOYMENT_FILES" "deployment.yml"
+
+BG_DEPLOYMENT_FILES=()
+expand_files "BG_DEPLOYMENTS" "BG_DEPLOYMENT_FILES" "bg_deployment.yml"
 
 HORIZONTAL_POD_AUTOSCALER_FILES=()
 expand_files "HORIZONTAL_POD_AUTOSCALERS" "HORIZONTAL_POD_AUTOSCALER_FILES" "horizontal_pod_autoscaler.yml"
