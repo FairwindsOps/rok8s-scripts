@@ -65,8 +65,8 @@ fi
 if [ "$ROK8S_ENABLE_CHANGE_DETECTION" ]; then
   #Check to see if the digest for this image has changed.  If it has not, then indicate that
   printf "\nRunning change detection...\n"
-  oldDigest=$(docker inspect ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH | jq -r .[].Id)
-  newDigest=$(docker inspect ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:latest | jq -r .[].Id)
+  oldDigest=$(docker inspect "${EXTERNAL_REGISTRY_BASE_DOMAIN}"/"${REPOSITORY_NAME}":"$CI_BRANCH" | jq -r .[].Id)
+  newDigest=$(docker inspect "${EXTERNAL_REGISTRY_BASE_DOMAIN}"/"${REPOSITORY_NAME}":latest | jq -r .[].Id)
 
   changeFile=".changesDetected"
   if [ -f $changeFile ]; then
