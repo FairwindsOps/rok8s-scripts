@@ -42,9 +42,13 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" || true
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" || true
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:master" || true
+  if [ "${DOCKER_TARGET}" != "" ]; then
+    DOCKER_TARGET="--target=${DOCKER_TARGET}"
+  fi
   # shellcheck disable=2086
   docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" \
     ${CACHE_FROM_TARGETS} \
+    ${DOCKER_TARGET} \
     ${ROK8S_DOCKER_BUILD_EXTRAARGS} \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" \
     --cache-from "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" \
