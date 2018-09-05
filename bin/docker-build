@@ -61,3 +61,21 @@ then
   echo "Docker build failed! Aborting"
   exit 1
 fi
+
+if [ $ROK8S_ENABLE_CHANGE_DETECTION ]; then
+  #Check to see if the digest for this image has changed.  If it has not, then indicate that
+  printf "\nRunning change detection...\n"
+  oldDigest=$(docker inspect ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH | jq -r .[].Id)
+  newDigest=$(docker inspect ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:latest | jq -r .[].Id)
+
+  changeFile=".changesDetected"
+  if [ -f $changeFile ]; then
+    rm $changeFile
+  fi
+  if [ "$oldDigest" == "$newDigest" ]; then
+    echo "false" > $changeFile
+  else #Default to true so that tests will be run if something amiss
+    echo "true" > $changeFile
+  fi
+  printf "Result of change detection: $(cat $changeFile)\n"
+fi
