@@ -194,13 +194,12 @@ source code. Use the `SECRETS=` configuration to specify the manifests to deploy
 
 Using an [AWS KMS](https://aws.amazon.com/kms/) ARN or [Google KMS](https://cloud.google.com/kms/) ID, `Secret` manifests are encrypted in the source code and decrypted at deployment time.
 
-Whenever encrypting or decrypting data, `sops` requires credentials for the appropriate
+Whenever encrypting data, `sops` requires credentials for the appropriate
 cloud provider (GCP or AWS). You can read more about `sops` usage [here](https://github.com/mozilla/sops#usage).
 
 ```bash
 sops "--kms=arn:aws:kms:us-east-1:123456123456:key/e836b432-b1db-4b84-a124-6c54948d787c" --encrypt secret.yml > deploy/encrypted.secret.sops.yml
 echo 'SOPS_SECRETS=(encrypted)' >> app.config
-echo 'SOPS_KMS_ARN=arn:aws:kms:us-east-1:123456123456:key/e836b432-b1db-4b84-a124-6c54948d787c' >> app.config
 ```
 
 ### External
