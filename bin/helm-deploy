@@ -5,6 +5,12 @@ set -eo pipefail
 . k8s-read-config
 
 # shellcheck disable=SC2086
+
+# Set a CI_REF from branch or tag
+CI_REF="${CI_TAG}"
+CI_REF="${CI_REF:-$CI_BRANCH}"
+CI_REF=$(echo "${CI_REF}" | tr / _)
+
 if [[ ! $(kubectl get namespace $NAMESPACE) ]]; then
   echo "Creating ${NAMESPACE} namespace"
   # shellcheck disable=SC2086
