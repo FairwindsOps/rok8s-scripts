@@ -36,6 +36,7 @@ helm_upgrade() {
   helm upgrade --install "${CHART_RELEASE_NAME}" \
     "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" \
     --set image.tag="${CI_SHA1}" \
+    --set rok8sCIRef="${CI_REF}" \
     --namespace="${NAMESPACE}" \
     --wait \
     --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}" \
