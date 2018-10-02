@@ -178,7 +178,7 @@ If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS 
 
 ## Kubernetes Access
 
-In order to connect to a Kubernets cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clusters, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
+In order to connect to a Kubernetes cluster the build must authenticate. In GKE clusters having the above GCP login is sufficient. In other clusters, base64encode your kube_config file and save it in the environment variable `KUBECONFIG_DATA`
 
 ## Secrets
 
