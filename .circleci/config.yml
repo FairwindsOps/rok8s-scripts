@@ -68,7 +68,7 @@ references:
   load_supported_docker_bases: &load_supported_docker_bases
     run:
       name: Load all the base docker images we support from the ci-images dir
-      command: echo "export SUPPORTED_DOCKER_BASES=$(ls ci-images)" >> $BASH_ENV
+      command: echo "export SUPPORTED_DOCKER_BASES=\"$(ls ci-images)\"" >> $BASH_ENV
 
   docker_build: &docker_build
     run:
