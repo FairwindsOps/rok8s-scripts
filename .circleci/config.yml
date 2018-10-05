@@ -68,7 +68,7 @@ references:
   load_supported_docker_bases: &load_supported_docker_bases
     run:
       name: Load all the base docker images we support from the ci-images dir
-      command: export SUPPORTED_DOCKER_BASES=$(ls ci-images)
+      command: echo "export SUPPORTED_DOCKER_BASES=$(ls ci-images)" >> $BASH_ENV
 
   docker_build: &docker_build
     run:
@@ -119,8 +119,8 @@ references:
     run:
       name: Generate major & minor tags
       command: |
-        export DOCKER_MAJOR_TAG="$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1/')"
-        export DOCKER_MINOR_TAG="$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1\2/')"
+        echo "export DOCKER_MAJOR_TAG=$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1/')" >> $BASH_ENV
+        echo "export DOCKER_MINOR_TAG=$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1\2/')" >> $BASH_ENV
 
 jobs:
   test_npm:
