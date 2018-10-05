@@ -65,7 +65,7 @@ references:
       name: Docker login
       command: docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
 
-  load_supported_docker_bases:
+  load_supported_docker_bases: &load_supported_docker_bases
     run:
       name: Load all the base docker images we support from the ci-images dir
       command: export SUPPORTED_DOCKER_BASES=$(ls ci-images)
