@@ -65,23 +65,39 @@ references:
       name: Docker login
       command: docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
 
+  load_supported_docker_bases:
+    run:
+      name: Load all the base docker images we support from the ci-images dir
+      command: export SUPPORTED_DOCKER_BASES=$(ls ci-images)
+
   docker_build: &docker_build
     run:
       name: Docker build
       command: |
-        docker build -f ci-images/node8/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node8 .
-        docker build -f ci-images/node6/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node6 .
-        docker build -f ci-images/stretch/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-stretch .
-        docker build -f ci-images/alpine/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-alpine .
+        for docker_base in ${SUPPORTED_DOCKER_BASES}; do
+          docker build -f ci-images/${docker_base}/Dockerfile -t quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-${docker_base} .
+        done
 
   docker_push: &docker_push
     run:
       name: Docker push
       command: |
-        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node8
-        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-node6
-        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-stretch
-        docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-alpine
+        if [[ "${DOCKER_BASE_TAG}" =~ ^v[0-9]+ ]]; then
+          for docker_base in ${SUPPORTED_DOCKER_BASES}; do
+            echo "Pushing ${docker_base}"
+            docker tag quay.io/reactiveops/ci-images:{$DOCKER_BASE_TAG,$DOCKER_MAJOR_TAG}-${docker_base}
+            docker tag quay.io/reactiveops/ci-images:{$DOCKER_BASE_TAG,$DOCKER_MINOR_TAG}-${docker_base}
+            docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-${docker_base}
+            docker push quay.io/reactiveops/ci-images:$DOCKER_MAJOR_TAG-${docker_base}
+            docker push quay.io/reactiveops/ci-images:$DOCKER_MINOR_TAG-${docker_base}
+          done
+        elif [[ "${DOCKER_BASE_TAG}" =~ ^dev- ]]; then
+          for docker_base in ${SUPPORTED_DOCKER_BASES}; do
+            docker push quay.io/reactiveops/ci-images:$DOCKER_BASE_TAG-${docker_base}
+          done
+        else
+          echo "Skipping the docker push because '\$DOCKER_BASE_TAG: $DOCKER_BASE_TAG' does not start with dev- or v[0-9]+."
+        fi
 
   npm_release: &npm_release
     run:
@@ -98,6 +114,13 @@ references:
         git fetch --tags
         curl -O https://raw.githubusercontent.com/reactiveops/release.sh/v0.0.2/release
         /bin/bash release
+
+  build_docker_tags: &build_docker_tags
+    run:
+      name: Generate major & minor tags
+      command: |
+        export DOCKER_MAJOR_TAG="$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1/')"
+        export DOCKER_MINOR_TAG="$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1\2/')"
 
 jobs:
   test_npm:
@@ -126,6 +149,7 @@ jobs:
       - image: circleci/buildpack-deps:jessie
     steps:
       - checkout
+      - *load_supported_docker_bases
       - setup_remote_docker
       - run: echo 'export DOCKER_BASE_TAG=dev-$CIRCLE_SHA1' >> $BASH_ENV
       - *docker_login
@@ -137,11 +161,13 @@ jobs:
       - image: circleci/node:boron-stretch
     steps:
       - checkout
+      - *load_supported_docker_bases
       - setup_remote_docker
       - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
       - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
       - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
       - *github_release
+      - *build_docker_tags
       - *docker_login
       - *docker_build
       - *docker_push
