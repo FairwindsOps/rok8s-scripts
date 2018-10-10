@@ -163,6 +163,12 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 * Pod Disruption Budgets end in `pod_disruption_budget.yml`
 * Helm Values Files end in `values.yml`
 
+### Monorepo support
+
+With rok8s-scripts, You can host and deploy a multitude of micro-services
+in one git repo (monorepo). Be sure to follow the directory structure defined above, 
+e.g., `<repo>/deploy/<MicroserviceA>/<[Env]>/<app>.<extension>.yml`
+
 ## Credentials
 
 If you are using `rok8s-scripts` to deliver images to a cloud repository on AWS or GCP you will need to provide credentials as environment variables. `rok8s-scripts` will automatically login if the following variables exist:
