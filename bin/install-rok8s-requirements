@@ -120,3 +120,11 @@ if ! hash helm 2>/dev/null; then
   chmod +x "${ROK8S_INSTALL_PATH}/helm"
   rm -rf "${ROK8S_INSTALL_PATH}/helm-tmp"
 fi
+
+# make sure kubeval is installed
+if ! hash kubeval 2>/dev/null; then
+  echo Installing kubeval...
+  cd "${ROK8S_INSTALL_PATH}"
+  curl -L "https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz" | tar xzvf -
+  chmod +x "${ROK8S_INSTALL_PATH}/kubeval"
+fi
