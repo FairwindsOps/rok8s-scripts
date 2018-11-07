@@ -129,7 +129,7 @@ if ! hash kubeval 2>/dev/null; then
   chmod +x "${ROK8S_INSTALL_PATH}/kubeval"
 fi
 
-# make sure kubeval is installed
+# make sure aws-iam-authenticator is installed
 if ! hash aws-iam-authenticator 2>/dev/null; then
   echo Installing aws-iam-authenticator...
   cd "${ROK8S_INSTALL_PATH}"
