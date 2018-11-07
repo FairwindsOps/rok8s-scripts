@@ -126,6 +126,7 @@ if ! hash kubeval 2>/dev/null; then
   echo Installing kubeval...
   cd "${ROK8S_INSTALL_PATH}"
   curl -L "https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz" | tar xzvf -
+  echo "0582bd259fb8045562d3db3bc01ab834d8f210e7  kubeval"  | sha1sum -c -
   chmod +x "${ROK8S_INSTALL_PATH}/kubeval"
 fi
 
@@ -134,5 +135,6 @@ if ! hash aws-iam-authenticator 2>/dev/null; then
   echo Installing aws-iam-authenticator...
   cd "${ROK8S_INSTALL_PATH}"
   wget -q "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.3.0/heptio-authenticator-aws_0.3.0_linux_amd64" -O "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
+  echo "1053ac315df5f1e306f62969dbf1e1308f608efd  aws-iam-authenticator" | sha1sum -c -
   chmod +x "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
 fi
