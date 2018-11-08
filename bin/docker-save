@@ -1,18 +1,9 @@
 #!/bin/bash
-while getopts ":f:" opt; do
+while getopts ":fo:" opt; do
   case $opt in
     f)
       CONFIG_FILE=$OPTARG
       ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-  esac
-done
-
-while getopts ":o:" opt; do
-  case $opt in
     o)
       OUTPUT_FILE=$OPTARG
       ;;
