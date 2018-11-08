@@ -1,5 +1,5 @@
 #!/bin/bash
-while getopts ":fo:" opt; do
+while getopts ":f:o:" opt; do
   case $opt in
     f)
       CONFIG_FILE=$OPTARG
