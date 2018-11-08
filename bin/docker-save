@@ -16,7 +16,7 @@ done
 
 if [ -z "$OUTPUT_FILE" ];                   then echo "OUTPUT_FILE not specificed, must use -o"; exit 1; fi
 
-. k8s-read-config -f $CONFIG_FILE
+. k8s-read-config -f "$CONFIG_FILE"
 . docker-resolve
 
 if [ -z "$DOCKERTAG" ];                     then echo DOCKERTAG must be set; exit 1; fi
