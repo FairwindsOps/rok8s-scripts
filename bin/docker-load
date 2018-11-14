@@ -1,0 +1,38 @@
+#!/bin/bash
+while getopts ":f:i:" opt; do
+  case $opt in
+    f)
+      CONFIG_FILE=$OPTARG
+      ;;
+    i) INPUT_FILE=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [ -z "$INPUT_FILE" ];                    then echo "INPUT_FILE not specificed, must use -i"; exit 1; fi
+
+. k8s-read-config -f "$CONFIG_FILE"
+. docker-resolve
+
+if [ -z "$DOCKERTAG" ];                     then echo DOCKERTAG must be set; exit 1; fi
+
+image_load() {
+  if ! docker load --input "$1"
+  then
+    echo "Unable to import docker image, aborting."
+    exit 1
+  fi
+
+}
+echo "Current Docker images:"
+docker images
+
+echo "Importing docker images from ${INPUT_FILE}"
+image_load "${INPUT_FILE}"
+
+echo "Finished import, current docker images:"
+docker images

@@ -1,0 +1,35 @@
+#!/bin/bash
+while getopts ":f:o:" opt; do
+  case $opt in
+    f)
+      CONFIG_FILE=$OPTARG
+      ;;
+    o)
+      OUTPUT_FILE=$OPTARG
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [ -z "$OUTPUT_FILE" ];                   then echo "OUTPUT_FILE not specificed, must use -o"; exit 1; fi
+
+. k8s-read-config -f "$CONFIG_FILE"
+. docker-resolve
+
+if [ -z "$DOCKERTAG" ];                     then echo DOCKERTAG must be set; exit 1; fi
+
+image_save() {
+  if ! docker save "$1" -o "$2"
+  then
+    echo "Unable to export docker image, aborting."
+    exit 1
+  fi
+
+}
+
+echo "Exporting ${DOCKERTAG}:latest to ${OUTPUT_FILE}"
+image_save "${DOCKERTAG}:latest" "${OUTPUT_FILE}"
+echo "Finished export of ${OUTPUT_FILE}"
