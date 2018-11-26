@@ -9,6 +9,7 @@
     "docker-push": "./bin/docker-push",
     "docker-resolve": "./bin/docker-resolve",
     "get-remote-kubecfg": "./bin/get-remote-kubecfg",
+    "get-secrets": "./bin/get-secrets",
     "helm-deploy": "./bin/helm-deploy",
     "helm-template": "./bin/helm-template",
     "install-rok8s-requirements": "./bin/install-rok8s-requirements",
