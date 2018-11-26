@@ -166,7 +166,7 @@ Your kubernetes API object files should all be stored in the /deploy top level d
 ### Monorepo support
 
 With rok8s-scripts, You can host and deploy a multitude of micro-services
-in one git repo (monorepo). Be sure to follow the directory structure defined above, 
+in one git repo (monorepo). Be sure to follow the directory structure defined above,
 e.g., `<repo>/deploy/<MicroserviceA>/<[Env]>/<app>.<extension>.yml`
 
 ## Credentials
@@ -190,6 +190,20 @@ In order to connect to a Kubernetes cluster the build must authenticate. In GKE 
 
 There are multiple ways to handle Kubernetes Secrets. Examples of each can be
 found in [here](examples/sops-secrets).
+
+### External Secrets Managers
+
+It is also possible to retrieve individual key/value pairs from an external secrets manager. Supported secret stores are:
+
+There are two ways to use this:
+* `. get-secrets` - this will allow you to use the variables as environment variables
+* As part of `k8s-deploy-secrets` when you set `EXTERNAL_SECRETS_K8S_NAME`.  This will create a secret in the k8s cluster with all of the secrets from the secret store that you listed.
+
+There is an example [here](examples/external-secrets-manager).
+
+External secrets managers supported:
+
+* AWS Secrets Manager - specify a list of AWS secret names to retrieve by setting `AWS_SECRETS`.
 
 ### Unencrypted
 
@@ -405,7 +419,7 @@ To generate a `KUBECONFIG_DATA` value you can use `cat ~/.kube/config | base64`.
 
 In some cases it will be beneficial to have an indicator of when a container that was built using the `docker-build` command actually created a new layer, as opposed to it just using cached layers.  There is a feature called `ROK8S_ENABLE_CHANGE_DETECTION` that can help with this.
 
-When set to `true`, `ROK8S_ENABLE_CHANGE_DETECTION` will compare the sha256 of the newly built container with the sha256 of the cached container for that branch.  It will output a file called `.changesDetected`.  This file will container `true` if there were changes, or `false` if the container ID is identical to the cache. 
+When set to `true`, `ROK8S_ENABLE_CHANGE_DETECTION` will compare the sha256 of the newly built container with the sha256 of the cached container for that branch.  It will output a file called `.changesDetected`.  This file will container `true` if there were changes, or `false` if the container ID is identical to the cache.
 
 # Releasing
 
