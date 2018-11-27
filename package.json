@@ -1,6 +1,6 @@
 {
   "name": "rok8s-scripts",
-  "version": "0.0.1",
+  "version": "7.19.1",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
     "decrypt-kubecfg": "./bin/decrypt-kubecfg",
@@ -9,6 +9,7 @@
     "docker-push": "./bin/docker-push",
     "docker-resolve": "./bin/docker-resolve",
     "get-remote-kubecfg": "./bin/get-remote-kubecfg",
+    "get-secrets": "./bin/get-secrets",
     "helm-deploy": "./bin/helm-deploy",
     "helm-template": "./bin/helm-template",
     "install-rok8s-requirements": "./bin/install-rok8s-requirements",
