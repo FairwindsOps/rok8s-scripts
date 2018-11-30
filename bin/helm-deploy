@@ -21,7 +21,10 @@ fi
 # Allows us to use helm even if it's not installed
 # in kube-system.
 if [ -z "$TILLER_NAMESPACE" ]; then
-  TILLER_NAMESPACE="$(kubectl get deploy -o wide --all-namespaces | grep tiller-deploy | tail -n 1 | cut -d ' ' -f 1 | tr -d ' ')"
+  TILLER_NAMESPACE="$(kubectl get deploy --all-namespaces -l app=helm,name=tiller | tail -n 1 | cut -d ' ' -f 1 | tr -d ' ')"
+
+  # just in case variable didn't get set, give it a default
+  TILLER_NAMESPACE=${TILLER_NAMESPACE:-kube-system}
   echo "Set tiller namespace to $TILLER_NAMESPACE"
 fi
 
