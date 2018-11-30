@@ -1,6 +1,6 @@
 {
   "name": "rok8s-scripts",
-  "version": "7.19.1",
+  "version": "7.20.0",
   "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "bin": {
     "decrypt-kubecfg": "./bin/decrypt-kubecfg",
