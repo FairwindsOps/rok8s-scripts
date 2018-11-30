@@ -17,6 +17,14 @@ if [[ ! $(kubectl get namespace $NAMESPACE) ]]; then
   kubectl create namespace $NAMESPACE;
 fi
 
+# Set tiller_namespace if it isn't already set.
+# Allows us to use helm even if it's not installed
+# in kube-system.
+if [ -z "$TILLER_NAMESPACE" ]; then
+  TILLER_NAMESPACE="$(kubectl get deploy -o wide --all-namespaces | grep tiller-deploy | tail -n 1 | cut -d ' ' -f 1 | tr -d ' ')"
+  echo "Set tiller namespace to $TILLER_NAMESPACE"
+fi
+
 # If using k8s-deploy in combination with helm-deploy
 #  while transitioning to helm, set this to avoid deploying
 #  secrets twice
