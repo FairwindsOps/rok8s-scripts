@@ -1,0 +1,112 @@
+# Deploying to Kubernetes with Helm
+
+[Helm](https://helm.sh/) is a popular Kubernetes package manager. To deploy to Kubernetes with Helm, you'll first need to [initialize it in your cluster](https://docs.helm.sh/using_helm#install-helm).
+
+## Initial Project Structure
+
+All rok8s-scripts configuration lives in a `deploy` directory at the root of your project by default. In this example, we have a simple Python app with a Dockerfile in place. We'll add that `deploy` directory and add a rok8s-scripts build config file (`build.config`).
+
+```plaintext
+app-dir/
+├── deploy/
+│   ├── build.config                         // rok8s-scripts build configs
+│   ├── charts/                              // All HELM chart configuration for the app
+│   │   └── app/
+│   │       ├── Chart.yaml
+│   │       └── templates/
+│   │           ├── app.deployment.yaml
+│   │           ├── app-env.configmap.yaml
+│   │           ├── app.ingress.yaml
+│   │           └── app.service.yaml
+│   ├── development/                         // Contains files to deploy to dev environment
+│   │   ├── app-env.secret.sops.yml          // Secrets in SOPS: <secret-name>.secret.sops.yml
+│   │   └── app.values.yml                   // Helm values: <app>.values.yml
+│   └── development.config                   // rok8s-scripts config for development env
+├── app.py
+├── Dockerfile
+├── README.md
+└── requirements.txt
+```
+
+In the above structure we've added a Helm chart, which we won't be outlining here. The other additional files and folder we'll outline below.
+
+## rok8s-scripts Config
+The `deploy/development.config` file here is a rok8s-scripts config file for the development environment.
+
+```bash
+NAMESPACE='development'
+SOPS_SECRETS=('development/app-env')
+HELM_CHARTS=('charts/app')
+HELM_RELEASE_NAMES=('app-dev')
+HELM_VALUES=('development/app')
+```
+
+You'll see that some of these configurations reference _similar_, but not exact, matches to the files above. Note `deploy/development/app.values.yml` translates to `HELM_VALUES=('development/app')`. The `deploy/development/app-env.secret.sops.yml` file translates to `SOPS_SECRETS=('development/app-env')`. **Note that if the files are not named with the expected extensions then rok8s-scripts will not work**.
+
+## Helm Values Files
+
+Helm uses values files to fill in chart templates. In this example, our values file is reference in rok8s-scripts config as `HELM_VALUES=('development/app')`, which maps to reading the `deploy/development/app.values.yml` file. A simple values file might look something like this:
+
+```yaml
+---
+image: 012345678911.dkr.ecr.us-east-1.amazonaws.com/app
+somevalue: anothervalue
+```
+
+## Sops Secrets
+
+Helm stores release information in Config Maps. If we deployed Kubernetes Secrets with Helm, they'd also be visible in that Helm release Config Map. To avoid that, we manage secrets separately with Helm. Please see [Secret Encryption with Sops](docs/sops.md) for further information.
+
+## Deploying it All
+
+This step assumes that you've already configured access to your cluster in your pipeline. If you have not, refer to our cloud specific documentation covering that first.
+
+With cluster auth in place, and Docker images build, you're ready to deploy this with Helm:
+
+```bash
+helm-deploy -f deploy/development.config
+```
+
+This script reads the rok8s-scripts config file (`deploy/development.config`) and runs a Helm upgrade or install with the given values files.
+
+Importantly, it will set the `image.tag` value to `CI_SHA1`, a value that should match the tag of your latest pushed image. There's more info available in our [Docker documentation](docs/docker.md) on how these images are tagged and pushed.
+
+## Advanced Configuration
+
+### Multiple Charts
+The Helm environment variables here all support multiple values. Each value in each array should line up with the value of the other arrays at that position.
+
+```bash
+NAMESPACE='development'
+HELM_CHARTS=('charts/app' 'charts/app2')
+HELM_RELEASE_NAMES=('app-dev' 'app-2-dev')
+HELM_VALUES=('development/app' 'development/app2')
+```
+
+### Multiple Releases
+Similar to above, we can reuse the same chart but have multiple releases of it with slightly different configuration:
+
+```bash
+NAMESPACE='development'
+HELM_CHARTS=('charts/app' 'charts/app')
+HELM_RELEASE_NAMES=('app-dev' 'app-variant')
+HELM_VALUES=('development/app' 'development/app-variant')
+```
+
+### Multiple Values Files
+
+In some cases, the values files between environments will be quite similar. A helpful pattern involves using a base values file along with environment specific values files.
+
+```bash
+# development.config
+NAMESPACE='development'
+HELM_CHARTS=('charts/app')
+HELM_RELEASE_NAMES=('app-dev')
+HELM_VALUES=('shared/app,development/app')
+
+# staging.config
+NAMESPACE='staging'
+HELM_CHARTS=('charts/app')
+HELM_RELEASE_NAMES=('app-dev')
+HELM_VALUES=('shared/app,staging/app')
+```
