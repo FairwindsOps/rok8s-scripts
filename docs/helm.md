@@ -4,7 +4,7 @@
 
 ## Initial Project Structure
 
-All rok8s-scripts configuration lives in a `deploy` directory at the root of your project by default. In this example, we have a simple Python app with a Dockerfile in place. We'll add that `deploy` directory and add a rok8s-scripts build config file (`build.config`).
+All rok8s-scripts configuration lives in a `deploy` directory at the root of your project by default. In this example, we have a simple Python app with a Dockerfile in place.
 
 ```plaintext
 app-dir/
