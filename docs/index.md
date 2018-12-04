@@ -16,7 +16,21 @@ We currently include a variety of CI Images, including Alpine and Debian Stretch
 
 The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v7-stretch`. A full list of the latest image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
 
+## Examples
+
+rok8s-scripts is designed to work well in a wide variety of environments. That includes Bitbucket Pipelines, CircleCI, GitLab CI, and more. There are many valid ways to configure CI pipelines, we've includes a variety of [examples](/examples) in this repository.
+
+Most notably, the CI example includes sample configuration for the following platforms:
+
+- [Bitbucket Pipelines](/examples/ci/bitbucket-pipelines.yml)
+- [CircleCI](/examples/ci/.circleci/config.yml)
+- [GitLab CI](/examples/ci/.gitlab-ci.yml)
+- [Jenkins](/examples/ci/Jenkinsfile)
+
+On their own, these examples may not make a lot of sense. There's a lot more documentation below that should cover everything included in these examples and more.
+
 ## Further Reading
+
 - [Building and Pushing Docker Images](/docs/docker.md)
 - [Deploying to Kubernetes with Helm](/docs/helm.md)
 - [Deploying to Kubernetes without Helm](/docs/without_helm.md)
@@ -25,11 +39,6 @@ The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-ima
 ### Cloud Specific Documentation
 - [Amazon Web Services](/docs/aws.md)
 - [Google Cloud](/docs/gcp.md)
-
-### CI Specific Documentation
-- CircleCI
-- GitLab CI
-- Bitbucket Pipelines
 
 ### Contributing
 - [Releasing New Versions of rok8s-scripts](/docs/releasing.md)

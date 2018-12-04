@@ -46,6 +46,10 @@ k8s-deploy-and-verify -f deploy/development.config
 
 More indepth examples are available in the [examples directory](/examples).
 
+## Versioning
+**If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` are deployed, a new file will be created with that value as part of the filename.
+
+If using an HPA, set `replicas: hpa` in the deployment file to have k8s-deploy get the current number of replicas from the cluster and deploy that number of replicas. This is a workaround for an open issue (https://github.com/kubernetes/kubernetes/issues/25238).
 
 ## Deployment Configuration
 Listed below are all the types of resources rok8s-scripts supports. In all cases, the filename suffix is important and must match the spec precisely.
