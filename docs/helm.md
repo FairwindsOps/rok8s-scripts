@@ -71,6 +71,14 @@ This script reads the rok8s-scripts config file (`deploy/development.config`) an
 
 Importantly, it will set the `image.tag` value to `CI_SHA1`, a value that should match the tag of your latest pushed image. There's more info available in our [Docker documentation](/docs/docker.md) on how these images are tagged and pushed.
 
+## Templating
+
+In addition to the `helm-deploy` script, rok8s-scripts also includes a `helm-template` script that will output the Kubernetes config that Helm would apply as part of the `helm-deploy` script. Usage is identical to `helm-deploy`, of course with no changes actually getting deployed:
+
+```
+helm-template -f deploy/development.config
+```
+
 ## Advanced Configuration
 
 ### Multiple Charts

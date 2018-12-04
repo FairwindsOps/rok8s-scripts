@@ -10,7 +10,7 @@ There are two ways to use this:
 * `. get-secrets` - this will allow you to use the variables as environment variables
 * As part of `k8s-deploy-secrets` when you set `EXTERNAL_SECRETS_K8S_NAME`.  This will create a secret in the k8s cluster with all of the secrets from the secret store that you listed.
 
-There is an example [here](examples/external-secrets-manager).
+There is an example [here](/examples/external-secrets-manager).
 
 ## Encrypted Secrets With Sops
 Sops and rok8s-scripts can provide a powerful solution to encrypted secret management. This enables you to keep your secrets in source control and track changes to those secrets along with the rest of your Kubernetes configuration. All of this is powered with cloud based KMS from either AWS or GCP. To access secrets, users need access to both your Git repository and appropriate IAM credentials for KMS.
@@ -19,7 +19,7 @@ Using an [AWS KMS](https://aws.amazon.com/kms/) ARN or [Google KMS](https://clou
 
 Whenever encrypting data, `sops` requires credentials for the appropriate
 cloud provider (GCP or AWS). You can read more about `sops` usage [here](https://github.com/mozilla/sops#usage). Full examples of sops usage with rok8s-scripts can be
-[found here](examples/sops-secrets).
+[found here](/examples/sops-secrets).
 
 The examples below will use GCP KMS, but the process is very similar when using AWS KMS.
 
