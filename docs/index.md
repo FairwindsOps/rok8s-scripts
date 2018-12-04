@@ -1,6 +1,6 @@
 # rok8s-scripts
 
-This is a set of scripts that are useful for CI/CD workflows with Docker and Kubernetes. These simplify secrets management, environment specific config, Docker build caching, and much more.
+This is a set of opinionated scripts for managing application development and deployment lifecycle using Kubernetes. These simplify secure secrets management, environment specific config, Docker build caching, and much more.
 
 ## CI Images
 
@@ -17,19 +17,22 @@ We currently include a variety of CI Images, including Alpine and Debian Stretch
 The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v7-stretch`. A full list of the latest image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
 
 ## Further Reading
+- [Building and Pushing Docker Images](/docs/docker.md)
+- [Deploying to Kubernetes with Helm](/docs/helm.md)
+- [Deploying to Kubernetes without Helm](/docs/without_helm.md)
+- [Managing Kubernetes Secrets Securely](/docs/secrets.md)
 
-- [Building and Pushing Docker Images](docs/docker.md)
-- [Deploying to Kubernetes with Helm](docs/helm.md)
-- [Deploying to Kubernetes without Helm](docs/without_helm.md)
-- [Managing Kubernetes Secrets Securely](docs/secrets.md)
-- Cloud Specific Documentation
-  - [Amazon Web Services](docs/aws.md)
-  - [Google Cloud](docs/gcp.md)
-- CI Specific Documentation
-  - CircleCI
-  - GitLab CI
-  - Bitbucket Pipelines
-- [Releasing New Versions of rok8s-scripts](docs/releasing.md)
+### Cloud Specific Documentation
+- [Amazon Web Services](/docs/aws.md)
+- [Google Cloud](/docs/gcp.md)
+
+### CI Specific Documentation
+- CircleCI
+- GitLab CI
+- Bitbucket Pipelines
+
+### Contributing
+- [Releasing New Versions of rok8s-scripts](/docs/releasing.md)
 
 ## License
 Apache License 2.0

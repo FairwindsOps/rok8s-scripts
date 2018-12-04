@@ -30,7 +30,7 @@ app-dir/
 
 In the above structure we've added a Helm chart, which we won't be outlining here. The other additional files and folder we'll outline below.
 
-## rok8s-scripts Config
+## Configuration
 The `deploy/development.config` file here is a rok8s-scripts config file for the development environment.
 
 ```bash
@@ -53,9 +53,9 @@ image: 012345678911.dkr.ecr.us-east-1.amazonaws.com/app
 somevalue: anothervalue
 ```
 
-## Sops Secrets
+## Secret Management
 
-Helm stores release information in Config Maps. If we deployed Kubernetes Secrets with Helm, they'd also be visible in that Helm release Config Map. To avoid that, we manage secrets separately with Helm. Please see [Secret Encryption with Sops](docs/sops.md) for further information.
+Helm stores release information in Config Maps. If we deployed Kubernetes Secrets with Helm, they'd also be visible in that Helm release Config Map. To avoid that, we manage secrets separately. Please see [Managing Kubernetes Secrets Securely](/docs/secrets.md) for further information.
 
 ## Deploying it All
 
@@ -69,7 +69,7 @@ helm-deploy -f deploy/development.config
 
 This script reads the rok8s-scripts config file (`deploy/development.config`) and runs a Helm upgrade or install with the given values files.
 
-Importantly, it will set the `image.tag` value to `CI_SHA1`, a value that should match the tag of your latest pushed image. There's more info available in our [Docker documentation](docs/docker.md) on how these images are tagged and pushed.
+Importantly, it will set the `image.tag` value to `CI_SHA1`, a value that should match the tag of your latest pushed image. There's more info available in our [Docker documentation](/docs/docker.md) on how these images are tagged and pushed.
 
 ## Advanced Configuration
 

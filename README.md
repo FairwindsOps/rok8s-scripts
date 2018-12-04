@@ -18,18 +18,22 @@ The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-ima
 
 ## Further Reading
 
-- [Building and Pushing Docker Images](docs/docker.md)
-- [Deploying to Kubernetes with Helm](docs/helm.md)
-- [Deploying to Kubernetes without Helm](docs/without_helm.md)
-- [Managing Kubernetes Secrets Securely](docs/secrets.md)
-- Cloud Specific Documentation
-  - [Amazon Web Services](docs/aws.md)
-  - [Google Cloud](docs/gcp.md)
-- CI Specific Documentation
-  - CircleCI
-  - GitLab CI
-  - Bitbucket Pipelines
-- [Releasing New Versions of rok8s-scripts](docs/releasing.md)
+- [Building and Pushing Docker Images](/docs/docker.md)
+- [Deploying to Kubernetes with Helm](/docs/helm.md)
+- [Deploying to Kubernetes without Helm](/docs/without_helm.md)
+- [Managing Kubernetes Secrets Securely](/docs/secrets.md)
+
+### Cloud Specific Documentation
+- [Amazon Web Services](/docs/aws.md)
+- [Google Cloud](/docs/gcp.md)
+
+### CI Specific Documentation
+- CircleCI
+- GitLab CI
+- Bitbucket Pipelines
+
+### Contributing
+- [Releasing New Versions of rok8s-scripts](/docs/releasing.md)
 
 ## License
 Apache License 2.0

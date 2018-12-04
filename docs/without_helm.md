@@ -1,5 +1,5 @@
 # Deploying to Kubernetes without Helm
-Although [Helm](docs/helm.md) is our preferred method of deploying to Kubernetes,  rok8s-scripts also supports deploying to Kubernetes without Helm.
+Although [Helm](/docs/helm.md) is our preferred method of deploying to Kubernetes, rok8s-scripts also supports deploying to Kubernetes without Helm.
 
 ## Initial Project Structure
 All rok8s-scripts configuration lives in a `deploy` directory at the root of your project by default. In this example, we have a simple Python app with a Dockerfile in place.
@@ -26,10 +26,31 @@ app-dir/
 └── requirements.txt
 ```
 
+Each Kubernetes resource config lives in the `deploy` directory of this repo, with filenames matching the desired rok8s-scripts format (see below for a full list). In this example, each environment has unique configuration in the form of a secret, config map, and HPA. Beyond those resources, each environment would share the deployment and migration configuration.
+
+In the example above, the `development.config` rok8s-scripts configuration file would look something like:
+
+```bash
+CONFIGMAPS=("development/app-env")
+SOPS_SECRETS=("development/app-env")
+BLOCKING_JOBS=("app-migrate")
+DEPLOYMENTS=("app")
+HORIZONTAL_POD_AUTOSCALERS=("development/app")
+```
+
+This full configuration could be deployed with the following rok8s-scripts command:
+
+```bash
+k8s-deploy-and-verify -f deploy/development.config
+```
+
+More indepth examples are available in the [examples directory](/examples).
+
+
 ## Deployment Configuration
 Listed below are all the types of resources rok8s-scripts supports. In all cases, the filename suffix is important and must match the spec precisely.
 
-```
+```bash
 # Cluster Namespace to work in
 NAMESPACE='default'
 
