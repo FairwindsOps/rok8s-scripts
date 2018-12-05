@@ -12,30 +12,30 @@ The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-ima
 
 ## Examples
 
-rok8s-scripts is designed to work well in a wide variety of environments. That includes Bitbucket Pipelines, CircleCI, GitLab CI, and more. There are many valid ways to configure CI pipelines, we've includes a variety of [examples](/examples) in this repository.
+rok8s-scripts is designed to work well in a wide variety of environments. That includes Bitbucket Pipelines, CircleCI, GitLab CI, and more. There are many valid ways to configure CI pipelines, we've includes a variety of [examples](https://github.com/reactiveops/rok8s-scripts/tree/master/examples) in this repository.
 
 Most notably, the CI example includes sample configuration for the following platforms:
 
-- [Bitbucket Pipelines](/examples/ci/bitbucket-pipelines.yml)
-- [CircleCI](/examples/ci/.circleci/config.yml)
-- [GitLab CI](/examples/ci/.gitlab-ci.yml)
-- [Jenkins](/examples/ci/Jenkinsfile)
+- [Bitbucket Pipelines](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/bitbucket-pipelines.yml)
+- [CircleCI](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/.circleci/config.yml)
+- [GitLab CI](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/.gitlab-ci.yml)
+- [Jenkins](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/Jenkinsfile)
 
 On their own, these examples may not make a lot of sense. There's a lot more documentation below that should cover everything included in these examples and more.
 
 ## Further Reading
 
-- [Building and Pushing Docker Images](/docs/docker.md)
-- [Deploying to Kubernetes with Helm](/docs/helm.md)
-- [Deploying to Kubernetes without Helm](/docs/without_helm.md)
-- [Managing Kubernetes Secrets Securely](/docs/secrets.md)
+- [Building and Pushing Docker Images](docker.md)
+- [Deploying to Kubernetes with Helm](helm.md)
+- [Deploying to Kubernetes without Helm](without_helm.md)
+- [Managing Kubernetes Secrets Securely](secrets.md)
 
 ### Cloud Specific Documentation
-- [Amazon Web Services](/docs/aws.md)
-- [Google Cloud](/docs/gcp.md)
+- [Amazon Web Services](aws.md)
+- [Google Cloud](gcp.md)
 
 ### Contributing
-- [Releasing New Versions of rok8s-scripts](/docs/releasing.md)
+- [Releasing New Versions of rok8s-scripts](releasing.md)
 
 ## License
 Apache License 2.0

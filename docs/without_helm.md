@@ -1,5 +1,5 @@
 # Deploying to Kubernetes without Helm
-Although [Helm](/docs/helm.md) is our preferred method of deploying to Kubernetes, rok8s-scripts also supports deploying to Kubernetes without Helm.
+Although [Helm](helm.md) is our preferred method of deploying to Kubernetes, rok8s-scripts also supports deploying to Kubernetes without Helm.
 
 ## Initial Project Structure
 All rok8s-scripts configuration lives in a `deploy` directory at the root of your project by default. In this example, we have a simple Python app with a Dockerfile in place.
@@ -44,7 +44,7 @@ This full configuration could be deployed with the following rok8s-scripts comma
 k8s-deploy-and-verify -f deploy/development.config
 ```
 
-More indepth examples are available in the [examples directory](/examples).
+More indepth examples are available in the [examples directory](https://github.com/reactiveops/rok8s-scripts/tree/master/examples).
 
 ## Versioning
 **If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` are deployed, a new file will be created with that value as part of the filename.
