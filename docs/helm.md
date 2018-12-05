@@ -55,7 +55,7 @@ somevalue: anothervalue
 
 ## Secret Management
 
-Helm stores release information in Config Maps. If we deployed Kubernetes Secrets with Helm, they'd also be visible in that Helm release Config Map. To avoid that, we manage secrets separately. Please see [Managing Kubernetes Secrets Securely](/docs/secrets.md) for further information.
+Helm stores release information in Config Maps. If we deployed Kubernetes Secrets with Helm, they'd also be visible in that Helm release Config Map. To avoid that, we manage secrets separately. Please see [Managing Kubernetes Secrets Securely](secrets.md) for further information.
 
 ## Deploying it All
 
@@ -69,7 +69,7 @@ helm-deploy -f deploy/development.config
 
 This script reads the rok8s-scripts config file (`deploy/development.config`) and runs a Helm upgrade or install with the given values files.
 
-Importantly, it will set the `image.tag` value to `CI_SHA1`, a value that should match the tag of your latest pushed image. There's more info available in our [Docker documentation](/docs/docker.md) on how these images are tagged and pushed.
+Importantly, it will set the `image.tag` value to `CI_SHA1`, a value that should match the tag of your latest pushed image. There's more info available in our [Docker documentation](docker.md) on how these images are tagged and pushed.
 
 ## Templating
 
