@@ -1,0 +1,88 @@
+image: quay.io/reactiveops/ci-images:v7-stretch
+
+aliases:
+  - &initialize-env |
+      export GCLOUDSDK_CONTAINER_USE_V1_CLIENT="false"
+      export GOOGLE_APPLICATION_CREDENTIALS="${ROK8S_TMP:-${HOME}}/gcloud-service-key.json"
+      export GCP_REGIONAL_CLUSTER=true
+      export GCP_REGION=us-central1
+      export CI_SHA1=$BITBUCKET_COMMIT
+      export CI_BRANCH=$BITBUCKET_BRANCH
+      export CI_BUILD_NUM=$BITBUCKET_BUILD_NUMBER
+      export CI_TAG=$BITBUCKET_TAG
+
+  - &initialize-dev |
+      export GCP_PROJECT=sample-dev-project
+      export CLUSTER_NAME=sample-dev-cluster
+      export GCLOUD_KEY=$GCLOUD_KEY_DEV
+      export ROK8S_CONFIG="deploy/development.config"
+      prepare-gcloud
+
+  - &initialize-staging |
+      export GCP_PROJECT=sample-staging-project
+      export CLUSTER_NAME=sample-staging-cluster
+      export GCLOUD_KEY=$GCLOUD_KEY_STAGING
+      export ROK8S_CONFIG="deploy/staging.config"
+      prepare-gcloud
+
+  - &initialize-prod |
+      export GCP_PROJECT=sample-staging-project
+      export CLUSTER_NAME=sample-staging-cluster
+      export GCLOUD_KEY=$GCLOUD_KEY_PROD
+      export ROK8S_CONFIG="deploy/production.config"
+      prepare-gcloud
+
+  - build-and-push-step: &build-and-push-step
+      name: Build and Push
+      services:
+        - docker
+      caches:
+        - docker
+      script:
+        - *initialize-env
+        - *initialize-dev
+        - docker-build -f $ROK8S_CONFIG
+        - docker-push -f $ROK8S_CONFIG
+
+  - deploy-dev-step: &deploy-dev-step
+      name: Deploy Development
+      deployment: test
+      script:
+        - *initialize-env
+        - *initialize-dev
+        - helm-deploy -f $ROK8S_CONFIG
+
+  - deploy-staging-step: &deploy-staging-step
+      name: Deploy Staging
+      deployment: staging
+      script:
+        - *initialize-env
+        - *initialize-staging
+        - helm-deploy -f $ROK8S_CONFIG
+
+  - deploy-prod-step: &deploy-prod-step
+      name: Deploy Production
+      deployment: production
+      trigger: manual
+      script:
+        - *initialize-env
+        - *initialize-prod
+        - helm-deploy -f $ROK8S_CONFIG
+
+options:
+  docker: true
+
+pipelines:
+  default:
+    - step: *build-and-push-step
+    - step: *deploy-dev-step
+
+  branches:
+    master:
+      - step: *build-and-push-step
+      - step: *deploy-staging-step
+
+  tags:
+    release-*:
+      - step: *build-and-push-step
+      - step: *deploy-prod-step
