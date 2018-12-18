@@ -10,7 +10,7 @@ if [ -z "$CI_SHA1" ];                       then echo CI_SHA1 must be set; exit 
 if [ -z "$CI_BUILD_NUM" ];                  then echo CI_BUILD_NUM must be set; exit 1; fi
 
 # support overriding "latest"
-LATEST=${LATEST:-latest}
+DOCKER_LATEST_TAG=${DOCKER_LATEST_TAG:-latest}
 
 # Set a CI_REF from branch or tag
 CI_REF="${CI_TAG}"
@@ -21,7 +21,7 @@ if [ -z "$CI_REF" ]; then echo CI_BRANCH or CI_TAG must be set; exit 1; fi
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
 # support list of additional tag versions delimited by commas by default
-TAG_VERSION_DELIMITER_CHAR="${TAG_VERSION_DELIMITER_CHAR:-,}"
+DOCKER_TAG_VERSION_DELIMITER_CHAR="${DOCKER_TAG_VERSION_DELIMITER_CHAR:-,}"
 BUILD_TAG_PREFIX=${BUILD_TAG_PREFIX:-build_}
 TAG_VERSIONS="${TAG_VERSIONS:-$CI_SHA1$TAG_VERSION_DELIMITER_CHAR$CI_REF$TAG_VERSION_DELIMITER_CHAR$BUILD_TAG_PREFIX$CI_BUILD_NUM}"
 
@@ -49,9 +49,9 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   done <<< "$(grep -i '^FROM.* AS ' ${DOCKERFILE} | awk '{print $4}')"
 fi
 
-for TAG_VERSION in $(echo "$TAG_VERSIONS" | tr "$TAG_VERSION_DELIMITER_CHAR" ' '); do
-  if [ "${LATEST}" != "${TAG_VERSION}" ]; then
-    echo "Pushing ${DOCKERTAG}:${LATEST} as ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${TAG_VERSION}"
-    tag_push "${DOCKERTAG}:${LATEST}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${TAG_VERSION}"
+for TAG_VERSION in $(echo "$TAG_VERSIONS" | tr "$DOCKER_TAG_VERSION_DELIMITER_CHAR" ' '); do
+  if [ "${DOCKER_LATEST_TAG}" != "${TAG_VERSION}" ]; then
+    echo "Pushing ${DOCKERTAG}:${DOCKER_LATEST_TAG} as ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${TAG_VERSION}"
+    tag_push "${DOCKERTAG}:${DOCKER_LATEST_TAG}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${TAG_VERSION}"
   fi
 done
