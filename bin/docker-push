@@ -22,12 +22,12 @@ CI_REF=$(echo "${CI_REF}" | tr / _)
 
 # support list of tag versions
 BUILD_TAG_PREFIX=${BUILD_TAG_PREFIX:-build_}
-if [ -z "$DOCKER_TAG_VERSIONS" ]; then
+if [ -z "${DOCKER_TAG_VERSIONS[@]}" ]; then
   DOCKER_TAG_VERSIONS=("$CI_SHA1" "$CI_REF" "$BUILD_TAG_PREFIX$CI_BUILD_NUM")
 fi
 
 # check for additional tags
-if [ -z "$ADDITONAL_DOCKER_TAG_VERSIONS" ]; then
+if [ -z "${ADDITONAL_DOCKER_TAG_VERSIONS[@]}" ]; then
   ADDITIONAL_DOCKER_TAG_VERSIONS=()
 fi
 
