@@ -30,6 +30,9 @@ image_save() {
 
 }
 
-echo "Exporting ${DOCKERTAG}:latest to ${OUTPUT_FILE}"
-image_save "${DOCKERTAG}:latest" "${OUTPUT_FILE}"
+# support overriding "latest"
+DOCKER_LATEST_TAG=${DOCKER_LATEST_TAG:-latest}
+
+echo "Exporting ${DOCKERTAG}:${DOCKER_LATEST_TAG} to ${OUTPUT_FILE}"
+image_save "${DOCKERTAG}:${DOCKER_LATEST_TAG}" "${OUTPUT_FILE}"
 echo "Finished export of ${OUTPUT_FILE}"
