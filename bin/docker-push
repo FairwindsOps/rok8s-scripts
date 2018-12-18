@@ -20,10 +20,18 @@ if [ -z "$CI_REF" ]; then echo CI_BRANCH or CI_TAG must be set; exit 1; fi
 
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
-# support list of additional tag versions delimited by commas by default
-DOCKER_TAG_VERSION_DELIMITER_CHAR="${DOCKER_TAG_VERSION_DELIMITER_CHAR:-,}"
+# support list of tag versions
 BUILD_TAG_PREFIX=${BUILD_TAG_PREFIX:-build_}
-TAG_VERSIONS="${TAG_VERSIONS:-$CI_SHA1$TAG_VERSION_DELIMITER_CHAR$CI_REF$TAG_VERSION_DELIMITER_CHAR$BUILD_TAG_PREFIX$CI_BUILD_NUM}"
+if [ -z "$DOCKER_TAG_VERSIONS" ]; then
+  DOCKER_TAG_VERSIONS=("$CI_SHA1" "$CI_REF" "$BUILD_TAG_PREFIX$CI_BUILD_NUM")
+fi
+
+# check for additional tags
+if [ -z "$ADDITONAL_DOCKER_TAG_VERSIONS" ]; then
+  ADDITIONAL_DOCKER_TAG_VERSIONS=()
+fi
+
+ALL_DOCKER_TAG_VERSIONS=(${DOCKER_TAG_VERSIONS[@]} ${ADDITIONAL_DOCKER_TAG_VERSIONS[@]})
 
 tag_push() {
   if ! docker tag "$1" "$2"
@@ -49,9 +57,9 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   done <<< "$(grep -i '^FROM.* AS ' ${DOCKERFILE} | awk '{print $4}')"
 fi
 
-for TAG_VERSION in $(echo "$TAG_VERSIONS" | tr "$DOCKER_TAG_VERSION_DELIMITER_CHAR" ' '); do
-  if [ "${DOCKER_LATEST_TAG}" != "${TAG_VERSION}" ]; then
-    echo "Pushing ${DOCKERTAG}:${DOCKER_LATEST_TAG} as ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${TAG_VERSION}"
-    tag_push "${DOCKERTAG}:${DOCKER_LATEST_TAG}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${TAG_VERSION}"
+for DOCKER_TAG_VERSION in ${ALL_DOCKER_TAG_VERSIONS[@]}; do
+  if [ "${DOCKER_LATEST_TAG}" != "${DOCKER_TAG_VERSION}" ]; then
+    echo "Pushing ${DOCKERTAG}:${DOCKER_LATEST_TAG} as ${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${DOCKER_TAG_VERSION}"
+    tag_push "${DOCKERTAG}:${DOCKER_LATEST_TAG}" "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:${DOCKER_TAG_VERSION}"
   fi
 done
