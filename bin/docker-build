@@ -89,4 +89,4 @@ if [ "$ROK8S_ENABLE_CHANGE_DETECTION" ]; then
 fi
 
 # Fire the image scanner if enabled - see the `docker-microscanner` script for details
-docker-microscanner
+. docker-microscanner

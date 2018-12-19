@@ -17,7 +17,6 @@
 
 . k8s-read-config "$@"
 
-if [ -z "$BASEDIR" ];    then echo BASEDIR must be set; exit 1; fi
 if [ -z "$DOCKERTAG" ];  then echo DOCKERTAG must be set; exit 1; fi
 
 function _run_microscanner() {
