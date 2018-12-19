@@ -9,7 +9,7 @@
 # - ENABLE_MICROSCANNER="true" (all other values are false)
 # - MICROSCANNER_TOKEN="tokenHere" (see https://github.com/aquasecurity/microscanner#registering-for-a-token for a token)
 # - MICROSCANNER_ARGS="--some-args" (see https://github.com/aquasecurity/microscanner for arguments)
-# - MICROSCANNER_IMAGE_SOURCE="${DOCKERTAG}" (Defaults to DOCKERTAG, but you can override in case you don't have a local build but want to scan something in a repository. Can be helpful if your docker build don't persist through build steps.)
+# - MICROSCANNER_IMAGE_SOURCE="${DOCKERTAG}" (Defaults to DOCKERTAG:DOCKER_LATEST_TAG, but you can override in case you don't have a local build but want to scan something in a repository. Can be helpful if your docker build don't persist through build steps.)
 #
 # Common issue - if your container does not have ca-certificates installed you can pass `MICORSCANNER_ARGS="--no-verify"`
 #                to avoid checking certs for the scan. The error you may see is an x509 cert error:
@@ -45,10 +45,10 @@ if [[ "${ENABLE_MICROSCANNER}" == "true" ]]; then
   # Assure we've got our token before proceeding.
   if [ -z "$MICROSCANNER_TOKEN" ]; then echo "MICROSCANNER_TOKEN is a required value"; exit 1; fi
   if [ -z "$MICROSCANNER_IMAGE_SOURCE" ]; then
-    echo "MICROSCANNER_IMAGE_SOURCE is not defined, defaulting to DOCKERTAG (${DOCKERTAG})."
-    _microscanner_image_source="${DOCKERTAG}"
+    echo "MICROSCANNER_IMAGE_SOURCE is not defined, defaulting to DOCKERTAG:DOCKER_LATEST_TAG (${DOCKERTAG}:${DOCKER_LATEST_TAG})."
+    _microscanner_image_source="${DOCKERTAG}:${DOCKER_LATEST_TAG}"
   else
-    echo "MICROSCANNER_IMAGE_SOURCE is being overriden from DOCKERTAG (${DOCKERTAG}) to (${MICROSCANNER_IMAGE_SOURCE})."
+    echo "MICROSCANNER_IMAGE_SOURCE is being overriden from DOCKERTAG:DOCKER_LATEST_TAG (${DOCKERTAG}:${DOCKER_LATEST_TAG}) to (${MICROSCANNER_IMAGE_SOURCE})."
     _microscanner_image_source="${MICROSCANNER_IMAGE_SOURCE}"
   fi
 
