@@ -14,7 +14,7 @@ while getopts ":f:o:" opt; do
   esac
 done
 
-if [ -z "$OUTPUT_FILE" ];                   then echo "OUTPUT_FILE not specificed, must use -o"; exit 1; fi
+if [ -z "$OUTPUT_FILE" ];                   then echo "OUTPUT_FILE not specified, must use -o"; exit 1; fi
 
 . k8s-read-config -f "$CONFIG_FILE"
 . docker-resolve
@@ -30,6 +30,9 @@ image_save() {
 
 }
 
-echo "Exporting ${DOCKERTAG}:latest to ${OUTPUT_FILE}"
-image_save "${DOCKERTAG}:latest" "${OUTPUT_FILE}"
+# support overriding "latest"
+DOCKER_LATEST_TAG=${DOCKER_LATEST_TAG:-latest}
+
+echo "Exporting ${DOCKERTAG}:${DOCKER_LATEST_TAG} to ${OUTPUT_FILE}"
+image_save "${DOCKERTAG}:${DOCKER_LATEST_TAG}" "${OUTPUT_FILE}"
 echo "Finished export of ${OUTPUT_FILE}"
