@@ -14,7 +14,7 @@ while getopts ":f:o:" opt; do
   esac
 done
 
-if [ -z "$OUTPUT_FILE" ];                   then echo "OUTPUT_FILE not specificed, must use -o"; exit 1; fi
+if [ -z "$OUTPUT_FILE" ];                   then echo "OUTPUT_FILE not specified, must use -o"; exit 1; fi
 
 . k8s-read-config -f "$CONFIG_FILE"
 . docker-resolve

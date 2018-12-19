@@ -10,6 +10,9 @@ if [ -z "$DOCKERFILE" ]; then echo DOCKERFILE must be set; exit 1; fi
 PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
 CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
 
+# support overriding "latest"
+DOCKER_LATEST_TAG=${DOCKER_LATEST_TAG:-latest}
+
 if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
   echo "Using --cache-from to improve performance"
 
@@ -46,7 +49,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
     DOCKER_TARGET="--target=${DOCKER_TARGET}"
   fi
   # shellcheck disable=2086
-  docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" \
+  docker build --rm=false -t "${DOCKERTAG}:${DOCKER_LATEST_TAG}" -f "${BASEDIR}/${DOCKERFILE}" \
     ${CACHE_FROM_TARGETS} \
     ${DOCKER_TARGET} \
     ${ROK8S_DOCKER_BUILD_EXTRAARGS} \
@@ -57,7 +60,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
 else
   echo "--cache-from not available with this version of Docker"
   # shellcheck disable=2086
-  docker build --rm=false -t "${DOCKERTAG}" -f "${BASEDIR}/${DOCKERFILE}" ${ROK8S_DOCKER_BUILD_EXTRAARGS} "${BASEDIR}"
+  docker build --rm=false -t "${DOCKERTAG}:${DOCKER_LATEST_TAG}" -f "${BASEDIR}/${DOCKERFILE}" ${ROK8S_DOCKER_BUILD_EXTRAARGS} "${BASEDIR}"
 fi
 # shellcheck disable=2181
 if [ $? -ne 0 ]
@@ -70,9 +73,6 @@ if [ "$ROK8S_ENABLE_CHANGE_DETECTION" ]; then
   #Check to see if the digest for this image has changed.  If it has not, then indicate that
   printf "\\nRunning change detection...\\n"
   oldDigest=$(docker inspect "${EXTERNAL_REGISTRY_BASE_DOMAIN}"/"${REPOSITORY_NAME}":"$CI_BRANCH" | jq -r .[].Id)
-
-  # support overriding "latest"
-  DOCKER_LATEST_TAG=${DOCKER_LATEST_TAG:-latest}
 
   newDigest=$(docker inspect "${EXTERNAL_REGISTRY_BASE_DOMAIN}"/"${REPOSITORY_NAME}":"${DOCKER_LATEST_TAG}" | jq -r .[].Id)
 
