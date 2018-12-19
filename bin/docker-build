@@ -83,3 +83,6 @@ if [ "$ROK8S_ENABLE_CHANGE_DETECTION" ]; then
   fi
   printf "Result of change detection: %s\\n" "$(cat $changeFile)"
 fi
+
+# Fire the image scanner if enabled - see the `docker-microscanner` script for details
+docker-microscanner

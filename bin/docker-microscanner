@@ -57,4 +57,6 @@ if [[ "${ENABLE_MICROSCANNER}" == "true" ]]; then
   _run_microscanner "${_microscanner_image_source}"
 
   echo "Microscanner passed on image (${_microscanner_image_source})! Continuing with pipeline."
+else
+  echo "Skipping Security Scan with microscanner. This is a beta feature that can be enabled by setting ENABLE_MICROSCANNER=\"true\""
 fi
