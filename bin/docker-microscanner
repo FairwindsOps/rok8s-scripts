@@ -45,10 +45,10 @@ if [[ "${ENABLE_MICROSCANNER}" == "true" ]]; then
   # Assure we've got our token before proceeding.
   if [ -z "$MICROSCANNER_TOKEN" ]; then echo "MICROSCANNER_TOKEN is a required value"; exit 1; fi
   if [ -z "$MICROSCANNER_IMAGE_SOURCE" ]; then
-    echo "MICROSCANNER_IMAGE_SOURCE is not defined, defaulting to DOCKERTAG (${DOCKERTAG})."
+    echo "MICROSCANNER_IMAGE_SOURCE is not defined, defaulting to DOCKERTAG:DOCKER_LATEST_TAG (${DOCKERTAG}:${DOCKER_LATEST_TAG})."
     _microscanner_image_source="${DOCKERTAG}:${DOCKER_LATEST_TAG}"
   else
-    echo "MICROSCANNER_IMAGE_SOURCE is being overriden from DOCKERTAG (${DOCKERTAG}) to (${MICROSCANNER_IMAGE_SOURCE})."
+    echo "MICROSCANNER_IMAGE_SOURCE is being overriden from DOCKERTAG:DOCKER_LATEST_TAG (${DOCKERTAG}:${DOCKER_LATEST_TAG}) to (${MICROSCANNER_IMAGE_SOURCE})."
     _microscanner_image_source="${MICROSCANNER_IMAGE_SOURCE}"
   fi
 
