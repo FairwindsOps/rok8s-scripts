@@ -1,0 +1,61 @@
+#!/bin/bash
+
+# docker-microscanner **BETA RELEASE**
+# This script helps you run your recently built docker images through the Aqua Microscanner.
+# **NOTE** that this script can only be used _AFTER_ `docker-build` has run, and the image needs to be accessible still.
+# This scanner will, be default, fail when detecting any high severity CVEs.
+#
+# Relevant Environment Variables
+# - ENABLE_MICROSCANNER="true" (all other values are false)
+# - MICROSCANNER_TOKEN="tokenHere" (see https://github.com/aquasecurity/microscanner#registering-for-a-token for a token)
+# - MICROSCANNER_ARGS="--some-args" (see https://github.com/aquasecurity/microscanner for arguments)
+# - MICROSCANNER_IMAGE_SOURCE="${DOCKERTAG}" (Defaults to DOCKERTAG, but you can override in case you don't have a local build but want to scan something in a repository. Can be helpful if your docker build don't persist through build steps.)
+#
+# Common issue - if your container does not have ca-certificates installed you can pass `MICORSCANNER_ARGS="--no-verify"`
+#                to avoid checking certs for the scan. The error you may see is an x509 cert error:
+#                - `x509: failed to load system roots and no roots provided`
+
+. k8s-read-config "$@"
+
+if [ -z "$DOCKERTAG" ];  then echo DOCKERTAG must be set; exit 1; fi
+
+function _run_microscanner() {
+  # Set args
+  local source_image="$1"
+
+  echo "Starting Microscanner from image (${source_image})."
+
+  # Quick outline of how this works:
+  # We start a heredoc and we plan to pipe the output of `cat <heredoc>`
+  # to `docker build`, which will render the docker build from stdin.
+  # TODO: Make this more efficient by using multi-stage build binary downloads
+  #       from an existing image with the microscanner binary.
+  cat <<EOF | docker build --no-cache --build-arg token="${MICROSCANNER_TOKEN}" --build-arg args="${MICROSCANNER_ARGS}" -
+FROM $source_image
+ADD https://get.aquasec.com/microscanner /
+RUN chmod +x /microscanner
+ARG token
+ARG args=""
+RUN /microscanner \${args} \${token}
+EOF
+}
+
+if [[ "${ENABLE_MICROSCANNER}" == "true" ]]; then
+  echo "ENABLE_MICROSCANNER is true. Scanning image with microscanner. The image will only fail if any HIGH severity issues are detected. For more information on microscanner, see https://github.com/aquasecurity/microscanner."
+  # Assure we've got our token before proceeding.
+  if [ -z "$MICROSCANNER_TOKEN" ]; then echo "MICROSCANNER_TOKEN is a required value"; exit 1; fi
+  if [ -z "$MICROSCANNER_IMAGE_SOURCE" ]; then
+    echo "MICROSCANNER_IMAGE_SOURCE is not defined, defaulting to DOCKERTAG (${DOCKERTAG})."
+    _microscanner_image_source="${DOCKERTAG}"
+  else
+    echo "MICROSCANNER_IMAGE_SOURCE is being overriden from DOCKERTAG (${DOCKERTAG}) to (${MICROSCANNER_IMAGE_SOURCE})."
+    _microscanner_image_source="${MICROSCANNER_IMAGE_SOURCE}"
+  fi
+
+  # Scan image
+  _run_microscanner "${_microscanner_image_source}"
+
+  echo "Microscanner passed on image (${_microscanner_image_source})! Continuing with pipeline."
+else
+  echo "Skipping Security Scan with microscanner. This is a beta feature that can be enabled by setting ENABLE_MICROSCANNER=\"true\""
+fi
