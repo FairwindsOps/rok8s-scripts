@@ -4,6 +4,11 @@ set -eo pipefail
 
 . k8s-read-config > /dev/null
 
+# Set a CI_REF from branch or tag
+CI_REF="${CI_TAG}"
+CI_REF="${CI_REF:-$CI_BRANCH}"
+CI_REF=$(echo "${CI_REF}" | tr / _)
+
 format_multiple_values_files() {
   values_files="$1"
   formatted_files=""
@@ -30,7 +35,7 @@ do
 
   echo "# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
   echo "# > ${CHART_PATH}: ${CHART_VALUES}"
-  helm template "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" --namespace="${NAMESPACE}"
+  helm template "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" --namespace="${NAMESPACE}" --set image.tag="${CI_SHA1}" --set rok8sCIRef="${CI_REF}"
   echo "# < ${CHART_PATH}: ${CHART_VALUES}"
   echo "# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
   echo ""
