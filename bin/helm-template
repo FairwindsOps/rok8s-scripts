@@ -38,8 +38,8 @@ do
       -f "${CHART_VALUES}" \
       --namespace="${NAMESPACE}" \
       --set image.tag="${CI_SHA1}" \
-      --set rok8sCIRef="${CI_REF}" > ${ROK8S_TMP}/helm.out
-  cat ${ROK8S_TMP}/helm.out
+      --set rok8sCIRef="${CI_REF}" > "${ROK8S_TMP}/helm.out"
+  cat "${ROK8S_TMP}/helm.out"
   echo ""
 
 done
