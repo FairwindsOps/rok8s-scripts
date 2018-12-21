@@ -2,7 +2,12 @@
 
 set -eo pipefail
 
-. k8s-read-config > /dev/null
+. k8s-read-config
+
+# Set a CI_REF from branch or tag
+CI_REF="${CI_TAG}"
+CI_REF="${CI_REF:-$CI_BRANCH}"
+CI_REF=$(echo "${CI_REF}" | tr / _)
 
 format_multiple_values_files() {
   values_files="$1"
@@ -13,6 +18,9 @@ format_multiple_values_files() {
   done
   echo "${formatted_files%?}" )
 }
+
+HELM_HOME=${HELM_HOME}
+helm init --client-only
 
 for index in "${!HELM_CHARTS[@]}"
 do
@@ -28,11 +36,13 @@ do
     CHART_VALUES="./deploy/${CHART_VALUES}.values.yml"
   fi
 
-  echo "# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-  echo "# > ${CHART_PATH}: ${CHART_VALUES}"
-  helm template "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" --namespace="${NAMESPACE}"
-  echo "# < ${CHART_PATH}: ${CHART_VALUES}"
-  echo "# <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  helm dep up "./deploy/${CHART_PATH}"
+  helm template "./deploy/${CHART_PATH}" \
+      -f "${CHART_VALUES}" \
+      --namespace="${NAMESPACE}" \
+      --set image.tag="${CI_SHA1}" \
+      --set rok8sCIRef="${CI_REF}" > "${ROK8S_TMP}/helm.out"
+  cat "${ROK8S_TMP}/helm.out"
   echo ""
 
 done
