@@ -1,0 +1,65 @@
+#!/bin/bash
+
+set -eo pipefail
+
+. k8s-read-config
+
+# Set a CI_REF from branch or tag
+CI_REF="${CI_TAG}"
+CI_REF="${CI_REF:-$CI_BRANCH}"
+CI_REF=$(echo "${CI_REF}" | tr / _)
+
+format_multiple_values_files() {
+  values_files="$1"
+  formatted_files=""
+  echo "${values_files}" | sed -n 1'p' | tr ',' '\n' | ( while read -r file_name; do
+    file="./deploy/${file_name}.values.yml,"
+    formatted_files="${formatted_files}${file}"
+  done
+  echo "${formatted_files%?}" )
+}
+
+HELM_HOME=${HELM_HOME}
+helm init --client-only
+
+for index in "${!HELM_CHARTS[@]}"
+do
+
+  CHART_PATH=${HELM_CHARTS[$index]}
+  CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-${HELM_CHARTS[$index]}}
+  CHART_VALUES=${HELM_VALUES[$index]}
+
+  # if there is more than one values files listed
+  # then pass all values file to helm upgrade command
+  if [[ "${CHART_VALUES}" = *","* ]]; then
+    CHART_VALUES=$(format_multiple_values_files "${CHART_VALUES}")
+  else
+    CHART_VALUES="./deploy/${CHART_VALUES}.values.yml"
+  fi
+
+  helm dep up "./deploy/${CHART_PATH}"
+  helm template "./deploy/${CHART_PATH}" \
+      -f "${CHART_VALUES}" \
+      --namespace="${NAMESPACE}" \
+      --set image.tag="${CI_SHA1}" \
+      --set rok8sCIRef="${CI_REF}" > "${ROK8S_TMP}/helm.out"
+  cat "${ROK8S_TMP}/helm.out"
+  echo ""
+
+  helm package "./deploy/${CHART_PATH}"
+
+done
+
+# Send the manifests to the bucket
+if [ -z "${DEPLOY_BUCKET_ENDPOINT}" ]; then
+  DEPLOY_BUCKET_ENDPOINT="https://s3.dualstack.us-east-1.amazonaws.com"
+fi
+DEPLOY_BUCKET_PREFIX="s3://${DEPLOY_BUCKET}/${CHART_RELEASE_NAME}"
+
+tar -zcf deploy.tgz deploy/
+
+aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${ROK8S_TMP}/helm.out" "${DEPLOY_BUCKET_PREFIX}/manifest.yaml"
+
+for tarball in *tgz; do
+  aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${tarball}" "${DEPLOY_BUCKET_PREFIX}/${tarball}"
+done
