@@ -19,6 +19,9 @@ format_multiple_values_files() {
   echo "${formatted_files%?}" )
 }
 
+HELM_HOME=${HELM_HOME}
+helm init --client-only
+
 for index in "${!HELM_CHARTS[@]}"
 do
 
