@@ -9,6 +9,21 @@ CI_REF="${CI_TAG}"
 CI_REF="${CI_REF:-$CI_BRANCH}"
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
+generate_post_data()
+{
+  cat <<EOF
+{
+  "message": "From CircleCI Dev Deploy",
+  "newVersion": "${CHART_RELEASE_NAME}",
+  "releasePrefix": "demo-dev",
+  "namespace": "${NAMESPACE}",
+  "deployType": "canary",
+  "fileList": "${fileList}"
+}
+EOF
+}
+
+
 format_multiple_values_files() {
   values_files="$1"
   formatted_files=""
@@ -48,18 +63,28 @@ do
 
   helm package "./deploy/${CHART_PATH}"
 
-done
+  # Send the manifests to the bucket
+  if [ -z "${DEPLOY_BUCKET_ENDPOINT}" ]; then
+    DEPLOY_BUCKET_ENDPOINT="https://s3.dualstack.us-east-1.amazonaws.com"
+  fi
+  DEPLOY_BUCKET_PREFIX="s3://${DEPLOY_BUCKET}/${CHART_RELEASE_NAME}"
 
-# Send the manifests to the bucket
-if [ -z "${DEPLOY_BUCKET_ENDPOINT}" ]; then
-  DEPLOY_BUCKET_ENDPOINT="https://s3.dualstack.us-east-1.amazonaws.com"
-fi
-DEPLOY_BUCKET_PREFIX="s3://${DEPLOY_BUCKET}/${CHART_RELEASE_NAME}"
+  tar -zcf deploy.tgz deploy/
 
-tar -zcf deploy.tgz deploy/
+  aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${ROK8S_TMP}/helm.out" "${DEPLOY_BUCKET_PREFIX}/manifest.yaml"
 
-aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${ROK8S_TMP}/helm.out" "${DEPLOY_BUCKET_PREFIX}/manifest.yaml"
+  fileList=()
+  i=0
+  for tarball in *tgz; do
+    aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${tarball}" "${DEPLOY_BUCKET_PREFIX}/${tarball}"
+    fileList[$i]="${tarball}"
+    ((++i))
+  done
 
-for tarball in *tgz; do
-  aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${tarball}" "${DEPLOY_BUCKET_PREFIX}/${tarball}"
+  generate_post_data
+  curl --user "${DEPLOY_USER}:${DEPLOY_PASS}" \
+      -d "$(generate_post_data)" \
+      -H "Content-Type: application/json" \
+      -X POST \
+      "${ROK8S_LAUNCHER_HOOK_URL}"
 done
