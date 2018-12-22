@@ -14,7 +14,7 @@ generate_post_data()
   cat <<EOF
 {
   "message": "From CircleCI Dev Deploy",
-  "newVersion": "${CHART_RELEASE_NAME}",
+  "newVersion": "${CI_SHA1:(-8)}",
   "releasePrefix": "demo-dev",
   "namespace": "${NAMESPACE}",
   "deployType": "canary",
@@ -72,13 +72,11 @@ do
   tar -zcf deploy.tgz deploy/
 
   aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${ROK8S_TMP}/helm.out" "${DEPLOY_BUCKET_PREFIX}/manifest.yaml"
+  fileList="manifest.yaml"
 
-  fileList=()
-  i=0
   for tarball in *tgz; do
     aws --endpoint-url "${DEPLOY_BUCKET_ENDPOINT}" s3 cp "${tarball}" "${DEPLOY_BUCKET_PREFIX}/${tarball}"
-    fileList[$i]="${tarball}"
-    ((++i))
+    fileList="${fileList} $tarball"
   done
 
   generate_post_data
