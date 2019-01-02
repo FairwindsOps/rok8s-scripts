@@ -56,4 +56,4 @@ An important note here is that `$CI_REF` defaults to `$CI_BRANCH`, enabling cach
 ## Change Detection
 In some cases it will be beneficial to have an indicator of when a container that was built using the `docker-build` command actually created a new layer, as opposed to it just using cached layers.  There is a feature called `ROK8S_ENABLE_CHANGE_DETECTION` that can help with this.
 
-When set to `true`, `ROK8S_ENABLE_CHANGE_DETECTION` will compare the sha256 of the newly built container with the sha256 of the cached container for that branch.  It will output a file called `.changesDetected`.  This file will container `true` if there were changes, or `false` if the container ID is identical to the cache.
+When set to `true`, `ROK8S_ENABLE_CHANGE_DETECTION` will compare the sha256 of the newly built container with the sha256 of the cached container for that branch.  It will output a file called `.changesDetected`.  This file will contain `true` if there were changes, or `false` if the container ID is identical to the cache.
