@@ -11,29 +11,32 @@ CI_REF="${CI_TAG}"
 CI_REF="${CI_REF:-$CI_BRANCH}"
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
-if [[ ! $(kubectl get namespace $NAMESPACE) ]]; then
-  echo "Creating ${NAMESPACE} namespace"
-  # shellcheck disable=SC2086
-  kubectl create namespace $NAMESPACE;
+if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
+  if [[ ! $(kubectl get namespace "$NAMESPACE") ]]; then
+    rok8s_echo "Creating ${NAMESPACE} namespace"
+    # shellcheck disable=SC2086
+    kubectl create namespace $NAMESPACE;
+  fi
+
+  # Set tiller_namespace if it isn't already set.
+  # Allows us to use helm even if it's not installed
+  # in kube-system.
+  if [ -z "$TILLER_NAMESPACE" ]; then
+    TILLER_NAMESPACE="$(kubectl get deploy --all-namespaces -l app=helm,name=tiller | tail -n 1 | cut -d ' ' -f 1 | tr -d ' ')"
+
+    # just in case variable didn't get set, give it a default
+    TILLER_NAMESPACE=${TILLER_NAMESPACE:-kube-system}
+    rok8s_echo "Set tiller namespace to $TILLER_NAMESPACE"
+  fi
+
+  # If using k8s-deploy in combination with helm-deploy
+  #  while transitioning to helm, set this to avoid deploying
+  #  secrets twice
+  if [[ -z "${ROK8S_HELM_TRANSITIONING}" ]]; then
+    . k8s-deploy-secrets
+  fi
 fi
 
-# Set tiller_namespace if it isn't already set.
-# Allows us to use helm even if it's not installed
-# in kube-system.
-if [ -z "$TILLER_NAMESPACE" ]; then
-  TILLER_NAMESPACE="$(kubectl get deploy --all-namespaces -l app=helm,name=tiller | tail -n 1 | cut -d ' ' -f 1 | tr -d ' ')"
-
-  # just in case variable didn't get set, give it a default
-  TILLER_NAMESPACE=${TILLER_NAMESPACE:-kube-system}
-  echo "Set tiller namespace to $TILLER_NAMESPACE"
-fi
-
-# If using k8s-deploy in combination with helm-deploy
-#  while transitioning to helm, set this to avoid deploying
-#  secrets twice
-if [[ -z "${ROK8S_HELM_TRANSITIONING}" ]]; then
-  . k8s-deploy-secrets
-fi
 
 HELM_DEFAULT_TIMEOUT=300
 HELM_HOME=${HELM_HOME}
@@ -52,7 +55,7 @@ format_multiple_values_files() {
 helm_upgrade() {
   # shellcheck disable=SC2086
   helm upgrade --install "${CHART_RELEASE_NAME}" \
-    ${CHART_PATH} -f "${CHART_VALUES}" \
+    "${CHART_PATH}" -f "${CHART_VALUES}" \
     --set image.tag="${CI_SHA1}" \
     --set rok8sCIRef="${CI_REF}" \
     --set sanitizedBranch="${SANITIZED_BRANCH}" \
@@ -66,21 +69,21 @@ helm_upgrade() {
 
 for index in "${!HELM_REPO_NAMES[@]}"
 do
-  echo "Adding Helm Repo: ${HELM_REPO_NAMES[index]}"
-  helm repo add ${HELM_REPO_NAMES[index]} ${HELM_REPO_URLS[index]}
+  rok8s_echo "Adding Helm Repo: ${HELM_REPO_NAMES[index]}"
+  helm repo add "${HELM_REPO_NAMES[index]}" "${HELM_REPO_URLS[index]}"
 done
 
-echo "Deploying Helm Charts"
+rok8s_echo "Deploying Helm Charts"
 for index in "${!HELM_CHARTS[@]}"
 do
 
   CHART_PATH_CONFIG=${HELM_CHARTS[$index]}
-  CHART_PATH_FIRST_SECTION=$(echo ${CHART_PATH_CONFIG} | cut -d/ -f1)
+  CHART_PATH_FIRST_SECTION=$(echo "${CHART_PATH_CONFIG}" | cut -d/ -f1)
 
-  if [[ " ${HELM_REPO_NAMES[@]} " =~ " ${CHART_PATH_FIRST_SECTION} " ]]; then
-    CHART_PATH=${CHART_PATH_CONFIG}
+  if [[ " ${HELM_REPO_NAMES[*]} " == *" ${CHART_PATH_FIRST_SECTION} "* ]]; then
+    CHART_PATH="${CHART_PATH_CONFIG}"
   else
-    CHART_PATH="./deploy/${CHART_PATH}"
+    CHART_PATH="./deploy/${CHART_PATH_CONFIG}"
   fi
 
   CHART_RELEASE_NAME=${HELM_RELEASE_NAMES[$index]:-${HELM_CHARTS[$index]}}
@@ -94,27 +97,36 @@ do
     CHART_VALUES="./deploy/${CHART_VALUES}.values.yml"
   fi
 
-  echo "Applying ${CHART_PATH} with ${CHART_VALUES}"
-  helm dep up ${CHART_PATH}
+  rok8s_echo "Applying ${CHART_PATH} with ${CHART_VALUES}"
+  helm dep up "${CHART_PATH}"
 
-  set +e
-  helm_upgrade
-  helm_ret=$?
-  set -e
+  if [ "${HELM_TEMPLATE_ONLY}" == "true" ]; then
+    helm template "${CHART_PATH}" \
+      -f "${CHART_VALUES}" \
+      --namespace="${NAMESPACE}" \
+      --set image.tag="${CI_SHA1}" \
+      --set rok8sCIRef="${CI_REF}"
 
-  if [ $helm_ret -gt 0 ] && grep -q "already exists" "${ROK8S_TMP}/helm.out"; then
-    echo "Detected that there are existing resources."
-    if [ -n "${ROK8S_HELM_ADOPT_EXISTING}" ]; then
-      echo "Attempting to force adoption of existing resources."
-      latest_revision=$(helm get "${CHART_RELEASE_NAME}" | grep REVISION | awk '{print $2}')
-      kubectl -n kube-system label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
-      helm_upgrade
-    else
-      echo "Not attempting adoption. Set ROK8S_HELM_ADOPT_EXISTING=1 to try adopting existing resources."
+  else
+    set +e
+    helm_upgrade
+    helm_ret=$?
+    set -e
+
+    if [ $helm_ret -gt 0 ] && grep -q "already exists" "${ROK8S_TMP}/helm.out"; then
+      rok8s_echo "Detected that there are existing resources."
+      if [ -n "${ROK8S_HELM_ADOPT_EXISTING}" ]; then
+        rok8s_echo "Attempting to force adoption of existing resources."
+        latest_revision=$(helm get "${CHART_RELEASE_NAME}" | grep REVISION | awk '{print $2}')
+        kubectl -n kube-system label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
+        helm_upgrade
+      else
+        rok8s_echo "Not attempting adoption. Set ROK8S_HELM_ADOPT_EXISTING=1 to try adopting existing resources."
+        exit $helm_ret
+      fi
+    elif [ $helm_ret -gt 0 ]; then
       exit $helm_ret
     fi
-  elif [ $helm_ret -gt 0 ]; then
-    exit $helm_ret
   fi
 done
 echo "Done deploying Helm Charts"
