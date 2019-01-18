@@ -67,6 +67,16 @@ helm_upgrade() {
       2>&1 | tee "${ROK8S_TMP}/helm.out"
 }
 
+helm_template() {
+  helm template "${CHART_PATH}" \
+    -f "${CHART_VALUES}" \
+    --namespace="${NAMESPACE}" \
+    --set image.tag="${CI_SHA1}" \
+    --set rok8sCIRef="${CI_REF}" \
+    --set sanitizedBranch="${SANITIZED_BRANCH}"
+}
+
+
 for index in "${!HELM_REPO_NAMES[@]}"
 do
   rok8s_echo "Adding Helm Repo: ${HELM_REPO_NAMES[index]}"
@@ -101,11 +111,7 @@ do
   helm dep up "${CHART_PATH}"
 
   if [ "${HELM_TEMPLATE_ONLY}" == "true" ]; then
-    helm template "${CHART_PATH}" \
-      -f "${CHART_VALUES}" \
-      --namespace="${NAMESPACE}" \
-      --set image.tag="${CI_SHA1}" \
-      --set rok8sCIRef="${CI_REF}"
+    helm_template
 
   else
     set +e
