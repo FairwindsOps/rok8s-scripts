@@ -1,0 +1,103 @@
+---
+# Source: example/templates/configmap.yaml
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example
+data:
+  example-data: example-value
+  example-data2: example-value2
+
+
+---
+# Source: example/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: example
+  labels:
+    app: example
+    chart: example-0.1.0
+    release: release-name
+    heritage: Tiller
+    dns: route53
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+      name: http
+  selector:
+    app: example
+    release: release-name
+
+---
+# Source: example/templates/deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: example
+  labels:
+    app: example
+    chart: example-0.1.0
+    release: release-name
+    heritage: Tiller
+spec:
+  template:
+    metadata:
+      labels:
+        app: example
+        release: release-name
+    spec:
+      containers:
+        - name: example
+          image: "nginx:test"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 3
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 1
+            httpGet:
+              path: /
+              port: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+
+          env:
+          - name: EXAMPLE1
+            value: VAlUE_1
+          - name: EXAMPLE2
+            value: VALUE_2
+
+
+---
+# Source: example/templates/horizontal_pod_autoscaler.yaml
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: example
+spec:
+  minReplicas: 1
+  maxReplicas: 10
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: example
+  targetCPUUtilizationPercentage: 10

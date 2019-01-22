@@ -35,12 +35,11 @@ if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   if [[ -z "${ROK8S_HELM_TRANSITIONING}" ]]; then
     . k8s-deploy-secrets
   fi
+
+  HELM_DEFAULT_TIMEOUT=300
+  HELM_HOME=${HELM_HOME}
+  helm init --client-only
 fi
-
-
-HELM_DEFAULT_TIMEOUT=300
-HELM_HOME=${HELM_HOME}
-helm init --client-only
 
 format_multiple_values_files() {
   values_files="$1"
@@ -108,12 +107,13 @@ do
   fi
 
   rok8s_echo "Applying ${CHART_PATH} with ${CHART_VALUES}"
-  helm dep up "${CHART_PATH}"
 
   if [ "${HELM_TEMPLATE_ONLY}" == "true" ]; then
     helm_template
 
   else
+    helm dep up "${CHART_PATH}"
+
     set +e
     helm_upgrade
     helm_ret=$?
@@ -133,7 +133,8 @@ do
     elif [ $helm_ret -gt 0 ]; then
       exit $helm_ret
     fi
+
+    echo "Done deploying Helm Charts"
+    echo ""
   fi
 done
-echo "Done deploying Helm Charts"
-echo ""
