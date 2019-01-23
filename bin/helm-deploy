@@ -90,6 +90,7 @@ do
   CHART_PATH_FIRST_SECTION=$(echo "${CHART_PATH_CONFIG}" | cut -d/ -f1)
 
   if [[ " ${HELM_REPO_NAMES[*]} " == *" ${CHART_PATH_FIRST_SECTION} "* ]]; then
+    USING_REMOTE_CHART="true"
     CHART_PATH="${CHART_PATH_CONFIG}"
   else
     CHART_PATH="./deploy/${CHART_PATH_CONFIG}"
@@ -112,7 +113,9 @@ do
     helm_template
 
   else
-    helm dep up "${CHART_PATH}"
+    if [ "${USING_REMOTE_CHART}" != "true" ]; then
+      helm dep up "${CHART_PATH}"
+    fi
 
     set +e
     helm_upgrade
