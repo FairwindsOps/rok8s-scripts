@@ -1,7 +1,5 @@
 {
-  "name": "rok8s-scripts",
-  "version": "7.22.2",
-  "description": "Bash scripts for deploying and managing applications in Kubernetes",
+  "author": "ReactiveOps <ops+rok8s-scripts@reactiveops.com>",
   "bin": {
     "decrypt-kubecfg": "./bin/decrypt-kubecfg",
     "docker-build": "./bin/docker-build",
@@ -32,15 +30,17 @@
     "prepare-awscli": "./bin/prepare-awscli",
     "prepare-gcloud": "./bin/prepare-gcloud",
     "prepare-kubectl": "./bin/prepare-kubectl",
+    "rollback-deployment": "./bin/rollback-deployment",
     "run-blocking-job": "./bin/run-blocking-job",
     "timeout.sh": "./bin/timeout.sh",
-    "verify-deployment": "./bin/verify-deployment",
-    "rollback-deployment": "./bin/rollback-deployment"
+    "verify-deployment": "./bin/verify-deployment"
   },
-  "author": "ReactiveOps <ops+rok8s-scripts@reactiveops.com>",
+  "description": "Bash scripts for deploying and managing applications in Kubernetes",
   "license": "MIT",
+  "name": "rok8s-scripts",
   "repository": {
     "type": "git",
     "url": "https://github.com/reactiveops/rok8s-scripts.git"
-  }
+  },
+  "version": "7.23.0"
 }
