@@ -14,16 +14,6 @@ references:
         export LD_LIBRARY_PATH=/tmp # hack to work around a bug with a statically linked lib https://github.com/koalaman/shellcheck/issues/1053
         shellcheck --version
 
-  npm_install: &npm_install
-    run:
-      name: Test npm install
-      command: npm install -g git://github.com/reactiveops/rok8s-scripts.git#${CIRCLE_SHA1}
-
-  pip_install: &pip_install
-    run:
-      name: Test pip install
-      command: pip install .
-
   run_shellcheck: &run_shellcheck
     run:
       name: Run Shellcheck
@@ -42,23 +32,11 @@ references:
     run:
       name: Run basic linting
       command: |
+        apk --update add bash
+        ln -s /root/project/bin/* /usr/local/bin/
         cd examples/production-ready
         k8s-lint -f staging.config
         k8s-lint -f production.config
-
-  check_setup_py_version: &check_setup_py_version
-    run:
-      name: Check setup.py version number against git release tag
-      command: |
-        pip install semver
-        latest_release="$(git describe --abbrev=0 --tags)"
-        latest_release="${latest_release#*v}"
-        setup_py_version="$(python setup.py --version)"
-
-        if ! python -c "import semver, sys; sys.exit(0 if semver.match('${setup_py_version}', '>=${latest_release}') else 1)"; then
-          echo "Repo setup.py version is stale: $setup_py_version Latest Git tag release: $latest_release"
-          exit 1
-        fi
 
   docker_login: &docker_login
     run:
@@ -99,14 +77,6 @@ references:
           echo "Skipping the docker push because '\$DOCKER_BASE_TAG: $DOCKER_BASE_TAG' does not start with dev- or v[0-9]+."
         fi
 
-  npm_release: &npm_release
-    run:
-      name: NPM release
-      command: |
-        echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-        echo $CIRCLE_TAG | xargs npm version --no-git-tag-version
-        npm publish
-
   github_release: &github_release
     run:
       name: GitHub release
@@ -123,25 +93,13 @@ references:
         echo "export DOCKER_MINOR_TAG=$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1\2/')" >> $BASH_ENV
 
 jobs:
-  test_npm:
+  test:
     docker:
-      - image: node:8.9.4
+      - image: alpine:latest
     steps:
       - checkout
       - *install_test_dependencies
-      - *npm_install
       - *run_shellcheck
-      - *run_basic_linting
-
-  test_pip:
-    docker:
-      - image: python:2.7
-    steps:
-      - checkout
-      - *install_test_dependencies
-      - *pip_install
-      - *run_shellcheck
-      - *check_setup_py_version
       - *run_basic_linting
 
   build:
@@ -171,15 +129,13 @@ jobs:
       - *docker_login
       - *docker_build
       - *docker_push
-      - *npm_release
 
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - test_npm
-      - test_pip
+      - test
       - build
   release:
     jobs:
