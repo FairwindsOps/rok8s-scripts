@@ -9,7 +9,7 @@ metadata:
 data:
   example-data: example-value
   example-data2: example-value2
-
+  
 
 ---
 # Source: example/templates/service.yaml
@@ -78,13 +78,13 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-
+            
           env:
           - name: EXAMPLE1
             value: VAlUE_1
           - name: EXAMPLE2
             value: VALUE_2
-
+                      
 
 ---
 # Source: example/templates/horizontal_pod_autoscaler.yaml
@@ -101,3 +101,6 @@ spec:
     kind: Deployment
     name: example
   targetCPUUtilizationPercentage: 10
+  
+
+
