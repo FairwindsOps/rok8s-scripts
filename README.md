@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/reactiveops/rok8s-scripts.svg?style=svg)](https://circleci.com/gh/reactiveops/rok8s-scripts)
+
 # rok8s-scripts
 
 This is a set of opinionated scripts for managing application development and deployment lifecycle using Kubernetes. These simplify secure secrets management, environment specific config, Docker build caching, and much more.
