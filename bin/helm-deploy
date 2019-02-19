@@ -50,6 +50,7 @@ format_multiple_values_files() {
 }
 
 helm_upgrade() {
+  # shellcheck disable=SC2086
   helm upgrade --install "${CHART_RELEASE_NAME}" \
     "./deploy/${CHART_PATH}" -f "${CHART_VALUES}" \
     --set image.tag="${CI_SHA1}" \
@@ -58,7 +59,7 @@ helm_upgrade() {
     --tiller-namespace="${TILLER_NAMESPACE}" \
     --wait \
     --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}" \
-    "${ROK8S_HELM_DEPLOY_EXTRAARGS}" \
+    ${ROK8S_HELM_DEPLOY_EXTRAARGS} \
       2>&1 | tee "${ROK8S_TMP}/helm.out"
 }
 
