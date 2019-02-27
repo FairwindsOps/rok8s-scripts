@@ -15,9 +15,6 @@ if ! gcloud config configurations describe "rok8s-${GCP_PROJECT}" 2>/dev/null; t
   gcloud config configurations create "rok8s-${GCP_PROJECT}"
 fi
 
-ROK8S_TMP="${ROK8S_TMP:-${HOME}}"
-mkdir -p "${ROK8S_TMP}"
-
 DECODE="--decode"
 if base64 --help 2>&1 | grep -q BusyBox; then
     DECODE="-d"

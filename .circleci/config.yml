@@ -1,65 +1,6 @@
 version: 2
 
 references:
-  install_test_dependencies: &install_test_dependencies
-    run:
-      name: Install dependencies
-      command: |
-        scversion="v0.5.0"
-        wget "https://storage.googleapis.com/shellcheck/shellcheck-$scversion.linux.x86_64.tar.xz"
-        tar --xz -xvf "shellcheck-$scversion.linux.x86_64.tar.xz"
-        mv shellcheck-$scversion/shellcheck /usr/bin/shellcheck
-        chmod +x /usr/bin/shellcheck
-        touch /tmp/libc.so.6
-        export LD_LIBRARY_PATH=/tmp # hack to work around a bug with a statically linked lib https://github.com/koalaman/shellcheck/issues/1053
-        shellcheck --version
-
-  npm_install: &npm_install
-    run:
-      name: Test npm install
-      command: npm install -g git://github.com/reactiveops/rok8s-scripts.git#${CIRCLE_SHA1}
-
-  pip_install: &pip_install
-    run:
-      name: Test pip install
-      command: pip install .
-
-  run_shellcheck: &run_shellcheck
-    run:
-      name: Run Shellcheck
-      command: |
-        cd bin
-        export LD_LIBRARY_PATH=/tmp # hack to work around a bug with a statically linked lib https://github.com/koalaman/shellcheck/issues/1053
-        shellcheck -x docker-* \
-          install-rok8s-requirements \
-          k8s-apply \
-          verify-deployment \
-          k8s-lint \
-          prepare-* \
-          helm-*
-
-  run_basic_linting: &run_basic_linting
-    run:
-      name: Run basic linting
-      command: |
-        cd examples/production-ready
-        k8s-lint -f staging.config
-        k8s-lint -f production.config
-
-  check_setup_py_version: &check_setup_py_version
-    run:
-      name: Check setup.py version number against git release tag
-      command: |
-        pip install semver
-        latest_release="$(git describe --abbrev=0 --tags)"
-        latest_release="${latest_release#*v}"
-        setup_py_version="$(python setup.py --version)"
-
-        if ! python -c "import semver, sys; sys.exit(0 if semver.match('${setup_py_version}', '>=${latest_release}') else 1)"; then
-          echo "Repo setup.py version is stale: $setup_py_version Latest Git tag release: $latest_release"
-          exit 1
-        fi
-
   docker_login: &docker_login
     run:
       name: Docker login
@@ -123,26 +64,13 @@ references:
         echo "export DOCKER_MINOR_TAG=$(echo ${DOCKER_BASE_TAG} | sed -r 's/^(v[0-9]+)(\.[0-9]+)(\.[0-9]+)$/\1\2/')" >> $BASH_ENV
 
 jobs:
-  test_npm:
+  test:
     docker:
-      - image: node:8.9.4
+      - image: circleci/python:2.7-stretch-node
     steps:
       - checkout
-      - *install_test_dependencies
-      - *npm_install
-      - *run_shellcheck
-      - *run_basic_linting
-
-  test_pip:
-    docker:
-      - image: python:2.7
-    steps:
-      - checkout
-      - *install_test_dependencies
-      - *pip_install
-      - *run_shellcheck
-      - *check_setup_py_version
-      - *run_basic_linting
+      - run: sudo test/setup.sh
+      - run: test/run.sh
 
   build:
     docker:
@@ -178,8 +106,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - test_npm
-      - test_pip
+      - test
       - build
   release:
     jobs:

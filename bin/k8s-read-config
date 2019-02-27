@@ -1,15 +1,23 @@
 #!/bin/bash
 
+LOG_LEVEL="${LOG_LEVEL:-info}"
+
+rok8s_echo() {
+  if [ "${LOG_LEVEL}" != "none" ]; then
+    echo "$1"
+  fi
+}
+
 if [ "${ROK8S_DEBUG}" == "true" ]; then
   set -x
 fi
 
 if [ -n "${CONFIG_READ+1}" ]
 then
-  echo "Config already read"
+  rok8s_echo "Config already read"
   return 0
 fi
-echo "Reading config"
+rok8s_echo "Reading config"
 CONFIG_READ=1
 
 while getopts ":f:" opt; do
@@ -18,7 +26,7 @@ while getopts ":f:" opt; do
       CONFIG_FILE=$OPTARG
       ;;
     \?)
-      echo "Invalid option: -$OPTARG" >&2
+      rok8s_echo "Invalid option: -$OPTARG" >&2
       exit 1
       ;;
   esac
@@ -28,23 +36,26 @@ BASEDIR=$(pwd)
 DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
 BLOCKING_JOB_TIMEOUT=${BLOCKING_JOB_TIMEOUT:-300}
 ROK8S_ROLLBACK_DEPLOYMENTS=${ROK8S_ROLLBACK_DEPLOYMENTS:-no}
+SANITIZED_BRANCH=$(echo "${CI_BRANCH}" | sed 's/[^a-zA-Z0-9]/-/g')
+ROK8S_TMP="${ROK8S_TEMP:-$(mktemp -d)}"
+
 
 CONFIG=${CONFIG_FILE:-deploy/k8s-scripts.config}
 if test -f $BASEDIR/$CONFIG ; then
-  echo "Loading configuration from ${BASEDIR}/$CONFIG"
+  rok8s_echo "Loading configuration from ${BASEDIR}/$CONFIG"
   . $BASEDIR/$CONFIG
 else
-  echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
+  rok8s_echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
   exit 1
 fi
 
-echo "[dockerfile]: $DOCKERFILE"
-echo "[dockertag]: $DOCKERTAG"
+rok8s_echo "[dockerfile]: $DOCKERFILE"
+rok8s_echo "[dockertag]: $DOCKERTAG"
 
-echo "[external_registry_base_domain]: $EXTERNAL_REGISTRY_BASE_DOMAIN"
+rok8s_echo "[external_registry_base_domain]: $EXTERNAL_REGISTRY_BASE_DOMAIN"
 
 NAMESPACE=${NAMESPACE:=default}
-echo "[namespace]: $NAMESPACE"
+rok8s_echo "[namespace]: $NAMESPACE"
 
 function expand_files() {
   local INPUT_NAME="${1}"
@@ -66,10 +77,10 @@ function expand_files() {
     if [[ -f "${filename}" ]]; then
       eval "$OUTPUT_NAME+=("${filename}")"
     elif [[ -z "${ROK8S_ENABLE_OPTIONAL_CONFIGS}" ]]; then
-      echo "ERROR: Missing ${filename}"
+      rok8s_echo "ERROR: Missing ${filename}"
       exit 1
     else
-      echo "INFO: Skipping optional ${filename}"
+      rok8s_echo "INFO: Skipping optional ${filename}"
     fi
   done
 
@@ -134,6 +145,6 @@ DAEMONSET_FILES=()
 expand_files "DAEMONSETS" "DAEMONSET_FILES" "daemonset.yml"
 
 CLUSTER_NAME=${CLUSTER_NAME}
-echo "[cluster_name]: $CLUSTER_NAME"
-echo ""
+rok8s_echo "[cluster_name]: $CLUSTER_NAME"
+rok8s_echo ""
 
