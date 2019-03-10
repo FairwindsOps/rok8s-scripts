@@ -72,7 +72,8 @@ helm_template() {
     --namespace="${NAMESPACE}" \
     --set image.tag="${CI_SHA1}" \
     --set rok8sCIRef="${CI_REF}" \
-    --set sanitizedBranch="${SANITIZED_BRANCH}"
+    --set sanitizedBranch="${SANITIZED_BRANCH}" \
+    ${ROK8S_HELM_DEPLOY_EXTRAARGS}
 }
 
 
