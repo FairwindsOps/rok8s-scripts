@@ -1,8 +1,5 @@
 # Releasing New Versions of rok8s-scripts
 
-## Before Merging the Pull Request!
-Please be sure to update `./setup.py` and `./package.json` to reflect the new version you wish to release. CODEOWNERS should be able to answer what the next version to release should be.
-
 ## Creating the Tag
 
 Create an annotated tag on the commit you would like to release
