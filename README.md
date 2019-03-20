@@ -10,7 +10,7 @@ Each new release of rok8s-scripts comes with a new set of CI images for simple w
 
 We currently include a variety of CI Images, including Alpine and Debian Stretch as our recommended starting points. In certain cases you may want to use our images that include Node.js or Golang.
 
-The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v7-stretch`. A full list of the latest image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
+The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v8-stretch`. A full list of the latest image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
 
 ## Examples
 
@@ -25,11 +25,31 @@ Most notably, the CI example includes sample configuration for the following pla
 
 On their own, these examples may not make a lot of sense. There's a lot more documentation below that should cover everything included in these examples and more.
 
+## Versioning v8.0.0 and beyond
+
+Rok8s-scripts contains a number of dependencies that have various ways of versioning themselves. Most notably, Helm tends to break backward compatibility with every minor release. We have decided that post v8 of rok8s-scripts, we will update our versions according to the version change of the underlying tool. For example, if Helm changes from `2.13.0` to `2.14.0`, we will change the version of rok8s scripts by one minor version. This will be clearly mentioned in the release notes. This means that a minor version of rok8s-scripts could introduce breaking changes to the CI/CD pipelines that are using it.
+
+Please note that we will still commit to any patch version releases being backward-compatible. We will never release a patch version that upgrades an underlying tool beyond a patch version, and we will not release any patch versions of rok8s-scripts that introduce a breaking change.
+
+Here is a set of guidelines to follow when deciding what version of ci-images (and thus rok8s-scripts) to use:
+
+#### You are very risk-averse
+
+You want rok8s-scripts to be stable, and just keep working until you decide to upgrade.
+
+In this scenario, you should pin to a minor version of rok8s-scripts such as `v8.0-alpine`.
+
+#### You like to live dangerously
+
+You are okay with your pipeline breaking occasionally and having to upgrade things as they break.
+
+In this case, go ahead and pin to a major version such as `v8-alpine`
+
 ## Further Reading
 
 - [Building and Pushing Docker Images](/docs/docker.md)
-- [Deploying to Kubernetes with Helm](/docs/helm.md)
-- [Deploying to Kubernetes without Helm](/docs/without_helm.md)
+- [Deploying to Kubernetes with Helm](/docs/Helm.md)
+- [Deploying to Kubernetes without Helm](/docs/without_Helm.md)
 - [Managing Kubernetes Secrets Securely](/docs/secrets.md)
 
 ### Cloud Specific Documentation

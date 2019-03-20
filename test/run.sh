@@ -16,28 +16,6 @@ else
 fi
 
 echo "------------------------"
-echo "Running NPM Tests"
-echo "------------------------"
-
-if test/npm.sh ; then
-  echo "✅ NPM Tests Passed"
-else
-  echo "⛔️ NPM Tests Failed"
-  EXIT_CODE=1
-fi
-
-echo "------------------------"
-echo "Running Pip Tests"
-echo "------------------------"
-
-if test/pip.sh ; then
-  echo "✅ Pip Tests Passed"
-else
-  echo "⛔️ Pip Tests Failed"
-  EXIT_CODE=1
-fi
-
-echo "------------------------"
 echo "Running K8S Lint Tests"
 echo "------------------------"
 

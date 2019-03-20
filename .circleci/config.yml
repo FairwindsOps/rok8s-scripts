@@ -40,14 +40,6 @@ references:
           echo "Skipping the docker push because '\$DOCKER_BASE_TAG: $DOCKER_BASE_TAG' does not start with dev- or v[0-9]+."
         fi
 
-  npm_release: &npm_release
-    run:
-      name: NPM release
-      command: |
-        echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-        echo $CIRCLE_TAG | xargs npm version --no-git-tag-version
-        npm publish
-
   github_release: &github_release
     run:
       name: GitHub release
@@ -99,7 +91,6 @@ jobs:
       - *docker_login
       - *docker_build
       - *docker_push
-      - *npm_release
 
 
 workflows:
