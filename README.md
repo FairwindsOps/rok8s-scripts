@@ -48,8 +48,8 @@ In this case, go ahead and pin to a major version such as `v8-alpine`
 ## Further Reading
 
 - [Building and Pushing Docker Images](/docs/docker.md)
-- [Deploying to Kubernetes with Helm](/docs/Helm.md)
-- [Deploying to Kubernetes without Helm](/docs/without_Helm.md)
+- [Deploying to Kubernetes with Helm](/docs/helm.md)
+- [Deploying to Kubernetes without Helm](/docs/without_helm.md)
 - [Managing Kubernetes Secrets Securely](/docs/secrets.md)
 
 ### Cloud Specific Documentation
