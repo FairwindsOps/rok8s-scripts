@@ -40,7 +40,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
       --cache-from "${TARGET_IMAGE}:master" \
       "${BASEDIR}"
     CACHE_FROM_TARGETS="${CACHE_FROM_TARGETS} --cache-from ${TARGET_IMAGE}:${TARGET_TAG}"
-  done <<< "$(grep -i '^FROM.* AS ' ${DOCKERFILE} | awk '{print $4}')"
+  done <<< "$(grep -i '^FROM.* AS ' ${BASEDIR}/${DOCKERFILE} | awk '{print $4}')"
 
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" || true
   docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" || true
