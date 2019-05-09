@@ -1,0 +1,25 @@
+description: >
+  Use this example to build and push a docker
+  image using rok8s-scripts.  This assumes that you
+  have a working rok8s-scripts configuration already
+  in place.
+
+usage:
+  version: 2.1
+
+  orbs:
+    rok8s-scripts: reactiveops/rok8s-scripts@v9.0.0
+
+  workflows:
+    build_and_push:
+      jobs:
+        - rok8s/docker_build_and_push:
+            config_file: deploy/build.config
+            docker-login: true
+            username: "orgname+circleci"
+            registry: "quay.io"
+            password-variable: quay_token
+            context: org-global
+            filters:
+              branches:
+                only: master

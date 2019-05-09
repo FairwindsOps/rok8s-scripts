@@ -36,6 +36,9 @@ always necessary to create a new issue in GitHub. In these cases, a branch with 
 * Submit a pull request.
 * Mention the issue in your PR description. I.E. `Fixes #42`.  This will ensure that your issue gets tagged with the PR.
 
+## Orb development
+
+There is a Makefile that can assist in validating and testing the orb locally.  See the commands there for more info.
 
 Attribution
 ===========

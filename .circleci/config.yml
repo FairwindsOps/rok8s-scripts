@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  orb-tools: circleci/orb-tools@8.27.2
 
 references:
   docker_login: &docker_login
@@ -100,16 +103,60 @@ jobs:
       - *docker_build
       - *docker_push
 
-
 workflows:
-  version: 2
   build_and_test:
     jobs:
       - test
       - build
+
   release:
     jobs:
       - release:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+  "Orb Test and Publish":
+    jobs:
+      - orb-tools/lint:
+          name: "lint-orb-files"
+          lint-dir: orb
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - orb-tools/pack:
+          name: "pack-orb"
+          source-dir: orb
+          requires:
+            - "lint-orb-files"
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - orb-tools/publish:
+          name: "publish-dev-branch-orb"
+          orb-ref: reactiveops/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          publish-token-variable: CIRCLECI_DEV_API_TOKEN
+          attach-workspace: true
+          requires:
+            - "pack-orb"
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
+      - orb-tools/publish:
+          name: "publish-tagged-orb"
+          orb-ref: reactiveops/rok8s-scripts@${CIRCLE_TAG}
+          publish-token-variable: CIRCLECI_DEV_API_TOKEN
+          attach-workspace: true
+          requires:
+            - "pack-orb"
           filters:
             branches:
               ignore: /.*/

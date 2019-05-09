@@ -17,7 +17,7 @@ we run some of the scripts provided by rok8s-scripts. In particular, we use:
 * `prepare-kubectl` to set up for pushing the latest image to our Kubernetes cluster
 * `k8s-deploy-and-verify` to push our image to Kubernetes and make sure the deployment succeeded
 
-We also use the rok8s-scripts CI image, `quay.io/reactiveops/ci-images:v8-stretch`,
+We also use the rok8s-scripts CI image, `quay.io/reactiveops/ci-images:v9-stretch`,
 to ensure rok8s-scripts and its dependencies are all available during the build and deploy jobs.
 
 ## Try it out
