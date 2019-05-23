@@ -69,7 +69,7 @@ function expand_files() {
     return
   fi
 
-  eval echo "[${INPUT_NAME}]: \${${INPUT_NAME}[@]}"
+  rok8s_echo "[${INPUT_NAME}]: \${${INPUT_NAME}[@]}"
 
   for i in ${INPUTS}
   do
@@ -84,7 +84,7 @@ function expand_files() {
     fi
   done
 
-  eval echo "[${OUTPUT_NAME}]: \${${OUTPUT_NAME}[@]}"
+  rok8s_echo "[${OUTPUT_NAME}]: \${${OUTPUT_NAME}[@]}"
 }
 
 CONFIGMAP_FILES=()
