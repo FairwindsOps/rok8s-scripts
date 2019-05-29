@@ -4,6 +4,8 @@
 
 This is a set of opinionated scripts for managing application development and deployment lifecycle using Kubernetes. These simplify secure secrets management, environment specific config, Docker build caching, and much more.
 
+**Want to learn more?** ReactiveOps holds [office hours on Zoom](https://zoom.us/j/951540265) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@reactiveops.com`
+
 ## CI Images
 
 Each new release of rok8s-scripts comes with a new set of CI images for simple workflows. These CI images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows should ensure that you don't need to spend any build time installing extra dependencies.
