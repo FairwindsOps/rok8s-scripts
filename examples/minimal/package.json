@@ -1,5 +1,5 @@
 {
-  "name": "example",
+  "name": "rok8s-minimal-example",
   "version": "0.0.0",
   "description": "Example app deployment with rok8s-scripts",
   "repository": {
@@ -8,8 +8,11 @@
   },
   "author": "ReactiveOps",
   "license": "Apache-2.0",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
-     "rok8s-scripts": "*"
+     "express": "^4.16.1"
   }
 }
 
