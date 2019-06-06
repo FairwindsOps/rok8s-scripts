@@ -38,13 +38,21 @@ rok8s-scripts is a great way to deploy your chart to staging and production
 
 ## Examples
 
-rok8s-scripts is designed to work well in a wide variety of environments. That includes Bitbucket Pipelines, CircleCI, GitLab CI, and more. There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](/examples) in this repository.
+rok8s-scripts is designed to work well with a wide variety of use cases and environments.
+There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](/examples) in this repository.
 
 ### CI Platforms
 - [Bitbucket Pipelines](/examples/ci/bitbucket-pipelines.yml)
 - [CircleCI](/examples/ci/.circleci/config.yml)
 - [GitLab CI](/examples/ci/.gitlab-ci.yml)
 - [Jenkins](/examples/ci/Jenkinsfile)
+
+### Miscellaneous examples
+- [External secrets manager](/examples/external-secrets-manager)
+- [SOPS secrets](/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts
+- [Using Helm](/examples/helm) - We recommend using Helm to manage your deployments
+- [Optional components](/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production
+- [Production ready](/examples/production-ready) - Includes a number of recommended production features
 
 ## CI Images
 
