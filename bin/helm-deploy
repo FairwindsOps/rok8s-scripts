@@ -77,12 +77,23 @@ helm_upgrade() {
 }
 
 helm_template() {
-  helm template "${CHART_PATH}" \
+  temp_dir="${ROK8S_TMP}/remote_repo"
+  if [ -n "${HELM_REPO_URLS}" ]; then
+    helm fetch --untar --untardir "${temp_dir}" "${CHART_PATH}"
+    path_to_use=$(echo "$CHART_PATH" | sed -e 's/.*\///')
+    path_to_use="$temp_dir/$path_to_use"
+  else
+    path_to_use=${CHART_PATH}
+  fi
+  helm template "${path_to_use}" \
     -f "${CHART_VALUES}" \
     --namespace="${NAMESPACE}" \
     --set image.tag="${CI_SHA1}" \
     --set rok8sCIRef="${CI_REF}" \
     --set sanitizedBranch="${SANITIZED_BRANCH}"
+  if [ -n "${HELM_REPO_URLS}" ]; then
+    rm -rf "${temp_dir}"
+  fi
 }
 
 
@@ -95,7 +106,6 @@ done
 rok8s_echo "Deploying Helm Charts"
 for index in "${!HELM_CHARTS[@]}"
 do
-
   CHART_PATH_CONFIG=${HELM_CHARTS[$index]}
   CHART_PATH_FIRST_SECTION=$(echo "${CHART_PATH_CONFIG}" | cut -d/ -f1)
 
