@@ -4,9 +4,9 @@ In order to connect to your Kubernetes cluster, you'll need to set the environme
 variable `KUBECONFIG_DATA`. This variable should contain a valid base64 encoded
 [kubeconfig](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)
 
-## Quickstart
+## Using an Existing Kubeconfig
 > Note: Using your local kubeconfig is NOT recommended. It is much more secure
-> to create a service account, as shown below
+> to use cloud provider credentials or create a service account, as shown below
 
 The easiest way to authenticate is to pass a valid kubeconfig to the `base64` command.
 
@@ -17,9 +17,17 @@ cat ~/.kube/config | base64 -w 0
 The output of this command should be set as the environment variable `KUBECONFIG_DATA`
 in the settings for your CI platform.
 
+## Using Cloud Providers
+If you're using EKS or GKE, the preferred method of authentication is to create a deployment
+account on AWS or GCP. Using the credentials for that account, rok8s-scripts can use the
+`aws-cli` and `gcloud` tools to authenticate with your cluster.
+
+See the documentation for [AWS](aws.md) or [GCP](gcp.md) for more information.
+
 ## Using a Service Account
 [Service accounts](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/)
-are the preferred method for granting automated access to the Kubernetes API. You can use
+are the best method for granting automated access to the Kubernetes API if you're not using
+a managed Kubernetes service like EKS or GKE. You can use
 these instructions to generate a kubeconfig for a service account.
 
 ### Creating a Service Account
