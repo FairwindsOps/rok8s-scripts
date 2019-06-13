@@ -44,14 +44,7 @@ HELM_VALUES=('development/app')
 You'll see that some of these configurations reference _similar_, but not exact, matches to the files above. Note `deploy/development/app.values.yml` translates to `HELM_VALUES=('development/app')`. The `deploy/development/app-env.secret.sops.yml` file translates to `SOPS_SECRETS=('development/app-env')`. **Note that if the files are not named with the expected extensions then rok8s-scripts will not work**.
 
 ## Credentials
-In order to deploy to Kubernetes, you'll need to base64 encode your kubeconfig
-and set it as an environment variable.
-* Run:
-```
-cat ~/.kube/config | base64 -w 0 > kube-config-encoded.txt
-```
-* Create a new environment variable `KUBECONFIG_DATA`
-* Paste the contents of `kube-config-encoded.txt` as the environment variable value
+See [Kubernetes auth](kubernetes_auth.md) to learn how to grant your CI pipeline access to your Kubernetes cluster
 
 ## Helm Values Files
 Helm uses values files to fill in chart templates. In this example, our values file is reference in rok8s-scripts config as `HELM_VALUES=('development/app')`, which maps to reading the `deploy/development/app.values.yml` file. A simple values file might look something like this:

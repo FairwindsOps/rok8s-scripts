@@ -55,8 +55,13 @@ on Quay. We'll pass credentials for this account to CircleCI so that it can
 * Edit `./deploy/minimal-production.deployment.yml` with your quay username and repository
 
 ### Setting up Kubernetes
-In order to deploy to Kubernetes, you'll need to base64 encode your kubeconfig
-and set it as an environment variable in CircleCI.
+> Note: Using your personal kubeconfig is NOT recommended. It is much more secure
+> to create a service account. See the docs on [Kubernetes auth](/docs/kubernetes_auth.md)
+> for more details
+In order to deploy to Kubernetes, you'll need to base64 encode a valid kubeconfig
+and set it as an environment variable in CircleCI. We recommend
+[creating a service account](/docs/kubernetes_auth.md) for this, but for simplicity
+the example below uses the kubeconfig stored in your home directory.
 * Run:
 ```
 cat ~/.kube/config | base64 -w 0 > kube-config-encoded.txt
