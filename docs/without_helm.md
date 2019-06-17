@@ -46,6 +46,9 @@ k8s-deploy-and-verify -f deploy/development.config
 
 More indepth examples are available in the [examples directory](https://github.com/reactiveops/rok8s-scripts/tree/master/examples).
 
+## Credentials
+See [Kubernetes auth](kubernetes_auth.md) to learn how to grant your CI pipeline access to your Kubernetes cluster
+
 ## Versioning
 **If a Docker image is used in the file then any cases of `:latest` will be replaced with th `CI_SHA1` if it is defined.** This allows a set image tag to be used when deploying from a CI system. When files that could use `CI_SHA1` are deployed, a new file will be created with that value as part of the filename.
 

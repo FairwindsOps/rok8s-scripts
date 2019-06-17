@@ -2,10 +2,19 @@
 It's quite straightforward to push Docker images to Google Container Registry and deploy to GKE clusters with rok8s-scripts.
 
 ## Google Cloud Credentials
-To connect to Google Cloud from a CI workflow, a GCP service account is recommended. This can be created from the Google Cloud Console. Credentials for this service account can be downloaded in JSON form. To load those into a rok8s-scripts CI workflow, they'll need to be base64 encoded. This can be accomplished with a command like this:
+To connect to Google Cloud from a CI workflow, a [GCP service account](https://console.cloud.google.com/iam-admin/serviceaccounts)
+is recommended. To create a service account:
+* [Go to the service accounts page](https://console.cloud.google.com/iam-admin/serviceaccounts)
+* Choose a name for the account (e.g. `rok8s-scripts`) and hit "Create"
+* For "Service account permissions", choose `Kubernetes Engine Developer` and hit "continue"
+* Click "Create Key" and choose "JSON"
+
+
+To load the JSON credentials into a rok8s-scripts CI workflow, they'll need to be base64 encoded.
+This can be accomplished with a command like this:
 
 ```bash
-cat downloaded_google_credentials.json | base64
+cat downloaded_google_credentials.json | base64 -w 0
 ```
 
 With those credentials in base64 format, you'll need to add them as a protected environment variable in your CI tool of choice. This environment variable needs to be named `GCLOUD_KEY`, and contain a base64 encoded copy of GCP Service Account credentials. It's important that this value is not checked into your codebase, as the credentials could potentially provide a great deal of access into your systems.

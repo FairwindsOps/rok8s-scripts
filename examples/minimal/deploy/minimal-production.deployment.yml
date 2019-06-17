@@ -1,21 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: minimal-example
+  name: rok8s-example
 
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        app: minimal-example
+        app: rok8s-example
     spec:
       containers:
-        - name: minimal-example
+        - name: rok8s-example
           # `latest` will be replaced with $CI_SHA1 by k8s-deploy
-          image: quay.io/example-org/example-app:latest
-          command:
-            - 'sleep 86400'
+          image: quay.io/example-org/rok8s-scripts-test:latest
           ports:
-          - containerPort: 5000
+          - containerPort: 8080
             name: http
