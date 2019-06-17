@@ -2,16 +2,16 @@
 
 [version-image]: https://img.shields.io/static/v1.svg?label=Version&message=8.0.2&color=239922
 [version-link]: https://github.com/reactiveops/rok8s-scripts
-[circle-image]: https://circleci.com/gh/reactiveops/rok8s-scripts.svg?style=svg
-[circle-link]: https://circleci.com/gh/reactiveops/rok8s-scripts
+[circleci-image]: https://circleci.com/gh/reactiveops/rok8s-scripts.svg?style=svg
+[circleci-link]: https://circleci.com/gh/reactiveops/rok8s-scripts
 
 # rok8s-scripts
 
-rok8s-scripts is a framework for managing application development and deployment lifecycles using Kubernetes.
+rok8s-scripts is a framework for building GitOps workflows with Docker and Kubernetes.
 By adding rok8s-scripts to your CI/CD pipeline, you can build, push, and deploy your applications using the
 set of best practices we've built at ReactiveOps.
 
-In addition to building and deploying docker images, rok8s-scripts is a great way to handle
+In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
 **Want to learn more?** ReactiveOps holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@reactiveops.com`
@@ -38,7 +38,8 @@ rok8s-scripts is a great way to deploy your chart to staging and production
 
 ## Examples
 
-rok8s-scripts is designed to work well in a wide variety of environments. That includes Bitbucket Pipelines, CircleCI, GitLab CI, and more. There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](https://github.com/reactiveops/rok8s-scripts/tree/master/examples) in this repository.
+rok8s-scripts is designed to work well with a wide variety of use cases and environments.
+There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](https://github.com/reactiveops/rok8s-scripts/tree/master/examples) in this repository.
 
 ### CI Platforms
 - [Bitbucket Pipelines](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/bitbucket-pipelines.yml)
@@ -46,13 +47,18 @@ rok8s-scripts is designed to work well in a wide variety of environments. That i
 - [GitLab CI](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/.gitlab-ci.yml)
 - [Jenkins](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/Jenkinsfile)
 
+### Miscellaneous examples
+- [External secrets manager](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/external-secrets-manager)
+- [SOPS secrets](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts
+- [Using Helm](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments
+- [Optional components](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production
+- [Production ready](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features
+
 ## CI Images
 
-Each new release of rok8s-scripts comes with a set of CI images for simple workflows. These images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows ensures that you don't need to spend any build time installing extra dependencies.
+Each new release of rok8s-scripts generates CI images for common workflows. These images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows ensures that you don't need to spend any build time installing extra dependencies.
 
-We currently include a variety of CI Images, including Alpine and Debian Stretch as our recommended starting points. In certain cases you may want to use our images that include Node.js or Golang.
-
-The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v8-stretch`. A full list of the latest image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
+We currently include CI Images based on Alpine and Debian Stretch as our recommended starting points. The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v8-stretch`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
 
 ## Versioning v8.0.0 and beyond
 
