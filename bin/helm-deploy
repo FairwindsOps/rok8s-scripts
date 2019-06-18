@@ -11,6 +11,20 @@ CI_REF="${CI_TAG}"
 CI_REF="${CI_REF:-$CI_BRANCH}"
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
+detect_tiller_namespace() {
+    # If there is more than one tiller, then auto-detection will not work.
+    mapfile -t TILLERS < <(kubectl get deploy --all-namespaces -l app=helm,name=tiller | awk 'NR > 1 {print $1}')
+    if [ ${#TILLERS[@]} -gt 1 ]; then
+      echo "Multiple TILLERS were found.  This is not supported by auto-detection.  Please specify TILLER_NAMESPACE in your config."
+      echo "Found a tiller in these namespaces:"
+      printf '%s\n' "${TILLERS[@]}"
+      exit 1
+    else
+      TILLER_NAMESPACE="${TILLERS[0]:-kube-system}"
+      rok8s_echo "Set tiller namespace to $TILLER_NAMESPACE"
+    fi
+}
+
 if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   if [[ ! $(kubectl get namespace "$NAMESPACE") ]]; then
     rok8s_echo "Creating ${NAMESPACE} namespace"
@@ -36,20 +50,6 @@ if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   HELM_HOME=${HELM_HOME}
   helm init --client-only
 fi
-
-detect_tiller_namespace() {
-    # If there is more than one tiller, then auto-detection will not work.
-    mapfile -t TILLERS < <(kubectl get deploy --all-namespaces -l app=helm,name=tiller | awk 'NR > 1 {print $1}')
-    if [ ${#TILLERS[@]} -gt 1 ]; then
-      echo "Multiple TILLERS were found.  This is not supported by auto-detection.  Please specify TILLER_NAMESPACE in your config."
-      echo "Found a tiller in these namespaces:"
-      printf '%s\n' "${TILLERS[@]}"
-      exit 1
-    else
-      TILLER_NAMESPACE="${TILLERS[0]:-kube-system}"
-      rok8s_echo "Set tiller namespace to $TILLER_NAMESPACE"
-    fi
-}
 
 format_multiple_values_files() {
   values_files="$1"
