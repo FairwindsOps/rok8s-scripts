@@ -22,11 +22,7 @@ if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   # Allows us to use helm even if it's not installed
   # in kube-system.
   if [ -z "$TILLER_NAMESPACE" ]; then
-    TILLER_NAMESPACE="$(kubectl get deploy --all-namespaces -l app=helm,name=tiller | tail -n 1 | cut -d ' ' -f 1 | tr -d ' ')"
-
-    # just in case variable didn't get set, give it a default
-    TILLER_NAMESPACE=${TILLER_NAMESPACE:-kube-system}
-    rok8s_echo "Set tiller namespace to $TILLER_NAMESPACE"
+    detect_tiller_namespace
   fi
 
   # If using k8s-deploy in combination with helm-deploy
@@ -40,6 +36,20 @@ if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   HELM_HOME=${HELM_HOME}
   helm init --client-only
 fi
+
+detect_tiller_namespace() {
+    # If there is more than one tiller, then auto-detection will not work.
+    mapfile -t TILLERS < <(kubectl get deploy --all-namespaces -l app=helm,name=tiller | awk 'NR > 1 {print $1}')
+    if [ ${#TILLERS[@]} -gt 1 ]; then
+      echo "Multiple TILLERS were found.  This is not supported by auto-detection.  Please specify TILLER_NAMESPACE in your config."
+      echo "Found a tiller in these namespaces:"
+      printf '%s\n' "${TILLERS[@]}"
+      exit 1
+    else
+      TILLER_NAMESPACE="${TILLERS[0]:-kube-system}"
+      rok8s_echo "Set tiller namespace to $TILLER_NAMESPACE"
+    fi
+}
 
 format_multiple_values_files() {
   values_files="$1"
