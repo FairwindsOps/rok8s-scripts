@@ -1,7 +1,7 @@
 [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
 
-[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=8.0.2&color=239922
-[version-link]: https://github.com/reactiveops/rok8s-scripts
+[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=8.1.0&color=239922
+[version-link]: https://github.com/reactiveops/rok8s-scripts/releases
 [circleci-image]: https://circleci.com/gh/reactiveops/rok8s-scripts.svg?style=svg
 [circleci-link]: https://circleci.com/gh/reactiveops/rok8s-scripts
 
