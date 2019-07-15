@@ -140,7 +140,7 @@ workflows:
               only: /.*/
       - orb-tools/publish:
           name: "publish-dev-branch-orb"
-          orb-ref: reactiveops/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
@@ -152,7 +152,7 @@ workflows:
               ignore: /.*/
       - orb-tools/publish:
           name: "publish-tagged-orb"
-          orb-ref: reactiveops/rok8s-scripts@${CIRCLE_TAG}
+          orb-ref: fairwinds/rok8s-scripts@${CIRCLE_TAG}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
