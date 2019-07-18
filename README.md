@@ -83,7 +83,9 @@ In this case, go ahead and pin to a major version such as `v8-alpine`
 
 ### Contributing
 - [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Roadmap](ROADMAP.md)
 - [Releasing New Versions of rok8s-scripts](/docs/releasing.md)
+- [Changelog](https://github.com/FairwindsOps/rok8s-scripts/releases)
 
 ## License
 Apache License 2.0
