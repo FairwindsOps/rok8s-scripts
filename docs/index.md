@@ -14,7 +14,7 @@ set of best practices we've built at ReactiveOps.
 In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
-**Want to learn more?** ReactiveOps holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@reactiveops.com`
+**Want to learn more?** ReactiveOps holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@fairwinds.com`
 
 ### Quickstart
 To help you get started quickly, we've built a [minimal example](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/minimal)
