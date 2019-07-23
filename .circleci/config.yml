@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@8.27.2
+  orb-tools: circleci/orb-tools@8.27.3
 
 references:
   docker_login: &docker_login
@@ -122,6 +122,9 @@ workflows:
     jobs:
       - orb-tools/lint:
           name: "lint-orb-files"
+          pre-steps:
+            - run:
+                command: apk add git openssh
           lint-dir: orb
           filters:
             branches:
