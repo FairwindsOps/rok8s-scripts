@@ -155,7 +155,7 @@ workflows:
               ignore: /.*/
       - orb-tools/publish:
           name: "publish-tagged-orb"
-          orb-ref: fairwinds/rok8s-scripts@${CIRCLE_TAG}
+          orb-ref: fairwinds/rok8s-scripts@${CIRCLE_TAG:1}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
