@@ -24,7 +24,7 @@ to ensure rok8s-scripts and its dependencies are all available during the build 
 
 * Run the following to copy this directory to a new git repository:
 ```
-git clone https://github.com/reactiveops/rok8s-scripts
+git clone https://github.com/FairwindsOps/rok8s-scripts
 cp -r rok8s-scripts/examples/minimal rok8s-scripts-test
 cd rok8s-scripts-test
 git init

@@ -4,9 +4,9 @@
   "description": "Example app deployment with rok8s-scripts",
   "repository": {
     "type": "git",
-    "url": "+https://github.com/reactiveops/rok8s-scripts.git"
+    "url": "+https://github.com/FairwindsOps/rok8s-scripts.git"
   },
-  "author": "ReactiveOps",
+  "author": "Fairwinds",
   "license": "Apache-2.0",
   "dependencies": {
      "rok8s-scripts": "*"
