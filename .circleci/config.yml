@@ -103,13 +103,26 @@ jobs:
       - *docker_build
       - *docker_push
 
-workflows:
-  build_and_test:
-    jobs:
-      - test
-      - build
+  request-orb-publish:
+    docker:
+      - image: alpine:latest
+    steps:
+      - run:
+          name: "Request Orb Publish"
+          command: |
+            curl -X POST --data-urlencode "payload={\"text\": \"Please publish orb version $CIRCLECI_TAG by checking out the tag and running release-orb.sh\"}" $SLACK_URL
 
-  release:
+workflows:
+  "Docker Build and Test":
+    jobs:
+      - test:
+          name: "Run Tests"
+      - build:
+          name: "Build Docker Images"
+          requires:
+            - "Run Tests"
+
+  Release:
     jobs:
       - release:
           filters:
@@ -153,11 +166,8 @@ workflows:
               only: /.*/
             tags:
               ignore: /.*/
-      - orb-tools/publish:
-          name: "publish-tagged-orb"
-          orb-ref: fairwinds/rok8s-scripts@${CIRCLE_TAG:1}
-          publish-token-variable: CIRCLECI_DEV_API_TOKEN
-          attach-workspace: true
+      - request-orb-publish:
+          name: "Request Orb Pubslishing"
           requires:
             - "pack-orb"
           filters:
