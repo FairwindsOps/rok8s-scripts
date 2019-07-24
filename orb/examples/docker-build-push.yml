@@ -8,12 +8,12 @@ usage:
   version: 2.1
 
   orbs:
-    rok8s-scripts: fairwinds/rok8s-scripts@v9.0.0
+    rok8s-scripts: fairwinds/rok8s-scripts@9.0.6
 
   workflows:
     build_and_push:
       jobs:
-        - rok8s/docker_build_and_push:
+        - rok8s-scripts/docker_build_and_push:
             config_file: deploy/build.config
             docker-login: true
             username: "orgname+circleci"
