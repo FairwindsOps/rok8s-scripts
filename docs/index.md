@@ -1,23 +1,23 @@
 [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
 
 [version-image]: https://img.shields.io/static/v1.svg?label=Version&message=8.1.0&color=239922
-[version-link]: https://github.com/reactiveops/rok8s-scripts/releases
-[circleci-image]: https://circleci.com/gh/reactiveops/rok8s-scripts.svg?style=svg
-[circleci-link]: https://circleci.com/gh/reactiveops/rok8s-scripts
+[version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
+[circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
+[circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
 
 # rok8s-scripts
 
 rok8s-scripts is a framework for building GitOps workflows with Docker and Kubernetes.
 By adding rok8s-scripts to your CI/CD pipeline, you can build, push, and deploy your applications using the
-set of best practices we've built at ReactiveOps.
+set of best practices we've built at Fairwinds.
 
 In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
-**Want to learn more?** ReactiveOps holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@fairwinds.com`
+**Want to learn more?** Fairwinds holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@fairwinds.com`
 
 ### Quickstart
-To help you get started quickly, we've built a [minimal example](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/minimal)
+To help you get started quickly, we've built a [minimal example](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/minimal)
 that shows how to use rok8s-scripts to build Docker images and deploy to Kubernetes
 using Circle CI. This example will serve as a helpful introduction regardless of your CI platform.
 
@@ -39,20 +39,20 @@ rok8s-scripts is a great way to deploy your chart to staging and production
 ## Examples
 
 rok8s-scripts is designed to work well with a wide variety of use cases and environments.
-There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](https://github.com/reactiveops/rok8s-scripts/tree/master/examples) in this repository.
+There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples) in this repository.
 
 ### CI Platforms
-- [Bitbucket Pipelines](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/bitbucket-pipelines.yml)
-- [CircleCI](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/.circleci/config.yml)
-- [GitLab CI](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/.gitlab-ci.yml)
-- [Jenkins](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/ci/Jenkinsfile)
+- [Bitbucket Pipelines](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/bitbucket-pipelines.yml)
+- [CircleCI](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/.circleci/config.yml)
+- [GitLab CI](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/.gitlab-ci.yml)
+- [Jenkins](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/Jenkinsfile)
 
 ### Miscellaneous examples
-- [External secrets manager](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/external-secrets-manager)
-- [SOPS secrets](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts
-- [Using Helm](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments
-- [Optional components](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production
-- [Production ready](https://github.com/reactiveops/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features
+- [External secrets manager](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/external-secrets-manager)
+- [SOPS secrets](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts
+- [Using Helm](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments
+- [Optional components](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production
+- [Production ready](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features
 
 ## CI Images
 
@@ -82,7 +82,7 @@ In this case, go ahead and pin to a major version such as `v8-alpine`
 
 ## Orbs
 
-CircleCI has introduced the concept of reusable config in the form of [Orbs](https://circleci.com/orbs/).  As of rok8s-scripts v9.0.0, ReactiveOps publishes an orb called `reactiveops/rok8s-scripts` in order to provide easier configuration inside of CircleCI.
+CircleCI has introduced the concept of reusable config in the form of [Orbs](https://circleci.com/orbs/).  As of rok8s-scripts v9.0.0, Fairwinds publishes an orb called `fairwinds/rok8s-scripts` in order to provide easier configuration inside of CircleCI.
 
 ## Further Reading
 
@@ -96,8 +96,8 @@ CircleCI has introduced the concept of reusable config in the form of [Orbs](htt
 - [Google Cloud](gcp.md)
 
 ### Contributing
-- [Code of Conduct](https://github.com/reactiveops/rok8s-scripts/tree/master/CODE_OF_CONDUCT.md)
-- [Roadmap](https://github.com/reactiveops/rok8s-scripts/tree/master/ROADMAP.md)
+- [Code of Conduct](https://github.com/FairwindsOps/rok8s-scripts/tree/master/CODE_OF_CONDUCT.md)
+- [Roadmap](https://github.com/FairwindsOps/rok8s-scripts/tree/master/ROADMAP.md)
 - [Releasing New Versions of rok8s-scripts](releasing.md)
 - [Changelog](https://github.com/FairwindsOps/rok8s-scripts/releases)
 

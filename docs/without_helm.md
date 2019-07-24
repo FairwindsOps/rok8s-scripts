@@ -44,7 +44,7 @@ This full configuration could be deployed with the following rok8s-scripts comma
 k8s-deploy-and-verify -f deploy/development.config
 ```
 
-More indepth examples are available in the [examples directory](https://github.com/reactiveops/rok8s-scripts/tree/master/examples).
+More indepth examples are available in the [examples directory](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples).
 
 ## Credentials
 See [Kubernetes auth](kubernetes_auth.md) to learn how to grant your CI pipeline access to your Kubernetes cluster

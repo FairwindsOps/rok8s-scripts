@@ -53,7 +53,7 @@ kubectl create clusterrolebinding rok8s-scripts \
 ```
 
 #### Safer permissions
-> The examples below use [rbac-manager](https://github.com/reactiveops/rbac-manager)
+> The examples below use [rbac-manager](https://github.com/FairwindsOps/rbac-manager)
 > to simplify the permissions model
 
 One common pattern is to only grant `cluster-admin` permissions on namespaces that

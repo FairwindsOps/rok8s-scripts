@@ -1,20 +1,20 @@
 [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
 
 [version-image]: https://img.shields.io/static/v1.svg?label=Version&message=8.1.0&color=239922
-[version-link]: https://github.com/reactiveops/rok8s-scripts/releases
-[circleci-image]: https://circleci.com/gh/reactiveops/rok8s-scripts.svg?style=svg
-[circleci-link]: https://circleci.com/gh/reactiveops/rok8s-scripts
+[version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
+[circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
+[circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
 
 # rok8s-scripts
 
 rok8s-scripts is a framework for building GitOps workflows with Docker and Kubernetes.
 By adding rok8s-scripts to your CI/CD pipeline, you can build, push, and deploy your applications using the
-set of best practices we've built at ReactiveOps.
+set of best practices we've built at Fairwinds.
 
 In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
-**Want to learn more?** ReactiveOps holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@fairwinds.com`
+**Want to learn more?** Fairwinds holds [office hours on Zoom](https://zoom.us/j/242508205) the first Friday of every month, at 12pm Eastern. You can also reach out via email at `opensource@fairwinds.com`
 
 ### Quickstart
 To help you get started quickly, we've built a [minimal example](/examples/minimal)
@@ -82,7 +82,7 @@ In this case, go ahead and pin to a major version such as `v8-alpine`
 
 ## Orbs
 
-CircleCI has introduced the concept of reusable config in the form of [Orbs](https://circleci.com/orbs/).  As of rok8s-scripts v9.0.0, ReactiveOps publishes an orb called `reactiveops/rok8s-scripts` in order to provide easier configuration inside of CircleCI.
+CircleCI has introduced the concept of reusable config in the form of [Orbs](https://circleci.com/orbs/).  As of rok8s-scripts v9.0.0, Fairwinds publishes an orb called `fairwinds/rok8s-scripts` in order to provide easier configuration inside of CircleCI.
 
 ## Further Reading
 

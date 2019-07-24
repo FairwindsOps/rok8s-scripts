@@ -19,7 +19,7 @@ if test -f $CONFIG ; then
 fi
 
 cat <<EOT >> $CONFIG
-# Configuration for https://github.com/reactiveops/rok8s-scripts
+# Configuration for https://github.com/FairwindsOps/rok8s-scripts
 
 # Dockerfile to build
 DOCKERFILE='Dockerfile'

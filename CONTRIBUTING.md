@@ -1,6 +1,6 @@
 # How to contribute
 
-Issues, whether bugs, tasks, or feature requests are essential for keeping rok8s-scripts (and ReactiveOps in general) great.
+Issues, whether bugs, tasks, or feature requests are essential for keeping rok8s-scripts (and Fairwinds in general) great.
 We believe it should be as easy as possible to contribute changes that
 get things working in your environment. There are a few guidelines that we
 need contributors to follow so that we can have a chance of keeping on
