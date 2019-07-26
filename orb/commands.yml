@@ -42,6 +42,5 @@ commands:
         description: The location of the rok8s-scripts config file
         default: "deploy/build.config"
     steps:
-      - setup_remote_docker
       - run: |
           docker-build -f << parameters.config >>
