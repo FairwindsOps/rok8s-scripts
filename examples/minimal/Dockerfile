@@ -2,9 +2,9 @@ FROM node:8
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package*.json .
 RUN npm install
-COPY . .
+COPY server.js .
 
 EXPOSE 8080
 CMD [ "npm", "start" ]
