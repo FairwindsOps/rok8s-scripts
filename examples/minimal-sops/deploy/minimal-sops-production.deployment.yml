@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: rok8s-example
+
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: rok8s-example
+    spec:
+      containers:
+        - name: rok8s-example
+          # Replace `quay.io/example-org/rok8s-scripts-test`
+          #   with your image repository
+          # `latest` will be replaced with $CI_SHA1 by k8s-deploy
+          image: quay.io/example-org/rok8s-scripts-test:latest
+          ports:
+          - containerPort: 8080
+            name: http
+          envFrom:
+            - secretRef:
+                name: rok8s-example
+
