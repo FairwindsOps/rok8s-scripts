@@ -34,7 +34,7 @@ git commit -m "testing rok8s scripts"
 ```
 * Create a new repository on GitHub
 * Follow the instructions on GitHub to push your code to your new repo
-* Go to circleci.com and add your repo as a new project
+* Go to circleci.com/dashboard and add your repo as a new project
 * Click "Start Building" to kick off your first build
 
 You'll see CircleCI start two jobs - one to build the image, and one to deploy it to Kubernetes.
@@ -51,9 +51,13 @@ using another image registry like AWS ECR, GCP GCR, or DockerHub.
 * In your project settings on CircleCI, go to "Environment Variables"
 * Add an environment variable named `quay_robot`, and paste the value from Quay
 * Add an environment variable named `quay_token`, and paste the value from Quay
+
+#### Configure Your Deployment 
+
 * Update the rok8s-scripts configuration and Kubernetes deployment with the image registry:
 	* Edit `./deploy/production.config` with your quay organization and repository name, by setting `EXTERNAL_REGISTRY_BASE_DOMAIN` and `REPOSITORY_NAME`
 	* Edit `./deploy/minimal-production.deployment.yml` with your quay organization and repository name, by setting `image` under `spec -> template -> spec -> containers -> *`
+* IF you did not use quay.io as your image registry, edit the `.circleci/config.yml` file at the root of your repository, and remove the `docker login ...` line from the `references -> build_image -> commands` section.
 
 ### Setting up Kubernetes
 > Note: Using your personal kubeconfig is NOT recommended. It is much more secure
