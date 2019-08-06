@@ -1,7 +1,7 @@
 # Managing Kubernetes Secrets Securely
 There are multiple ways to securely manage Kubernetes Secrets with rok8s-scripts. With support for AWS Secrets Manager, Sops encrypted secrets, and fetching secrets from external sources like AWS S3 or Google Cloud Storage, there should be at least one option that works well for you.
 
-The Rok8s-scripts [k8s-deploy-secrets helper script](./../bin/k8s-deploy-secrets) decrypts and deploys secrets to Kubernetes. You do not need to call this script directly, it is called by other `deploy` scripts.
+The Rok8s-scripts [k8s-deploy-secrets helper script](/bin/k8s-deploy-secrets) decrypts and deploys secrets to Kubernetes. You do not need to call this script directly, it is called by other `deploy` scripts.
 
 ## External Secrets Managers
 It is possible to retrieve individual key/value pairs from an external secrets manager. Supported secret stores are:
@@ -23,7 +23,7 @@ To access encrypted secrets, users or CI need access to both your Git repository
 Rok8s-scripts expects secret files to include the `.secret.sops.yml` extension. In your Rok8s-scripts configuration file, set the `SOPS_SECRETS` variable to a list of secret files, **not including the extension**. For example: `SOPS_SECRETS=('production/minimal-sops-production')`
 
 An [example of sops usage with rok8s-scripts can be
-[found here](../examples/minimal-sops-secrets).
+[found here](/examples/minimal-sops-secrets).
 
 ### Create Cloud Resources
 
@@ -58,9 +58,7 @@ gcloud auth applicaton-default login
 When encrypting data, `sops` requires credentials for the appropriate
 cloud provider (GCP or AWS). You can read more about `sops` usage on [the sops usage page](https://github.com/mozilla/sops#usage).
 
-
 Sops, by default, will open a file in memory to create and encrypt. If you want to encrypt a new file you can run the commands below. Note that if you want to override your terminals default editor (usually set to `vi`) then you can provide an `$EDITOR` environment variable. Included is an example of using sops with vscode (note not all editors are supported).
-
 
 ```bash
 ### Encrypt using an AWS KMS key
@@ -103,7 +101,7 @@ If the yaml was using a `data` section instead of a `stringData` section, you’
 echo -n 'example_secret_value' | base64
 ```
 
-After exiting your editor `sops` will re-encrypt all the data using the original KMS key you used to encrypt the original file. You can then commit that encrypted file back into your source repo.
+After exiting your editor `sops` will re-encrypt all the data using the original KMS key you used to encrypt the original file. You can then commit that encrypted file into your source repo.
 
 ```bash
 sops path/to/your/file.secret.sops.yml

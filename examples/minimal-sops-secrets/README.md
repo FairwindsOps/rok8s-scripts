@@ -19,7 +19,7 @@ we run some of the scripts provided by rok8s-scripts. In particular, we use:
 * `k8s-deploy-and-verify` to deploy our image to Kubernetes and make sure the deployment succeeded
 	* This also calls the `k8s-deploy-secrets` script to decrypt and deploy secrets
 
-We also use the rok8s-scripts CI image, `quay.io/reactiveops/ci-images:v9-stretch`,
+We also use the rok8s-scripts CI image, `quay.io/reactiveops/ci-images:v9.0-stretch`,
 to ensure rok8s-scripts and its dependencies are available during the build and deploy jobs.
 
 ## Try it out
@@ -47,7 +47,7 @@ credentials for our image repository or Kubernetes cluster.
 This deployment leverages the `k8s-deploy-secrets` script to decrypt and deploy a secret to Kubernetes. Encrypt the included secret , and commit **the encrypted secret** to this repository. The unencrypted secret is included in this repository **only for demonstration purposes**, and is not used by the rok8s-scripts deployment.
 
 * Install the [Sops](https://github.com/mozilla/sops) tool, to encrypt the secret.
-* See the [Sops section of the secrets documentation](./../../docs/secrets.md#encrypted-secrets-with-sops) for details about creating an encryption key and encrypting secrets. Use a command like one of the following to encrypt the secret in this repository. NOTE: Be sure to set the `sops_kms_flag` variable below, to the correct Sops flag and KMS ID for your cloud provider (AWS or GCP):
+* See the [Sops section of the secrets documentation](/docs/secrets.md#encrypted-secrets-with-sops) for details about creating an encryption key and encrypting secrets. Use a command like one of the following to encrypt the secret in this repository. NOTE: Be sure to set the `sops_kms_flag` variable below, to the correct Sops flag and KMS ID for your cloud provider (AWS or GCP):
 
 ```
 # Set this to an appropriate value for your AWS or GCP KMS key.
@@ -107,7 +107,7 @@ Commit and push your changes to the master branch to trigger another build.
 Everything should run successfully this time, and you should see your app
 running inside your Kubernetes cluster.
 
-You can check your app by running
+You can check your app by runningz
 ```
 kubectl port-forward --namespace rok8s-example svc/rok8s-example 3000:80
 ```

@@ -19,7 +19,7 @@ references:
         docker-pull -f deploy/production.config
         docker-build -f deploy/production.config
 
-  deploy: &deploy
+  deploy_to_kube: &deploy_to_kube
     run:
       name: Deploy to Production
       command: |
@@ -44,7 +44,7 @@ jobs:
       - setup_remote_docker
       - *set_environment_variables
       - *build_image
-      - *deploy
+      - *deploy_to_kube
 
 workflows:
   version: 2
