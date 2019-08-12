@@ -1,0 +1,30 @@
+description: Start a command runner to execute commands against the kind cluster
+parameters:
+  command_runner_image:
+    description: "The image to execute commands from against the kind cluster."
+    type: string
+    default: "quay.io/reactiveops/ci-images:v9.0-alpine"
+steps:
+  - run:
+      name: Setup Command Runner
+      command: |
+        kubeconfig="$(kind get kubeconfig-path --name="e2e")"
+        echo $kubeconfig
+        cat $kubeconfig
+        docker rm -f e2e-command-runner || true
+        docker run -itd \
+          --name "e2e-command-runner" \
+          --network container:e2e-control-plane \
+          --env KUBECONFIG=/.kube/config \
+          --env TILLER_NAMESPACE=helm-system \
+          --env CI_SHA1=$CIRCLE_SHA1 \
+          --env CI_BRANCH=$CIRCLE_BRANCH \
+          --env CI_BUILD_NUM=$CIRCLE_BUILD_NUM \
+          --env CI_TAG=$CIRCLE_TAG \
+          << parameters.command_runner_image >>
+        docker exec e2e-command-runner sh -c 'mkdir -p /.kube'
+        docker cp "$kubeconfig" e2e-command-runner:/.kube/config
+        docker inspect e2e-command-runner | jq .
+        docker exec e2e-command-runner sh -c 'ls -al /.kube'
+        docker exec e2e-command-runner sh -c "sed -i 's/https:\/\/127.0.0.1:[0-9]\+/https:\/\/127.0.0.1:6443/g' /.kube/config"
+        docker exec e2e-command-runner sh -c 'kubectl get nodes'

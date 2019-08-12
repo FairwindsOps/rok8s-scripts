@@ -1,0 +1,17 @@
+description: Log into a docker repo
+parameters:
+  registry:
+    type: string
+    description: The name of the docker registry.
+    default: "quay.io"
+  username:
+    type: string
+    description: The username to use for the registry.
+  password-variable:
+    type: string
+    description: The environment variable name containing the password.
+steps:
+  - run:
+      name: Docker Login
+      command: |
+        docker login -u="<<parameters.username>>" -p="$<<parameters.password-variable>>" <<parameters.registry>>
