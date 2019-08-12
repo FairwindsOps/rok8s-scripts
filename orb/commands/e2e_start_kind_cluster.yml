@@ -1,0 +1,19 @@
+description: Start a kind cluster
+parameters:
+  kind_version:
+    description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
+    type: string
+    default: "0.5.0"
+  kind_node_image:
+    description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
+    type: string
+    default: "kindest/node:v1.13.10@sha256:2f5f882a6d0527a2284d29042f3a6a07402e1699d792d0d5a9b9a48ef155fa2a"
+steps:
+  - run:
+      name: Start Kind Cluster
+      command: |
+        curl -LO https://github.com/kubernetes-sigs/kind/releases/download/v<< parameters.kind_version >>/kind-linux-amd64
+        chmod +x kind-linux-amd64
+        mv kind-linux-amd64 /usr/local/bin/kind
+
+        kind create cluster --name="e2e" --image << parameters.kind_node_image >> --wait=120s

@@ -1,0 +1,46 @@
+description: >
+  sets up a working e2e testing environment for Kubernetes using
+  kind and also sets up a way to access it via the e2e-command-runner
+  container. There are two entrypoints
+  for scripts here, one is a pre_script, and one is the script.
+  The pre_script runs on the CircleCI executor itself and allows
+  access to the repository that was checked out, as well as provides
+  the opportunity to copy more files over to the command runner. This
+  can be done using `docker cp <file> e2e-command-runner:<path>.
+  The regular script is copied over to the command runner container
+  and executed on the command runner, providing access to the
+  Kubernetes kind cluster via kubectl and helm commands.
+parameters:
+  kind_version:
+    description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
+    type: string
+    default: "0.5.0"
+  kind_node_image:
+    description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
+    type: string
+    default: "kindest/node:v1.13.10@sha256:2f5f882a6d0527a2284d29042f3a6a07402e1699d792d0d5a9b9a48ef155fa2a"
+  command_runner_image:
+    description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
+    type: string
+    default: "quay.io/reactiveops/ci-images:v9.0-alpine"
+  pre_script:
+    description: "Script to run on the local machine before running on command runner."
+    type: string
+  script:
+    description: "The script to run on the command runner."
+    type: string
+executor: ci-images
+steps:
+  - checkout
+  - setup_remote_docker
+  - set_env
+  - e2e_start_kind_cluster:
+      kind_node_image: << parameters.kind_node_image >>
+      kind_version: << parameters.kind_version >>
+  - e2e_start_command_runner:
+      command_runner_image: << parameters.command_runner_image >>
+  - e2e_helm_init
+  - e2e_hostpath_provisioner
+  - e2e_run_script:
+      pre_script: << parameters.pre_script >>
+      script: << parameters.script >>
