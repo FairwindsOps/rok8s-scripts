@@ -1,0 +1,30 @@
+description: >
+  This is an example of how one might run an end-to-end
+  test in Kubernetes using this Orb. There are two entrypoints
+  for scripts here, one is a pre_script, and one is the script.
+  The pre_script runs on the CircleCI executor itself and allows
+  access to the repository that was checked out, as well as provides
+  the opportunity to copy more files over to the command runner. This
+  can be done using `docker cp <file> e2e-command-runner:<path>.
+  The regular script is copied over to the command runner container
+  and executed on the command runner, providing access to the
+  Kubernetes kind cluster via kubectl and helm commands.
+
+usage:
+  version: 2.1
+
+  orbs:
+    rok8s-scripts: fairwinds/rok8s-scripts@9.0.6
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - rok8s-scripts/kubernetes_e2e_tests:
+          pre_script: e2e/pre.sh
+          script: e2e/test.sh
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              ignore: /.*/
