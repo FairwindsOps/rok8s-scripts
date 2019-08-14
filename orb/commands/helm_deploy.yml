@@ -1,0 +1,11 @@
+description: Deploys a helm chart using rok8s-scripts
+parameters:
+  config:
+    type: string
+    description: The location of the rok8s-scripts config file
+    default: "deploy/deploy.config"
+steps:
+  - run:
+      name: Helm Deploy
+      command: |
+        helm-deploy -f << parameters.config >>
