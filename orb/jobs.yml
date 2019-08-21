@@ -42,6 +42,6 @@ executors:
     parameters:
       version:
         type: string
-        default: "v9.0-stretch"
+        default: "v9.1-stretch"
     docker:
       - image: quay.io/reactiveops/ci-images:<<parameters.version>>
