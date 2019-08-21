@@ -8,7 +8,7 @@ usage:
   version: 2.1
 
   orbs:
-    rok8s-scripts: fairwinds/rok8s-scripts@9.0.6
+    rok8s-scripts: fairwinds/rok8s-scripts@9.1.0
 
   workflows:
     build_and_push:

@@ -19,7 +19,7 @@ we run some of the scripts provided by rok8s-scripts. In particular, we use:
 * `k8s-deploy-and-verify` to deploy our image to Kubernetes and make sure the deployment succeeded
 	* This also calls the `k8s-deploy-secrets` script to decrypt and deploy secrets
 
-We also use the rok8s-scripts CI image, `quay.io/reactiveops/ci-images:v9.0-stretch`,
+We also use the rok8s-scripts CI image, `quay.io/reactiveops/ci-images:v9.1-stretch`,
 to ensure rok8s-scripts and its dependencies are available during the build and deploy jobs.
 
 ## Try it out
@@ -79,7 +79,7 @@ using another image registry like AWS ECR, GCP GCR, or DockerHub.
 * Add an environment variable named `quay_robot`, and paste the value from Quay
 * Add an environment variable named `quay_token`, and paste the value from Quay
 
-#### Configure Your Deployment 
+#### Configure Your Deployment
 
 * Update the rok8s-scripts configuration and Kubernetes deployment with the image registry:
 	* Edit `./deploy/production.config` with your quay organization and repository name, by setting `EXTERNAL_REGISTRY_BASE_DOMAIN` and `REPOSITORY_NAME`
