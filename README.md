@@ -1,6 +1,6 @@
 [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
 
-[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=8.1.0&color=239922
+[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=9.3.0&color=239922
 [version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
 [circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
 [circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
@@ -72,17 +72,17 @@ Here is a set of guidelines to follow when deciding what version of ci-images (a
 
 You want rok8s-scripts to be stable, and just keep working until you decide to upgrade.
 
-In this scenario, you should pin to a minor version of rok8s-scripts such as `v8.0-alpine`.
+In this scenario, you should pin to a minor version of rok8s-scripts such as `v9.3-alpine`.
 
 #### You like to live dangerously
 
 You are okay with your pipeline breaking occasionally and having to upgrade things as they break.
 
-In this case, go ahead and pin to a major version such as `v8-alpine`
+In this case, go ahead and pin to a major version such as `v9-alpine`
 
-## Orbs
+## Orb
 
-CircleCI has introduced the concept of reusable config in the form of [Orbs](https://circleci.com/orbs/).  As of rok8s-scripts v9.0.0, Fairwinds publishes an orb called `fairwinds/rok8s-scripts` in order to provide easier configuration inside of CircleCI.
+CircleCI has introduced the concept of reusable config in the form of [Orbs](https://circleci.com/orbs/).  As of rok8s-scripts v9.0.0, Fairwinds publishes an orb called [`fairwinds/rok8s-scripts`](https://circleci.com/orbs/registry/orb/fairwinds/rok8s-scripts) in order to provide easier configuration inside of CircleCI.
 
 ## Further Reading
 

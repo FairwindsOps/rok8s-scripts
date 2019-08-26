@@ -3,7 +3,7 @@ parameters:
   command_runner_image:
     description: "The image to execute commands from against the kind cluster."
     type: string
-    default: "quay.io/reactiveops/ci-images:v9.2-alpine"
+    default: "quay.io/reactiveops/ci-images:v9.3-alpine"
 steps:
   - run:
       name: Setup Command Runner

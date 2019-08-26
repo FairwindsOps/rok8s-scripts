@@ -22,14 +22,18 @@ parameters:
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
-    default: "quay.io/reactiveops/ci-images:v9.0-alpine"
+    default: "quay.io/reactiveops/ci-images:v9.3-alpine"
   pre_script:
     description: "Script to run on the local machine before running on command runner."
     type: string
+  pre_script_steps:
+    description: "Define and inject a set of custom steps to run in the local machine before scripts are executed against the command runner."
+    type: steps
+    default: []
   script:
     description: "The script to run on the command runner."
     type: string
-executor: ci-images
+executor: default
 steps:
   - checkout
   - setup_remote_docker
@@ -41,6 +45,7 @@ steps:
       command_runner_image: << parameters.command_runner_image >>
   - e2e_helm_init
   - e2e_hostpath_provisioner
+  - steps: << parameters.pre_script_steps >>
   - e2e_run_script:
       pre_script: << parameters.pre_script >>
       script: << parameters.script >>
