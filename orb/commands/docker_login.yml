@@ -8,7 +8,7 @@ parameters:
     type: string
     description: The username to use for the registry.
   password-variable:
-    type: string
+    type: env_var_name
     description: The environment variable name containing the password.
 steps:
   - run:

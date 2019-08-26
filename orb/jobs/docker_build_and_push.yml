@@ -22,7 +22,7 @@ parameters:
     type: string
     description: The environment variable name containing the password. Only used if docker-login is true.
     default: ""
-executor: ci-images
+executor: default
 steps:
   - checkout
   - setup_remote_docker
