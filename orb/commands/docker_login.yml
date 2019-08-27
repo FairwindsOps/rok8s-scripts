@@ -7,11 +7,11 @@ parameters:
   username:
     type: string
     description: The username to use for the registry.
-  password-variable:
-    type: string
+  password:
+    type: env_var_name
     description: The environment variable name containing the password.
 steps:
   - run:
       name: Docker Login
       command: |
-        docker login -u="<<parameters.username>>" -p="$<<parameters.password-variable>>" <<parameters.registry>>
+        docker login -u="<<parameters.username>>" -p="$<<parameters.password>>" <<parameters.registry>>

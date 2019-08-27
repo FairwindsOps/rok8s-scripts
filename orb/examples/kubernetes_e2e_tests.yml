@@ -14,7 +14,7 @@ usage:
   version: 2.1
 
   orbs:
-    rok8s-scripts: fairwinds/rok8s-scripts@9.0.6
+    rok8s-scripts: fairwinds/rok8s-scripts@9.3
 
   workflows:
     version: 2

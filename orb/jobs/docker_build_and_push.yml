@@ -18,11 +18,11 @@ parameters:
     type: string
     description: The username to use for the registry. Only used if docker-login is true.
     default: ""
-  password-variable:
-    type: string
+  password:
+    type: env_var_name
     description: The environment variable name containing the password. Only used if docker-login is true.
     default: ""
-executor: ci-images
+executor: default
 steps:
   - checkout
   - setup_remote_docker
@@ -32,7 +32,7 @@ steps:
       steps:
         - docker_login:
             username: <<parameters.username>>
-            password-variable: <<parameters.password-variable>>
+            password: <<parameters.password>>
             registry: <<parameters.registry>>
   - docker_build:
       config: <<parameters.config_file>>
