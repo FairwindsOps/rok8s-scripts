@@ -1,4 +1,4 @@
-image: quay.io/reactiveops/ci-images:v9.3-stretch
+image: quay.io/reactiveops/ci-images:v9.4-stretch
 
 aliases:
   - &initialize-env |
