@@ -1,6 +1,6 @@
 [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
 
-[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=9.3.0&color=239922
+[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=9.4.0&color=239922
 [version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
 [circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
 [circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
@@ -72,7 +72,7 @@ Here is a set of guidelines to follow when deciding what version of ci-images (a
 
 You want rok8s-scripts to be stable, and just keep working until you decide to upgrade.
 
-In this scenario, you should pin to a minor version of rok8s-scripts such as `v9.3-alpine`.
+In this scenario, you should pin to a minor version of rok8s-scripts such as `v9.4-alpine`.
 
 #### You like to live dangerously
 
