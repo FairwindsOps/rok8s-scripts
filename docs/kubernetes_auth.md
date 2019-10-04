@@ -114,14 +114,14 @@ you can use the below to generate the necessary `KUBECONFIG_DATA` value.
 namespace="rok8s-scripts"
 serviceaccount="rok8s-scripts"
 
-sa_secret_name=$(kc get serviceaccount "${serviceaccount}" -o 'jsonpath={.secrets[0].name}')
+sa_secret_name=$(kubectl -n "${namespace}" get serviceaccount "${serviceaccount}" -o 'jsonpath={.secrets[0].name}')
 
 context_name="$(kubectl config current-context)"
 kubeconfig_old="${KUBECONFIG}"
 cluster_name="$(kubectl config view -o "jsonpath={.contexts[?(@.name==\"${context_name}\")].context.cluster}")"
 server_name="$(kubectl config view -o "jsonpath={.clusters[?(@.name==\"${cluster_name}\")].cluster.server}")"
-cacert="$(kc get secret "${sa_secret_name}" -o "jsonpath={.data.ca\.crt}" | base64 --decode)"
-token="$(kc get secret "${sa_secret_name}" -o "jsonpath={.data.token}" | base64 --decode)"
+cacert="$(kubectl -n "${namespace}" get secret "${sa_secret_name}" -o "jsonpath={.data.ca\.crt}" | base64 --decode)"
+token="$(kubectl -n "${namespace}" get secret "${sa_secret_name}" -o "jsonpath={.data.token}" | base64 --decode)"
 
 export KUBECONFIG="$(mktemp)"
 kubectl config set-credentials "${serviceaccount}" --token="${token}" >/dev/null
