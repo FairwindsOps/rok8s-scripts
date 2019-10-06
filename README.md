@@ -25,16 +25,16 @@ using Circle CI. This example will serve as a helpful introduction regardless of
 We've created documentation for several different use cases and workflows where rok8s-scripts can help.
 
 * [Build and push Docker images](docs/docker.md) - This is the place to start to get a sense
-for rok8s-scripts project structure and a very basic use case
+for rok8s-scripts project structure and a very basic use case.
 * [Deploy to Kubernetes](docs/without_helm.md) - Learn how to get your applications into staging
 and production.
 * [Deploy to Kubernetes with Helm](docs/helm.md) - If you've built a Helm chart for your application,
-rok8s-scripts is a great way to deploy your chart to staging and production
-* [Manage secrets](docs/secrets.md) - Learn how rok8s-scripts can simplify and secure your secret management workflows
+rok8s-scripts is a great way to deploy your chart to staging and production.
+* [Manage secrets](docs/secrets.md) - Learn how rok8s-scripts can simplify and secure your secret management workflows.
 
 ### Cloud-specific Documentation
-* [Deploy to AWS](docs/aws.md) - Learn how to authenticate and deploy using rok8s-scripts with aws-cli
-* [Deploy to GCP](docs/gcp.md) - Learn how to authenticate and deploy using rok8s-scripts with gcloud
+* [Deploy to AWS](docs/aws.md) - Learn how to authenticate and deploy using rok8s-scripts with aws-cli.
+* [Deploy to GCP](docs/gcp.md) - Learn how to authenticate and deploy using rok8s-scripts with gcloud.
 
 ## Examples
 
@@ -49,10 +49,10 @@ There are many valid ways to configure CI pipelines, but to help you get started
 
 ### Miscellaneous examples
 - [External secrets manager](/examples/external-secrets-manager)
-- [SOPS secrets](/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts
-- [Using Helm](/examples/helm) - We recommend using Helm to manage your deployments
-- [Optional components](/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production
-- [Production ready](/examples/production-ready) - Includes a number of recommended production features
+- [SOPS secrets](/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts.
+- [Using Helm](/examples/helm) - We recommend using Helm to manage your deployments.
+- [Optional components](/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production.
+- [Production ready](/examples/production-ready) - Includes a number of recommended production features.
 
 ## CI Images
 
@@ -78,7 +78,7 @@ In this scenario, you should pin to a minor version of rok8s-scripts such as `v9
 
 You are okay with your pipeline breaking occasionally and having to upgrade things as they break.
 
-In this case, go ahead and pin to a major version such as `v9-alpine`
+In this case, go ahead and pin to a major version such as `v9-alpine`.
 
 ## Orb
 
