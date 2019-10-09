@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/docs/logo.svg" alt="Rok8s Scripts" />
+  <img src="/docs/logo.svg" height="120" alt="Rok8s Scripts" />
   <br>
 
   [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
