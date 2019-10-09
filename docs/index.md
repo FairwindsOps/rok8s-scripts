@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="logo.svg" alt="Rok8s Scripts" />
+  <img src="logo.svg" height="120" alt="Rok8s Scripts" />
   <br>
 
   [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
@@ -10,8 +10,6 @@
 [version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
 [circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
 [circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
-
-# rok8s-scripts
 
 rok8s-scripts is a framework for building GitOps workflows with Docker and Kubernetes.
 By adding rok8s-scripts to your CI/CD pipeline, you can build, push, and deploy your applications using the

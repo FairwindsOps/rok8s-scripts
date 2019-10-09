@@ -11,8 +11,6 @@
 [circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
 [circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
 
-# rok8s-scripts
-
 rok8s-scripts is a framework for building GitOps workflows with Docker and Kubernetes.
 By adding rok8s-scripts to your CI/CD pipeline, you can build, push, and deploy your applications using the
 set of best practices we've built at Fairwinds.
