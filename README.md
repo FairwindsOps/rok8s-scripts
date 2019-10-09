@@ -1,4 +1,10 @@
-[![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
+<div align="center">
+  <img src="/docs/logo.svg" alt="Rok8s Scripts" />
+  <br>
+
+  [![Version][version-image]][version-link] [![CircleCI][circleci-image]][circleci-link]
+</div>
+
 
 [version-image]: https://img.shields.io/static/v1.svg?label=Version&message=9.4.0&color=239922
 [version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
