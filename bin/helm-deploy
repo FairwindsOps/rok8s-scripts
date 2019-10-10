@@ -147,7 +147,7 @@ do
       if [ -n "${ROK8S_HELM_ADOPT_EXISTING}" ]; then
         rok8s_echo "Attempting to force adoption of existing resources."
         latest_revision=$(helm get "${CHART_RELEASE_NAME}" | grep REVISION | awk '{print $2}')
-        kubectl -n kube-system label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
+        kubectl -n "${TILLER_NAMESPACE}" label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
         helm_upgrade
       else
         rok8s_echo "Not attempting adoption. Set ROK8S_HELM_ADOPT_EXISTING=1 to try adopting existing resources."
