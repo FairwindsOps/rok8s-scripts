@@ -1,0 +1,32 @@
+description: >
+  This is an example of how you can use a single
+  command from the orb to perform specific actions.
+
+  This particular example utilizes the executor and
+  the set_env command from the orb. This can make
+  utilizing existing rok8s-scripts commands that
+  have not yet been implemented in the orb.
+
+usage:
+  version: 2.1
+
+  orbs:
+    rok8s-scripts: fairwinds/rok8s-scripts@9.4
+
+  jobs:
+    deploy-secrets:
+      executor: rok8s-scripts/ci-images
+      steps:
+        - checkout
+        - rok8s-scripts/set_env
+        - run: prepare-kubectl
+        - run: k8s-deploy-secrets -f <PATH TO YOUR CONFIG>
+
+  workflows:
+    version: 2
+    build:
+      jobs:
+        - deploy-secrets:
+            filters:
+              branches:
+                only: /.*/
