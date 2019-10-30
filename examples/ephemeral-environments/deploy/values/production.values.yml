@@ -1,0 +1,4 @@
+demo:
+  refreshInterval: 500
+  title: "Production Demo"
+  metadata: "Installed with Rok8s-Scripts"
