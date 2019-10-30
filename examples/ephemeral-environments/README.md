@@ -1,8 +1,8 @@
 # Ephemeral Environments in rok8s-scripts
 
-This is an example of how rok8s-scripts could be used to deploy ephemeral environments to your Kubernetes
-cluster using helm. These ephemeral environments will be created from any feature branches that are pushed
-to the source repository based on a regex match.
+This is an example of how rok8s-scripts could be used to deploy ephemeral environments to your Kubernetes cluster using helm. These ephemeral environments will be created from any feature branches that are pushed to the source repository based on a regex match.
+
+In the example described below, branches that match the regex pattern `feature-.*` trigger CircleCI to use that branch to create a new namespace and deploy to it as configured by the [deploy/ephemeral.config](deploy/ephemeral.config) file. When your ephemeral environments require other services, you can deploy the other service with a matching branch name or use a something like a helm chart to deploy multiple services.
 
 ## Configuration
 The file [`./deploy/ephemeral.config`](./deploy/ephemeral.config) is the main entry point for rok8s-scripts.
