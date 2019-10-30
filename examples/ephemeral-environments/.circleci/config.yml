@@ -1,0 +1,63 @@
+version: 2.1
+
+orbs:
+  rok8s-scripts: fairwinds/rok8s-scripts@9.4.0
+
+jobs:
+  deploy-ephemeral:
+    executor: rok8s-scripts/ci-images
+    steps:
+      - checkout
+      - rok8s-scripts/set_env
+      - run: echo 'export NAMESPACE=$SANITIZED_BRANCH' >> ${BASH_ENV}
+      - run: prepare-kubectl
+      - run: "helm-deploy -f deploy/ephemeral.config"
+
+  deploy-staging:
+    executor: rok8s-scripts/ci-images
+    steps:
+      - checkout
+      - rok8s-scripts/set_env
+      - run: prepare-kubectl
+      - run: "helm-deploy -f deploy/staging.config"
+
+  deploy-production:
+    executor: rok8s-scripts/ci-images
+    steps:
+      - checkout
+      - rok8s-scripts/set_env
+      - run: prepare-kubectl
+      - run: "helm-deploy -f deploy/production.config"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - rok8s-scripts/docker_build_and_push:
+          config_file: deploy/build.config
+          context: org-global
+          docker-login: true
+          password-variable: TOKEN_ENV_VAR_NAME
+          registry: quay.io
+          username: BOT_USER
+          filters:
+            branches:
+              only: /.*/
+      - deploy-ephemeral:
+          requires:
+            - rok8s-scripts/docker_build_and_push
+          filters:
+            branches:
+              only: /feature-.*/
+      - deploy-staging:
+          requires:
+            - rok8s-scripts/docker_build_and_push
+          filters:
+            branches:
+              only: master
+      - deploy-production:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /v.*/

@@ -1,0 +1,26 @@
+{{- if .Values.hpa.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "basic-demo.fullname" . }}
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ include "basic-demo.fullname" . }}
+  minReplicas: {{ .Values.hpa.min }}
+  maxReplicas: {{ .Values.hpa.max }}
+{{- if .Values.hpa.customMetric.enabled }}
+  metrics:
+  - type: Pods
+    pods:
+      metricName: {{ .Values.hpa.customMetric.metric }}
+      targetAverageValue: {{ .Values.hpa.customMetric.target }}
+{{- else }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ .Values.hpa.cpuTarget }}
+{{- end }}
+{{- end }}

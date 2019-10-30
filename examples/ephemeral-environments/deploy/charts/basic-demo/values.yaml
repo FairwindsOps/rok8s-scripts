@@ -1,0 +1,59 @@
+demo:
+  refreshInterval: 500
+  title: "Demo"
+  metadata: "Installed with Rok8s-Scripts"
+
+hpa:
+  enabled: false
+  min: 3
+  max: 20
+  cpuTarget: 60
+  customMetric:
+    enabled: false
+    metric: somecustommetricname
+    target: 30
+
+pdb:
+  enabled: true
+  maxUnavailable: 1
+
+image:
+  repository: quay.io/fairwinds/rok8s-ephemeral-example
+  tag: latest
+  pullPolicy: Always
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  name: basic-demo
+  type: ClusterIP
+  port: 80
+  annotations: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  paths: []
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  limits:
+    cpu: 70m
+    memory: 131072k
+  requests:
+    cpu: 10m
+    memory: 131072k
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
