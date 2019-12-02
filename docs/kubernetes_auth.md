@@ -8,7 +8,7 @@ variable `KUBECONFIG_DATA`. This variable should contain a valid base64 encoded
 > Note: Using your local kubeconfig is NOT recommended. It is much more secure
 > to use cloud provider credentials or create a service account, as shown below
 
-The easiest way to authenticate is to pass a valid kubeconfig to the `base64` command.
+The easiest way to authenticate is to pass a valid kubeconfig to the `base64` command. (The `-w` flag is unnecessary on MacOS and should be left out.)
 
 ```
 cat ~/.kube/config | base64 -w 0
