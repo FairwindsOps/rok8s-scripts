@@ -9,4 +9,3 @@ Below is a list of work we plan to get done this quarter. Some more details can 
 * End-to-end testing (stretch goal)
 * Remove ci-images (stretch goal)
 * Deprecate old features (stretch goal)
-

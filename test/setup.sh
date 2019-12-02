@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#shellcheck disable=SC2155
 export PATH=$PATH:$(pwd)/bin
 
 echo "Installing Shellcheck"

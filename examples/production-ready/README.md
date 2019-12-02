@@ -1,7 +1,5 @@
 ## Production-Ready
 
-**Note:** this example uses CircleCI v1
-
 An example including:
 
 * Staging and Production environments
@@ -16,5 +14,3 @@ Deployment Features:
 * Volume mounting of Secrets and ConfigMap
 * Resource requests and limits
 * Liveness Probe
-
-

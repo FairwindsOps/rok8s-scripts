@@ -135,7 +135,7 @@ workflows:
   "Orb Test and Publish":
     jobs:
       - orb-tools/lint:
-          name: "lint-orb-files"
+          name: "Lint Orb Files"
           pre-steps:
             - run:
                 command: apk add git openssh
@@ -146,22 +146,22 @@ workflows:
             tags:
               only: /.*/
       - orb-tools/pack:
-          name: "pack-orb"
+          name: "Pack Orb"
           source-dir: orb
           requires:
-            - "lint-orb-files"
+            - "Lint Orb Files"
           filters:
             branches:
               only: /.*/
             tags:
               only: /.*/
       - orb-tools/publish:
-          name: "publish-dev-branch-orb"
+          name: "Publish Dev Orb"
           orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
-            - "pack-orb"
+            - "Pack Orb"
           filters:
             branches:
               only: /.*/
@@ -170,7 +170,7 @@ workflows:
       - request-orb-publish:
           name: "Request Orb Pubslishing"
           requires:
-            - "pack-orb"
+            - "Pack Orb"
           filters:
             branches:
               ignore: /.*/

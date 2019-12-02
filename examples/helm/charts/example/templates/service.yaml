@@ -7,13 +7,13 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-    {{- if .Values.labels.dns }}
+{{- if .Values.labels.dns }}
     dns: {{ .Values.labels.dns }}
-    {{- end }}
-  {{- if .Values.nodeSelector }}
+{{- end }}
+{{- if .Values.nodeSelector }}
   annotations:
   {{ toYaml .Values.annotations }}
-    {{- end }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

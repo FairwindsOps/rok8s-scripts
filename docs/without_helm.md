@@ -122,4 +122,3 @@ DAEMONSETS=()
 ## Assumptions
 * In your Deployment file, specify imagePullPolicy: IfNotPresent
 * When using HPA in your Deployment file, the value of $DEPLOYMENT must match the deployment name or rok8s-scripts will not be able to determine the current number of replicas.
-

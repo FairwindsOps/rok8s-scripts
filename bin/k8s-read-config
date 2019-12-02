@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#shellcheck disable=SC2034
 LOG_LEVEL="${LOG_LEVEL:-info}"
 
 rok8s_echo() {
@@ -36,14 +36,16 @@ BASEDIR=$(pwd)
 DEPLOY_TIMEOUT=${DEPLOY_TIMEOUT:-300}
 BLOCKING_JOB_TIMEOUT=${BLOCKING_JOB_TIMEOUT:-300}
 ROK8S_ROLLBACK_DEPLOYMENTS=${ROK8S_ROLLBACK_DEPLOYMENTS:-no}
+#shellcheck disable=SC2001
 SANITIZED_BRANCH=$(echo "${CI_BRANCH}" | sed 's/[^a-zA-Z0-9]/-/g')
 ROK8S_TMP="${ROK8S_TEMP:-$(mktemp -d)}"
 
 
 CONFIG=${CONFIG_FILE:-deploy/k8s-scripts.config}
-if test -f $BASEDIR/$CONFIG ; then
+if test -f "$BASEDIR"/"$CONFIG" ; then
   rok8s_echo "Loading configuration from ${BASEDIR}/$CONFIG"
-  . $BASEDIR/$CONFIG
+  #shellcheck disable=SC1090
+  . "$BASEDIR"/"$CONFIG"
 else
   rok8s_echo "Config file, ${BASEDIR}/$CONFIG, not found." >&2
   exit 1
@@ -75,6 +77,7 @@ function expand_files() {
   do
     filename="$BASEDIR/deploy/$i.${FILE_ENDING}"
     if [[ -f "${filename}" ]]; then
+        #shellcheck disable=SC2027,SC2086
       eval "$OUTPUT_NAME+=("${filename}")"
     elif [[ -z "${ROK8S_ENABLE_OPTIONAL_CONFIGS}" ]]; then
       rok8s_echo "ERROR: Missing ${filename}"
@@ -147,4 +150,3 @@ expand_files "DAEMONSETS" "DAEMONSET_FILES" "daemonset.yml"
 CLUSTER_NAME=${CLUSTER_NAME}
 rok8s_echo "[cluster_name]: $CLUSTER_NAME"
 rok8s_echo ""
-

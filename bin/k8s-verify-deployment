@@ -4,13 +4,14 @@
 
 echo "Verifying successful deployments"
 
+#shellcheck disable=SC2153
 for index in "${!DEPLOYMENTS[@]}"
 do
   DEPLOYMENT=${DEPLOYMENTS[$index]##*/}
   echo "Checking deployment for $DEPLOYMENT"
-  timeout.sh -t ${DEPLOY_TIMEOUT} verify-deployment $DEPLOYMENT $NAMESPACE
+  timeout.sh -t "${DEPLOY_TIMEOUT}" verify-deployment "$DEPLOYMENT" "$NAMESPACE"
   result=$?
-  
+
   if [ "$result" == "0" ] ; then
     echo "DEPLOY SUCCESFUL"
   elif [ "$result" == "143" ] ; then

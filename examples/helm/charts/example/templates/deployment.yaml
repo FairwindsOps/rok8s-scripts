@@ -8,9 +8,9 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  {{- if (and .Values.replicaCount (not .Values.hpa.enabled)) }}
+{{- if (and .Values.replicaCount (not .Values.hpa.enabled)) }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
+{{- end }}
   template:
     metadata:
       labels:
@@ -39,4 +39,4 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           env:
-{{ toYaml .Values.env | indent 10 }}            
+{{ toYaml .Values.env | indent 10 }}

@@ -4,14 +4,13 @@ orbs:
   rok8s-scripts: fairwinds/rok8s-scripts@10.0
 
 jobs:
-  deploy-ephemeral:
+  test:
     executor: rok8s-scripts/ci-images
     steps:
       - checkout
       - rok8s-scripts/set_env
-      - run: echo 'export NAMESPACE=$SANITIZED_BRANCH' >> ${BASH_ENV}
-      - run: prepare-kubectl
-      - run: "helm-deploy -f deploy/ephemeral.config"
+      - run: k8s-lint -f deploy/staging.config
+      - run: k8s-lint -f deploy/production.config
 
   deploy-staging:
     executor: rok8s-scripts/ci-images
@@ -19,7 +18,7 @@ jobs:
       - checkout
       - rok8s-scripts/set_env
       - run: prepare-kubectl
-      - run: "helm-deploy -f deploy/staging.config"
+      - run: "k8s-deploy-and-verify -f production.config"
 
   deploy-production:
     executor: rok8s-scripts/ci-images
@@ -27,14 +26,20 @@ jobs:
       - checkout
       - rok8s-scripts/set_env
       - run: prepare-kubectl
-      - run: "helm-deploy -f deploy/production.config"
+      - run: "k8s-deploy-and-verify -f production.config"
 
 workflows:
   version: 2
   build:
     jobs:
+      - test:
+          filters:
+            branches:
+              only: /.*/
       - rok8s-scripts/docker_build_and_push:
-          config_file: deploy/build.config
+          requires:
+            - test
+          config_file: build.config
           context: org-global
           docker-login: true
           password-variable: TOKEN_ENV_VAR_NAME
@@ -43,15 +48,10 @@ workflows:
           filters:
             branches:
               only: /.*/
-      - deploy-ephemeral:
-          requires:
-            - rok8s-scripts/docker_build_and_push
-          filters:
-            branches:
-              only: /feature-.*/
       - deploy-staging:
           requires:
             - rok8s-scripts/docker_build_and_push
+            - test
           filters:
             branches:
               only: master

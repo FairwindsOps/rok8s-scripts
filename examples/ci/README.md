@@ -3,6 +3,3 @@ This example demonstrates how to use rok8s-scripts with four different CI platfo
 - [CircleCI](/examples/ci/.circleci/config.yml)
 - [GitLab CI](/examples/ci/.gitlab-ci.yml)
 - [Jenkins](/examples/ci/Jenkinsfile)
-
-
-

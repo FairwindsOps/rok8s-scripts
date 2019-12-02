@@ -22,4 +22,3 @@ spec:
           envFrom:
             - secretRef:
                 name: rok8s-example
-

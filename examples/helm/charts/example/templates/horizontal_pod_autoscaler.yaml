@@ -11,4 +11,4 @@ spec:
     kind: Deployment
     name: {{ template "chart.name" . }}
 {{ toYaml .Values.hpa.targets | indent 2 }}
-{{ end }}
+{{- end -}}

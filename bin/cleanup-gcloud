@@ -5,4 +5,4 @@ echo "Revoking gcloud credentials."
 gcloud auth revoke --all || echo "No credentials left to revoke"
 
 # The above command does not always remove this file
-rm $GOOGLE_APPLICATION_CREDENTIALS
+rm "$GOOGLE_APPLICATION_CREDENTIALS"

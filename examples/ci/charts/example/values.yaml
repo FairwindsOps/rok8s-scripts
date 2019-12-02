@@ -21,7 +21,7 @@ service:
     domainName: "default.example.com"
 labels:
   dns: route53
-resources: 
+resources:
   limits:
     cpu: 100m
     memory: 128Mi
