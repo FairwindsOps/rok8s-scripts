@@ -1,0 +1,58 @@
+description: >
+  Create a Github Release from an annotated tag.
+  Requires that GITHUB_ACCESS_TOKEN be set as an
+  environment variable. If the tag is annotated,
+  that will become the release notes. If the tag
+  is not annotated, then a list of commits will
+  become the release notes.
+
+steps:
+  - run:
+      name: Github Release
+      command: |
+        #!/usr/bin/env bash
+        set -eo pipefail; [[ $TRACE ]] && set -x
+
+        log-fail() {
+          declare desc="log fail formatter"
+          echo "$@" 1>&2
+          exit 1
+        }
+
+        main() {
+          declare desc="Creates a release for the last created tag on github"
+          local DESCRIPTION REQUEST_BODY
+
+          [[ -z "$GITHUB_ACCESS_TOKEN" ]] && log-fail "You must specify a GITHUB_ACCESS_TOKEN environment variable"
+          [[ -z "$CIRCLE_PROJECT_USERNAME" ]] && log-fail "You must specify a CIRCLE_PROJECT_USERNAME environment variable"
+          [[ -z "$CIRCLE_PROJECT_REPONAME" ]] && log-fail "You must specify a CIRCLE_PROJECT_REPONAME environment variable"
+
+          if [[ -z "$CIRCLE_TAG" ]]; then
+            echo "You can only release a tag. Please see the documentation. https://circleci.com/orbs/registry/orb/fairwinds/rok8s-scripts"
+            exit 1
+          fi
+
+          echo "Releasing tag: ${CIRCLE_TAG}"
+
+          DESCRIPTION="$(git tag -l -n1 --format="%(contents:body)" ${CIRCLE_TAG})"
+
+          if [[ -z "$DESCRIPTION" ]]; then
+            LAST_TAG=$(git describe --tags --abbrev=0 ${CIRCLE_TAG}^)
+            CHANGELOG=$(git log --pretty='format:%h %s' --reverse $LAST_TAG..HEAD)
+            DESCRIPTION="# Changelog
+
+        $CHANGELOG"
+          fi
+
+          echo "Release description: ${DESCRIPTION}"
+
+
+          REQUEST_BODY="$(jq -n --arg tag_name "$CIRCLE_TAG" --arg subject "${CIRCLE_TAG}" --arg description "${DESCRIPTION}" \
+           '{"tag_name": $tag_name, "target_commitish": "master", "name": $subject, "body": $description, "draft": false, "prerelease": false} ')"
+
+          echo "$REQUEST_BODY"
+
+          curl --data "${REQUEST_BODY}" "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases?access_token=${GITHUB_ACCESS_TOKEN}"
+        }
+
+        main "$@"
