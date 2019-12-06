@@ -11,4 +11,3 @@ spec:
     kind: Deployment
     name: example
   targetCPUUtilizationPercentage: 75
-

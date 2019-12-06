@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd bin
+cd bin || exit 1
 
 shellcheck -x docker-* \
   install-rok8s-requirements \

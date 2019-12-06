@@ -1,7 +1,6 @@
 ---
 # Source: example/templates/configmap.yaml
 
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,7 +9,6 @@ data:
   example-data: example-value
   example-data2: example-value2
   
-
 ---
 # Source: example/templates/service.yaml
 apiVersion: v1
@@ -84,7 +82,7 @@ spec:
             value: VAlUE_1
           - name: EXAMPLE2
             value: VALUE_2
-                      
+          
 
 ---
 # Source: example/templates/horizontal_pod_autoscaler.yaml
@@ -102,5 +100,3 @@ spec:
     name: example
   targetCPUUtilizationPercentage: 10
   
-
-

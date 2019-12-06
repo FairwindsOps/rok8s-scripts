@@ -11,31 +11,14 @@ references:
         echo 'export CI_TAG=$CIRCLE_TAG' >> ${BASH_ENV}
         echo 'export ROK8S_INSTALL_PATH=${HOME}' >> ${BASH_ENV}
 
-  build_image: &build_image
-    run:
-      name: Build Docker Image
-      command: |
-        docker login quay.io -u="${quay_robot}" -p="${quay_token}"
-        docker-pull -f deploy/production.config
-        docker-build -f deploy/production.config
-
   deploy_to_kube: &deploy_to_kube
     run:
       name: Deploy to Production
       command: |
-        docker-push -f deploy/production.config
         prepare-kubectl
-        k8s-deploy-and-verify -f deploy/production.config
+        k8s-deploy-and-verify -f deploy/secrets.config
 
 jobs:
-  build_image:
-    docker:
-      - image: quay.io/reactiveops/ci-images:v10.0-stretch
-    steps:
-      - checkout
-      - setup_remote_docker
-      - *set_environment_variables
-      - *build_image
   deploy:
     docker:
       - image: quay.io/reactiveops/ci-images:v10.0-stretch
@@ -43,17 +26,13 @@ jobs:
       - checkout
       - setup_remote_docker
       - *set_environment_variables
-      - *build_image
       - *deploy_to_kube
 
 workflows:
   version: 2
   build:
     jobs:
-      - build_image
       - deploy:
-          requires:
-            - build_image
           filters:
             branches:
               only: master

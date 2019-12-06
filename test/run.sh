@@ -2,6 +2,7 @@
 
 EXIT_CODE=0
 
+#shellcheck disable=SC2155
 export PATH=$PATH:$(pwd)/bin
 
 echo "------------------------"

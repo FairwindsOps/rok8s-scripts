@@ -1,12 +1,12 @@
 #!/bin/bash -e
-
+#shellcheck disable=SC2153
 . k8s-read-config
 
 echo "Deleting ConfigMaps"
 for index in "${!CONFIGMAP_FILES[@]}"
 do
   CONFIGMAP_FILE=${CONFIGMAP_FILES[$index]}
-  kubectl delete -f $CONFIGMAP_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$CONFIGMAP_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting ConfigMaps"
 
@@ -14,7 +14,7 @@ echo "Deleting ConfigMaps"
 for index in "${!FROMFILE_CONFIGMAP_FILES[@]}"
 do
   FROMFILE_CONFIGMAP_FILE=${FROMFILE_CONFIGMAP_FILES[$index]}
-  kubectl delete -f $FROMFILE_CONFIGMAP_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$FROMFILE_CONFIGMAP_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting From File ConfigMaps"
 
@@ -22,7 +22,7 @@ echo "Deleting Service Accounts"
 for index in "${!SERVICE_ACCOUNT_FILES[@]}"
 do
   SERVICE_ACCOUNT_FILE=${SERVICE_ACCOUNT_FILES[$index]}
-  kubectl delete -f $SERVICE_ACCOUNT_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$SERVICE_ACCOUNT_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Service Accounts"
 
@@ -30,7 +30,7 @@ echo "Deleting Secrets"
 for index in "${!SECRET_FILES[@]}"
 do
   SECRET_FILE=${SECRET_FILES[$index]}
-  kubectl delete -f $SECRET_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$SECRET_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Secrets"
 
@@ -38,7 +38,7 @@ echo "Deleting Blocking Jobs"
 for index in "${!BLOCKING_JOBS_FILES[@]}"
 do
   BLOCKING_JOB_FILE=${BLOCKING_JOBS_FILES[$index]}
-  kubectl delete -f $BLOCKING_JOB_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$BLOCKING_JOB_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Blocking Jobs"
 
@@ -46,7 +46,7 @@ echo "Deleting Jobs"
 for index in "${!JOBS_FILES[@]}"
 do
   JOB_FILE=${JOBS_FILES[$index]}
-  kubectl delete -f $JOB_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$JOB_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Jobs"
 echo ""
@@ -55,7 +55,7 @@ echo "Deleting Services"
 for index in "${!SERVICE_FILES[@]}"
 do
   SERVICE_FILE=${SERVICE_FILES[$index]}
-  kubectl delete -f $SERVICE_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$SERVICE_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Services"
 echo ""
@@ -64,7 +64,7 @@ echo "Deleting Ingress Resources"
 for index in "${!INGRESS_FILES[@]}"
 do
   INGRESS_FILE=${INGRESS_FILES[$index]}
-  kubectl delete -f $INGRESS_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$INGRESS_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Ingress Resources"
 
@@ -72,7 +72,7 @@ echo "Deleting Deployments"
 for index in "${!DEPLOYMENT_FILES[@]}"
 do
   DEPLOYMENT_FILE=${DEPLOYMENT_FILES[$index]}
-  kubectl delete -f $DEPLOYMENT_FILE --namespace=$NAMESPACE || true
+  kubectl delete -f "$DEPLOYMENT_FILE" --namespace="$NAMESPACE" || true
 done
 echo "Done deleting Deployments"
 echo ""

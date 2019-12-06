@@ -6,7 +6,7 @@
 </div>
 
 
-[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=9.4.0&color=239922
+[version-image]: https://img.shields.io/static/v1.svg?label=Version&message=10.0.0&color=239922
 [version-link]: https://github.com/FairwindsOps/rok8s-scripts/releases
 [circleci-image]: https://circleci.com/gh/FairwindsOps/rok8s-scripts.svg?style=svg
 [circleci-link]: https://circleci.com/gh/FairwindsOps/rok8s-scripts
@@ -55,14 +55,15 @@ There are many valid ways to configure CI pipelines, but to help you get started
 - [External secrets manager](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/external-secrets-manager)
 - [SOPS secrets](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts.
 - [Using Helm](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments.
-- [Optional components](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/optional-components) - Turn components (e.g. Horizontal Pod Audoscaler) on and off depending on whether you're deploying to staging or production.
 - [Production ready](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features.
 
 ## CI Images
 
 Each new release of rok8s-scripts generates CI images for common workflows. These images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows ensures that you don't need to spend any build time installing extra dependencies.
 
-We currently include CI Images based on Alpine and Debian Stretch as our recommended starting points. The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v9-stretch`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
+We currently include CI Images based on Alpine and Debian Stretch as our recommended starting points. The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v10-stretch`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
+
+**Deprecation Notice** As of v10 and onward, alpine and stretch will be the only available images.
 
 ## Versioning v8.0.0 and beyond
 
@@ -76,13 +77,13 @@ Here is a set of guidelines to follow when deciding what version of ci-images (a
 
 You want rok8s-scripts to be stable, and just keep working until you decide to upgrade.
 
-In this scenario, you should pin to a minor version of rok8s-scripts such as `v9.4-alpine`.
+In this scenario, you should pin to a minor version of rok8s-scripts such as `v10.0-alpine`.
 
 #### You like to live dangerously
 
 You are okay with your pipeline breaking occasionally and having to upgrade things as they break.
 
-In this case, go ahead and pin to a major version such as `v9-alpine`.
+In this case, go ahead and pin to a major version such as `v10-alpine`.
 
 ## Orb
 

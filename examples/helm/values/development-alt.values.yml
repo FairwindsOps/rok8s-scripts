@@ -2,4 +2,3 @@ configmap:
   data:
     example-data: example-value-alt
     example-data2: example-value2-alt
-

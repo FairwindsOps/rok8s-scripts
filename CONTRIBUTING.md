@@ -23,6 +23,10 @@ top of things.
 * Make sure you have added the necessary tests for your changes if applicable.
 * Make sure you have added any required documentation changes.
 
+## Pre-commit
+
+This repo contains a pre-commit file for use with [pre-commit](https://pre-commit.com/). Just run `pre-commit install` and you will have the hooks.
+
 ## Making Trivial Changes
 
 ### Documentation

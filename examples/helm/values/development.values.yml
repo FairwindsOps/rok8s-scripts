@@ -2,4 +2,3 @@ configmap:
   data:
     example-data: example-value
     example-data2: example-value2
-

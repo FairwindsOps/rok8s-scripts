@@ -1,18 +1,17 @@
 {
-  "name": "rok8s-minimal-example",
-  "version": "0.0.0",
+  "author": "Fairwinds",
+  "dependencies": {
+    "express": "^4.16.1"
+  },
   "description": "Example app deployment with rok8s-scripts",
+  "license": "Apache-2.0",
+  "name": "rok8s-minimal-example",
   "repository": {
     "type": "git",
     "url": "+https://github.com/FairwindsOps/rok8s-scripts.git"
   },
-  "author": "Fairwinds",
-  "license": "Apache-2.0",
   "scripts": {
     "start": "node server.js"
   },
-  "dependencies": {
-     "express": "^4.16.1"
-  }
+  "version": "0.0.0"
 }
-

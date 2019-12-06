@@ -1,15 +1,14 @@
 {
-  "name": "example",
-  "version": "0.0.0",
+  "author": "Fairwinds",
+  "dependencies": {
+    "rok8s-scripts": "*"
+  },
   "description": "Example app deployment with rok8s-scripts",
+  "license": "Apache-2.0",
+  "name": "example",
   "repository": {
     "type": "git",
     "url": "+https://github.com/FairwindsOps/rok8s-scripts.git"
   },
-  "author": "Fairwinds",
-  "license": "Apache-2.0",
-  "dependencies": {
-     "rok8s-scripts": "*"
-  }
+  "version": "0.0.0"
 }
-

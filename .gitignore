@@ -1,3 +1,9 @@
 .vscode
 .DS_Store
 orb.yml
+examples/helm-output.yaml
+test/.Python
+test/bin/
+test/include/
+test/lib/
+test/pip-selfcheck.json
