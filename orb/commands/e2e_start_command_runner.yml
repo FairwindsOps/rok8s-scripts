@@ -3,14 +3,12 @@ parameters:
   command_runner_image:
     description: "The image to execute commands from against the kind cluster."
     type: string
-    default: "quay.io/reactiveops/ci-images:v10.0-alpine"
+    default: "quay.io/reactiveops/ci-images:v10-alpine"
 steps:
   - run:
       name: Setup Command Runner
       command: |
-        kubeconfig="$(kind get kubeconfig-path --name="e2e")"
-        echo $kubeconfig
-        cat $kubeconfig
+        cat ./kind-kubeconfig
         docker rm -f e2e-command-runner || true
         docker run -itd \
           --name "e2e-command-runner" \
@@ -23,7 +21,7 @@ steps:
           --env CI_TAG=$CIRCLE_TAG \
           << parameters.command_runner_image >>
         docker exec e2e-command-runner sh -c 'mkdir -p /.kube'
-        docker cp "$kubeconfig" e2e-command-runner:/.kube/config
+        docker cp ./kind-kubeconfig e2e-command-runner:/.kube/config
         docker inspect e2e-command-runner | jq .
         docker exec e2e-command-runner sh -c 'ls -al /.kube'
         docker exec e2e-command-runner sh -c "sed -i 's/https:\/\/127.0.0.1:[0-9]\+/https:\/\/127.0.0.1:6443/g' /.kube/config"

@@ -1,0 +1,9 @@
+description: >
+  Create a Github Release from an annotated tag.
+  Requires that GITHUB_ACCESS_TOKEN be set as an
+  environment variable. Also requires that the tag
+  be annotated.
+
+executor: default
+steps:
+  - github_release

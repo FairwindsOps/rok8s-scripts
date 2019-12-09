@@ -1,0 +1,35 @@
+description: >
+  This example expands upon the kubernetes e2e test example by
+  demonstrating how you could run the same test across multiple
+  kubernetes versions.
+
+usage:
+  version: 2.1
+
+  orbs:
+    rok8s-scripts: fairwinds/rok8s-scripts@10.1
+
+  workflows:
+    version: 2
+    build:
+      jobs:
+        - rok8s-scripts/kubernetes_e2e_tests:
+            name: "End-To-End Test Kube 1.15.6"
+            kind_node_image: "kindest/node:v1.15.6@sha256:18c4ab6b61c991c249d29df778e651f443ac4bcd4e6bdd37e0c83c0d33eaae78"
+            pre_script: e2e/pre.sh
+            script: e2e/test.sh
+            filters:
+              branches:
+                only: /.*/
+              tags:
+                ignore: /.*/
+        - rok8s-scripts/kubernetes_e2e_tests:
+            name: "End-To-End Test Kube 1.16.3"
+            kind_node_image: "kindest/node:v1.16.3@sha256:70ce6ce09bee5c34ab14aec2b84d6edb260473a60638b1b095470a3a0f95ebec"
+            pre_script: e2e/pre.sh
+            script: e2e/test.sh
+            filters:
+              branches:
+                only: /.*/
+              tags:
+                ignore: /.*/

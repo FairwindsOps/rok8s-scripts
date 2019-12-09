@@ -14,13 +14,14 @@ usage:
   version: 2.1
 
   orbs:
-    rok8s-scripts: fairwinds/rok8s-scripts@10.0
+    rok8s-scripts: fairwinds/rok8s-scripts@10.1
 
   workflows:
     version: 2
     build:
       jobs:
         - rok8s-scripts/kubernetes_e2e_tests:
+            name: "End-To-End Test on Kubernetes"
             pre_script: e2e/pre.sh
             script: e2e/test.sh
             filters:
