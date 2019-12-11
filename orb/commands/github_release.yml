@@ -27,6 +27,9 @@ steps:
           [[ -z "$CIRCLE_PROJECT_USERNAME" ]] && log-fail "You must specify a CIRCLE_PROJECT_USERNAME environment variable"
           [[ -z "$CIRCLE_PROJECT_REPONAME" ]] && log-fail "You must specify a CIRCLE_PROJECT_REPONAME environment variable"
 
+          echo "$CIRCLE_PROJECT_USERNAME"
+          echo "$CIRCLE_PROJECT_REPONAME"
+
           if [[ -z "$CIRCLE_TAG" ]]; then
             echo "You can only release a tag. Please see the documentation. https://circleci.com/orbs/registry/orb/fairwinds/rok8s-scripts"
             exit 1
@@ -52,7 +55,7 @@ steps:
 
           echo "$REQUEST_BODY"
 
-          curl --data "${REQUEST_BODY}" "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases?access_token=${GITHUB_ACCESS_TOKEN}"
+          curl -v --data "${REQUEST_BODY}" "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases?access_token=${GITHUB_ACCESS_TOKEN}"
         }
 
         main "$@"

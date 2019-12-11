@@ -6,4 +6,5 @@ description: >
 
 executor: default
 steps:
+  - checkout
   - github_release
