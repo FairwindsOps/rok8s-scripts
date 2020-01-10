@@ -1,5 +1,5 @@
 description: >
-  Create a Github Release from an annotated tag.
+  Create a Github Release from a git tag.
   Requires that GITHUB_ACCESS_TOKEN be set as an
   environment variable. If the tag is annotated,
   that will become the release notes. If the tag
@@ -37,9 +37,11 @@ steps:
 
           echo "Releasing tag: ${CIRCLE_TAG}"
 
-          DESCRIPTION="$(git tag -l -n1 --format="%(contents:body)" ${CIRCLE_TAG})"
-
-          if [[ -z "$DESCRIPTION" ]]; then
+          if [[ $(git cat-file -t ${CIRCLE_TAG}) == "tag" ]]; then
+            echo "Found annotated tag."
+            DESCRIPTION="$(git tag -l -n1 --format="%(contents:body)" ${CIRCLE_TAG})"
+          else
+            echo "Found a lightweight tag"
             LAST_TAG=$(git describe --tags --abbrev=0 ${CIRCLE_TAG}^)
             CHANGELOG=$(git log --pretty='format:%h %s' --reverse $LAST_TAG..HEAD)
             DESCRIPTION="# Changelog

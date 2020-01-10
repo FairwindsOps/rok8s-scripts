@@ -26,7 +26,7 @@ repos:
      - id: pretty-format-json
        args: ['--autofix']
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    sha: 1.10.3
+    rev: 1.10.3
     hooks:
       - id: forbid-binary
       - id: shellcheck
