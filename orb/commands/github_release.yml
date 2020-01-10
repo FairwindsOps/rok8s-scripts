@@ -37,9 +37,9 @@ steps:
 
           echo "Releasing tag: ${CIRCLE_TAG}"
 
-          DESCRIPTION="$(git tag -l -n1 --format="%(contents:body)" ${CIRCLE_TAG})"
-
-          if [[ -z "$DESCRIPTION" ]]; then
+          if [[ $(git cat-file -t ${CIRCLE_TAG}) == "tag" ]]; then
+            DESCRIPTION="$(git tag -l -n1 --format="%(contents:body)" ${CIRCLE_TAG})"
+          else
             LAST_TAG=$(git describe --tags --abbrev=0 ${CIRCLE_TAG}^)
             CHANGELOG=$(git log --pretty='format:%h %s' --reverse $LAST_TAG..HEAD)
             DESCRIPTION="# Changelog
