@@ -1,9 +1,10 @@
 description: >
-  Create a Github Release from an annotated tag.
+  Create a Github Release from a git tag.
   Requires that GITHUB_ACCESS_TOKEN be set as an
-  environment variable. Also requires that the tag
-  be annotated.
-
+  environment variable. If the tag is annotated,
+  that will become the release notes. If the tag
+  is not annotated, then a list of commits will
+  become the release notes.
 executor: default
 steps:
   - checkout
