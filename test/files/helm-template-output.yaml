@@ -1,6 +1,5 @@
 ---
 # Source: example/templates/configmap.yaml
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,7 +7,6 @@ metadata:
 data:
   example-data: example-value
   example-data2: example-value2
-  
 ---
 # Source: example/templates/service.yaml
 apiVersion: v1
@@ -18,8 +16,8 @@ metadata:
   labels:
     app: example
     chart: example-0.1.0
-    release: release-name
-    heritage: Tiller
+    release: RELEASE-NAME
+    heritage: Helm
     dns: route53
 spec:
   type: LoadBalancer
@@ -30,8 +28,7 @@ spec:
       name: http
   selector:
     app: example
-    release: release-name
-
+    release: RELEASE-NAME
 ---
 # Source: example/templates/deployment.yaml
 apiVersion: extensions/v1beta1
@@ -41,14 +38,14 @@ metadata:
   labels:
     app: example
     chart: example-0.1.0
-    release: release-name
-    heritage: Tiller
+    release: RELEASE-NAME
+    heritage: Helm
 spec:
   template:
     metadata:
       labels:
         app: example
-        release: release-name
+        release: RELEASE-NAME
     spec:
       containers:
         - name: example
@@ -76,17 +73,13 @@ spec:
             requests:
               cpu: 100m
               memory: 128Mi
-            
           env:
           - name: EXAMPLE1
             value: VAlUE_1
           - name: EXAMPLE2
             value: VALUE_2
-          
-
 ---
 # Source: example/templates/horizontal_pod_autoscaler.yaml
-
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
@@ -99,4 +92,3 @@ spec:
     kind: Deployment
     name: example
   targetCPUUtilizationPercentage: 10
-  
