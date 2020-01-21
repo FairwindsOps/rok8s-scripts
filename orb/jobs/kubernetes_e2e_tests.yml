@@ -22,7 +22,7 @@ parameters:
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
-    default: "quay.io/reactiveops/ci-images:v10-alpine"
+    default: "quay.io/reactiveops/ci-images:v11-alpine"
   pre_script:
     description: "Script to run on the local machine before running on command runner."
     type: string
