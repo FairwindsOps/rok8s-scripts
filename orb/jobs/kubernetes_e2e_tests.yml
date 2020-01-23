@@ -33,7 +33,11 @@ parameters:
   script:
     description: "The script to run on the command runner."
     type: string
-executor: default
+  executor:
+    description: "The name of custom executor to use. Only recommended for development."
+    type: executor
+    default: ci-images
+executor: <<parameters.executor>>
 steps:
   - checkout
   - setup_remote_docker
