@@ -59,6 +59,9 @@ kubectl create clusterrolebinding rok8s-scripts \
 One common pattern is to only grant `cluster-admin` permissions on namespaces that
 have been explicitly given the label `rok8s-scripts-admin`
 
+*NOTE*: The `tiller` related permissions here are obsolete as of rok8s-scripts v11+ due to the
+introduction of Helm3.
+
 ```yaml
 apiVersion: rbacmanager.reactiveops.io/v1beta1
 kind: RBACDefinition
