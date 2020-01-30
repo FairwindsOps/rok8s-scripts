@@ -137,22 +137,10 @@ do
     helm_ret=$?
     set -e
 
-    if [ $helm_ret -gt 0 ] && grep -q "already exists" "${ROK8S_TMP}/helm.out"; then
-      rok8s_echo "Detected that there are existing resources."
-      if [ -n "${ROK8S_HELM_ADOPT_EXISTING}" ]; then
-        rok8s_echo "Attempting to force adoption of existing resources."
-        latest_revision=$(helm get "${CHART_RELEASE_NAME}" | grep REVISION | awk '{print $2}')
-        kubectl -n "${TILLER_NAMESPACE}" label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
-        helm_upgrade
-      else
-        rok8s_echo "Not attempting adoption. Set ROK8S_HELM_ADOPT_EXISTING=1 to try adopting existing resources."
-        exit $helm_ret
-      fi
-    elif [ $helm_ret -gt 0 ]; then
+    if [ $helm_ret -gt 0 ]; then
       exit $helm_ret
     fi
 
-    echo "Done deploying Helm Charts"
-    echo ""
+    rok8s_echo "Done deploying Helm Charts"
   fi
 done
