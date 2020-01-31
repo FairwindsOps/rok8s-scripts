@@ -5,7 +5,12 @@ description: >
   that will become the release notes. If the tag
   is not annotated, then a list of commits will
   become the release notes.
-executor: default
+parameters:
+  executor:
+    description: "The name of custom executor to use. Only recommended for development."
+    type: executor
+    default: ci-images
+executor: <<parameters.executor>>
 steps:
   - checkout
   - github_release

@@ -115,8 +115,8 @@ To remove this example from your Kubernetes cluster, delete the helm releases an
 
 For example:
 ```
-helm delete --purge ephemeral-demo-feature-awesomesauce
-helm delete --purge ephemeral-demo-staging
+helm delete ephemeral-demo-feature-awesomesauce
+helm delete ephemeral-demo-staging
 kubectl delete namespace feature-awesomesauce
 kubectl delete namespace staging-rok8s-demo
 ```

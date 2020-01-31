@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@8.27.3
+  orb-tools: circleci/orb-tools@9.0.0
 
 references:
   docker_login: &docker_login

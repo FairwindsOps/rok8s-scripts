@@ -11,32 +11,28 @@ CI_REF="${CI_TAG}"
 CI_REF="${CI_REF:-$CI_BRANCH}"
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
-detect_tiller_namespace() {
-    # If there is more than one tiller, then auto-detection will not work.
+detect_helm_2() {
+  # If there is tiller running, then Helm2 is probaby configured. Error and quit.
+  # set DISABLE_HELM_2_DETECTION to skip
+  if [[ ! ${DISABLE_HELM_2_DETECTION} ]]; then
     mapfile -t TILLERS < <(kubectl get deploy --all-namespaces -l app=helm,name=tiller | awk 'NR > 1 {print $1}')
-    if [ ${#TILLERS[@]} -gt 1 ]; then
-      echo "Multiple TILLERS were found.  This is not supported by auto-detection.  Please specify TILLER_NAMESPACE in your config."
+    if [ ${#TILLERS[@]} -gt 0 ]; then
+      echo "WARNING: You appear to have helm2 running with a Tiller in your cluster!!!! This is not supported!!!"
+      echo "If you REALLY want to do this, then you can set DISABLE_HELM_2_DETECTION to true in your config file."
+      echo "Doing that is not tested or recommended, so proceed with caution!"
       echo "Found a tiller in these namespaces:"
       printf '%s\n' "${TILLERS[@]}"
       exit 1
-    else
-      TILLER_NAMESPACE="${TILLERS[0]:-kube-system}"
-      rok8s_echo "Set tiller namespace to $TILLER_NAMESPACE"
     fi
+  fi
 }
 
 if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
+  detect_helm_2
   if [[ ! $(kubectl get namespace "$NAMESPACE") ]]; then
     rok8s_echo "Creating ${NAMESPACE} namespace"
     # shellcheck disable=SC2086
     kubectl create namespace $NAMESPACE;
-  fi
-
-  # Set tiller_namespace if it isn't already set.
-  # Allows us to use helm even if it's not installed
-  # in kube-system.
-  if [ -z "$TILLER_NAMESPACE" ]; then
-    detect_tiller_namespace
   fi
 
   # If using k8s-deploy in combination with helm-deploy
@@ -46,9 +42,8 @@ if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
     . k8s-deploy-secrets
   fi
 
-  HELM_DEFAULT_TIMEOUT=300
+  HELM_DEFAULT_TIMEOUT=300s
   HELM_HOME=${HELM_HOME}
-  helm init --client-only
 fi
 
 format_multiple_values_files() {
@@ -64,12 +59,12 @@ format_multiple_values_files() {
 helm_upgrade() {
   # shellcheck disable=SC2086
   helm upgrade --install "${CHART_RELEASE_NAME}" \
-    "${CHART_PATH}" -f "${CHART_VALUES}" \
+    "${CHART_PATH}" \
+    -f "${CHART_VALUES}" \
     --set image.tag="${CI_SHA1}" \
     --set rok8sCIRef="${CI_REF}" \
     --set sanitizedBranch="${SANITIZED_BRANCH}" \
     --namespace="${NAMESPACE}" \
-    --tiller-namespace="${TILLER_NAMESPACE}" \
     --wait \
     --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}" \
     ${ROK8S_HELM_DEPLOY_EXTRAARGS} \
@@ -142,22 +137,10 @@ do
     helm_ret=$?
     set -e
 
-    if [ $helm_ret -gt 0 ] && grep -q "already exists" "${ROK8S_TMP}/helm.out"; then
-      rok8s_echo "Detected that there are existing resources."
-      if [ -n "${ROK8S_HELM_ADOPT_EXISTING}" ]; then
-        rok8s_echo "Attempting to force adoption of existing resources."
-        latest_revision=$(helm get "${CHART_RELEASE_NAME}" | grep REVISION | awk '{print $2}')
-        kubectl -n "${TILLER_NAMESPACE}" label cm "${CHART_RELEASE_NAME}.v${latest_revision}" STATUS=DEPLOYED --overwrite
-        helm_upgrade
-      else
-        rok8s_echo "Not attempting adoption. Set ROK8S_HELM_ADOPT_EXISTING=1 to try adopting existing resources."
-        exit $helm_ret
-      fi
-    elif [ $helm_ret -gt 0 ]; then
+    if [ $helm_ret -gt 0 ]; then
       exit $helm_ret
     fi
 
-    echo "Done deploying Helm Charts"
-    echo ""
+    rok8s_echo "Done deploying Helm Charts"
   fi
 done

@@ -3,7 +3,7 @@ parameters:
   command_runner_image:
     description: "The image to execute commands from against the kind cluster."
     type: string
-    default: "quay.io/reactiveops/ci-images:v10-alpine"
+    default: "quay.io/reactiveops/ci-images:v11-alpine"
 steps:
   - run:
       name: Setup Command Runner
@@ -14,7 +14,6 @@ steps:
           --name "e2e-command-runner" \
           --network container:e2e-control-plane \
           --env KUBECONFIG=/.kube/config \
-          --env TILLER_NAMESPACE=helm-system \
           --env CI_SHA1=$CIRCLE_SHA1 \
           --env CI_BRANCH=$CIRCLE_BRANCH \
           --env CI_BUILD_NUM=$CIRCLE_BUILD_NUM \
