@@ -28,7 +28,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
 
     echo "Checking for existing cache image for target[${CACHE_TARGET}]..."
     docker pull "${TARGET_IMAGE}:${TARGET_TAG}" || true
-    docker pull "${TARGET_IMAGE}:master" || true
+    docker pull "${TARGET_IMAGE}:cache-master-${CACHE_TARGET}" || true
 
     echo "Building Dockerfile target[${CACHE_TARGET}]..."
     # shellcheck disable=2086
@@ -37,7 +37,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
       ${CACHE_FROM_TARGETS} \
       ${ROK8S_DOCKER_BUILD_EXTRAARGS} \
       --cache-from "${TARGET_IMAGE}:${TARGET_TAG}" \
-      --cache-from "${TARGET_IMAGE}:master" \
+      --cache-from "${TARGET_IMAGE}:cache-master-${CACHE_TARGET}" \
       "${BASEDIR}"
     CACHE_FROM_TARGETS="${CACHE_FROM_TARGETS} --cache-from ${TARGET_IMAGE}:${TARGET_TAG}"
   done <<< "$(grep -i '^FROM.* AS ' ${BASEDIR}/${DOCKERFILE} | awk '{print $4}')"
