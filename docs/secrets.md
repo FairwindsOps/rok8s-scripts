@@ -22,8 +22,21 @@ To access encrypted secrets, users or CI need access to both your Git repository
 
 Rok8s-scripts expects secret files to include the `.secret.sops.yml` extension. In your Rok8s-scripts configuration file, set the `SOPS_SECRETS` variable to a list of secret files, **not including the extension**. For example: `SOPS_SECRETS=('production/minimal-sops-production')`
 
-An [example of sops usage with rok8s-scripts can be
-[found here](/examples/minimal-sops-secrets).
+An [example of sops usage with rok8s-scripts can be found here](/examples/minimal-sops-secrets).
+
+### Specifying Multiple Secrets Files
+
+Unlike how it is done in the case of Helm, secrets are only specified globally for a release, so when you have multiple, you should specify a single list. For example:
+
+```
+### Here we have two files that contain secrets for this release.
+SOPS_SECRETS=('production/my-app-global production/my-app-central')
+
+### Example to illustrate the differences between helm and sops config.
+HELM_CHARTS=('charts/my-app')
+HELM_RELEASE_NAMES=('my-app-production')
+HELM_VALUES=('production/my-app-global,production/my-app-central')
+```
 
 ### Create Cloud Resources
 
