@@ -10,6 +10,10 @@ parameters:
     type: boolean
     default: true
     description: When true(default), perform a docker login before build and push.
+  docker-push:
+    type: boolean
+    default: true
+    description: When true(default), push the image when done.
   registry:
     type: string
     description: The name of the docker registry. Only used if docker-login is true.
@@ -41,5 +45,8 @@ steps:
             registry: <<parameters.registry>>
   - docker_build:
       config: <<parameters.config_file>>
-  - docker_push:
-      config: <<parameters.config_file>>
+  - when:
+      condition: << parameters.docker-push >>
+      steps:
+        - docker_push:
+            config: <<parameters.config_file>>
