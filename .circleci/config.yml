@@ -106,7 +106,7 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /.*/
+              only: /^v.*/
 
   "Orb Test and Publish":
     jobs:
