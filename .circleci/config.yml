@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@9.0.0
+  rok8s-scripts: fairwinds/rok8s-scripts@11
 
 references:
   docker_login: &docker_login
@@ -43,14 +44,6 @@ references:
           echo "Skipping the docker push because '\$DOCKER_BASE_TAG: $DOCKER_BASE_TAG' does not start with dev- or v[0-9]+."
         fi
 
-  github_release: &github_release
-    run:
-      name: GitHub release
-      command: |
-        git fetch --tags
-        curl -O https://raw.githubusercontent.com/FairwindsOps/release.sh/v0.0.2/release
-        /bin/bash release
-
   build_docker_tags: &build_docker_tags
     run:
       name: Generate major & minor tags
@@ -87,22 +80,6 @@ jobs:
       - *docker_build
       - *docker_push
 
-  release:
-    docker:
-      - image: circleci/node:boron-stretch
-    steps:
-      - checkout
-      - *load_supported_docker_bases
-      - setup_remote_docker
-      - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
-      - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
-      - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
-      - *github_release
-      - *build_docker_tags
-      - *docker_login
-      - *docker_build
-      - *docker_push
-
   request-orb-publish:
     docker:
       - image: alpine:latest
@@ -122,10 +99,9 @@ workflows:
           name: "Build Docker Images"
           requires:
             - "Run Tests"
-
   Release:
     jobs:
-      - release:
+      - rok8s-scripts/github_release:
           filters:
             branches:
               ignore: /.*/
