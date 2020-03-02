@@ -95,10 +95,10 @@ workflows:
     jobs:
       - test:
           name: "Run Tests"
-      - build: name: "Build Docker Images"
+      - build:
+          name: "Build Docker Images"
           requires:
             - "Run Tests"
-
   Release:
     jobs:
       - rok8s-scripts/github_release:
