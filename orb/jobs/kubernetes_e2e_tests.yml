@@ -40,7 +40,8 @@ parameters:
 executor: <<parameters.executor>>
 steps:
   - checkout
-  - setup_remote_docker
+  - setup_remote_docker:
+      docker_layer_caching: true
   - set_env
   - e2e_start_kind_cluster:
       kind_node_image: << parameters.kind_node_image >>
