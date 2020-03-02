@@ -14,8 +14,8 @@ steps:
       command: |
         curl -LO https://github.com/kubernetes-sigs/kind/releases/download/v<< parameters.kind_version >>/kind-linux-amd64
         chmod +x kind-linux-amd64
-        mkdir bin && mv kind-linux-amd64 bin/kind
-        export PATH=$(pwd)/bin:$PATH
+        mkdir bin-kind && mv kind-linux-amd64 bin-kind/kind
+        export PATH=$(pwd)/bin-kind:$PATH
 
         kind create cluster \
             --name="e2e" \
