@@ -12,6 +12,3 @@ steps:
       name: Docker Save
       command: |
         docker-save -f <<parameters.config>> -o <<parameters.filename>>
-  - store_artifacts:
-      path: <<parameters.filename>>
-      destination: <<parameters.filename>>
