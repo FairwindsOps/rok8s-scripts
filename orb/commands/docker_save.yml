@@ -1,0 +1,14 @@
+description: Builds a docker image using rok8s-scripts
+parameters:
+  config:
+    type: string
+    description: The location of the rok8s-scripts config file
+    default: "deploy/build.config"
+  filename:
+    type: string
+    description: "The filename to save the docker-save output to."
+steps:
+  - run:
+      name: Docker Save
+      command: |
+        docker-save -f <<parameters.config>> -o <<parameters.filename>>

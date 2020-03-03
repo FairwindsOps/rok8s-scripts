@@ -14,6 +14,10 @@ parameters:
     type: boolean
     default: true
     description: When true(default), push the image when done.
+  docker-save:
+    type: string
+    default: ""
+    description: "When set to a filename, will do a 'docker-save -f <config> -o <value>' after the build"
   registry:
     type: string
     description: The name of the docker registry. Only used if docker-login is true.
@@ -49,4 +53,10 @@ steps:
       condition: <<parameters.docker-push>>
       steps:
         - docker_push:
+            config: <<parameters.config_file>>
+  - when:
+      condition: <<parameters.docker-save>>
+      steps:
+        - docker_save:
+            filename: <<parameters.docker-save>>
             config: <<parameters.config_file>>
