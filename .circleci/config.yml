@@ -116,7 +116,7 @@ workflows:
             - "Run Tests"
   Release:
     jobs:
-      - release
+      - release:
           filters:
             branches:
               ignore: /.*/
