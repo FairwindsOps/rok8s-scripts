@@ -80,6 +80,21 @@ jobs:
       - *docker_build
       - *docker_push
 
+  release:
+    docker:
+      - image: circleci/node:boron-stretch
+    steps:
+      - checkout
+      - *load_supported_docker_bases
+      - setup_remote_docker
+      - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
+      - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
+      - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
+      - *build_docker_tags
+      - *docker_login
+      - *docker_build
+      - *docker_push
+
   request-orb-publish:
     docker:
       - image: alpine:latest
@@ -101,7 +116,10 @@ workflows:
             - "Run Tests"
   Release:
     jobs:
+      - release
       - rok8s-scripts/github_release:
+          requires:
+            - release
           filters:
             branches:
               ignore: /.*/
