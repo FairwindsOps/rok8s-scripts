@@ -37,11 +37,15 @@ parameters:
     description: "The name of custom executor to use. Only recommended for development."
     type: executor
     default: ci-images
+  enable_docker_layer_caching:
+    type: boolean
+    description: "Enables docker_layer_caching on remote docker. Requires a paid plan."
+    default: true
 executor: <<parameters.executor>>
 steps:
   - checkout
   - setup_remote_docker:
-      docker_layer_caching: true
+      docker_layer_caching: << parameters.enable_docker_layer_caching >>
   - set_env
   - e2e_start_kind_cluster:
       kind_node_image: << parameters.kind_node_image >>
