@@ -18,7 +18,7 @@ set of best practices we've built at Fairwinds.
 In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
-**Want to learn more?** Reach out on [the Slack channel](https://app.slack.com/client/TTU61G0LB/CV58E8NQ7), send an email to `opensource@fairwinds.com`, or join us for [office hours on Zoom](https://app.slack.com/client/TTU61G0LB/CV3CMR724)
+**Want to learn more?** Reach out on [the Slack channel](https://fairwindscommunity.slack.com/messages/rok8s-scripts), send an email to `opensource@fairwinds.com`, or join us for [office hours on Zoom](https://fairwindscommunity.slack.com/messages/office-hours)
 
 ### Quickstart
 To help you get started quickly, we've built a [minimal example](/examples/minimal)
