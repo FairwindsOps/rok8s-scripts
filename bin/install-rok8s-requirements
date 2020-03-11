@@ -33,7 +33,7 @@ else
 fi
 
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.15.7}"
-HELM_VERSION="${HELM_VERSION:-v3.0.2}"
+HELM_VERSION="${HELM_VERSION:-v3.1.1}"
 SOPS_VERSION="${SOPS_VERSION:-v3.5.0}"
 
 # make sure sudo is installed
