@@ -57,7 +57,7 @@ if [ "$DOCKER_BUILD_CACHE_FROM" == "available" ]; then
     TARGET_IMAGE=${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}
     echo "Pushing ${TARGET_IMAGE}:${TARGET_TAG}..."
     docker push "${TARGET_IMAGE}:${TARGET_TAG}"
-  done <<< "$(grep -i '^FROM.* AS ' ${DOCKERFILE} | awk '{print $4}')"
+  done <<< "$(grep -i '^FROM.* AS ' ${BASEDIR}/${DOCKERFILE} | awk '{print $4}')"
 fi
 
 for DOCKER_TAG_VERSION in "${ALL_DOCKER_TAG_VERSIONS[@]}"; do
