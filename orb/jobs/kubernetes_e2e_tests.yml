@@ -40,7 +40,7 @@ parameters:
   enable_docker_layer_caching:
     type: boolean
     description: "Enables docker_layer_caching on remote docker. Requires a paid plan."
-    default: true
+    default: false
   store-test-results:
     description: |
       The location to store test results. This path will be used in the command runner as well as
