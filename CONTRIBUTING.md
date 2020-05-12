@@ -44,6 +44,14 @@ always necessary to create a new issue in GitHub. In these cases, a branch with 
 
 There is a Makefile that can assist in validating and testing the orb locally.  See the commands there for more info.
 
+## Releasing
+
+- Make sure you update all the references to the version of rok8s in the repo.
+- Tag the commit you wish to release with the new tag
+- Push the tag
+- Once the release is done, find an org administrator to release the Orb
+
+
 Attribution
 ===========
 Portions of this text are copied from the [Puppet Contributing](https://github.com/puppetlabs/puppet/blob/master/CONTRIBUTING.md) documentation.
