@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  rok8s-scripts: fairwinds/rok8s-scripts@11.2
+  rok8s-scripts: fairwinds/rok8s-scripts@11.3
 
 jobs:
   deploy-ephemeral:
