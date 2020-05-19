@@ -33,7 +33,7 @@ parameters:
   enable_docker_layer_caching:
     type: boolean
     description: "Enables docker_layer_caching on remote docker. Requires a paid plan."
-    default: true
+    default: false
 executor: <<parameters.executor>>
 steps:
   - checkout
