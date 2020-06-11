@@ -34,6 +34,7 @@ fi
 
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.16.8}"
 HELM_VERSION="${HELM_VERSION:-v3.2.0}"
+HELM2_VERSION="${HELM2_VERSION:-v2.16.8}"
 SOPS_VERSION="${SOPS_VERSION:-v3.5.0}"
 
 # make sure sudo is installed
@@ -111,7 +112,7 @@ if ! hash sops 2>/dev/null; then
   chmod +x "${ROK8S_INSTALL_PATH}/sops"
 fi
 
-# make sure helm is installed
+# make sure helm 3 is installed
 if ! hash helm 2>/dev/null; then
   echo Installing helm...
   mkdir "${ROK8S_INSTALL_PATH}/helm-tmp"
@@ -119,6 +120,16 @@ if ! hash helm 2>/dev/null; then
   mv "${ROK8S_INSTALL_PATH}/helm-tmp/linux-amd64/helm" "${ROK8S_INSTALL_PATH}/helm"
   chmod +x "${ROK8S_INSTALL_PATH}/helm"
   rm -rf "${ROK8S_INSTALL_PATH}/helm-tmp"
+fi
+
+# make sure helm2 is installed
+if ! hash helm 2>/dev/null; then
+  echo Installing helm2...
+  mkdir "${ROK8S_INSTALL_PATH}/helm2-tmp"
+  curl "https://get.helm.sh/helm-${HELM2_VERSION}-linux-amd64.tar.gz" | tar xzvf - -C "${ROK8S_INSTALL_PATH}/helm2-tmp"
+  mv "${ROK8S_INSTALL_PATH}/helm-tmp/linux-amd64/helm" "${ROK8S_INSTALL_PATH}/helm2"
+  chmod +x "${ROK8S_INSTALL_PATH}/helm2"
+  rm -rf "${ROK8S_INSTALL_PATH}/helm2-tmp"
 fi
 
 # make sure kubeval is installed
