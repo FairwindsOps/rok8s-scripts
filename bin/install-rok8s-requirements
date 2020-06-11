@@ -127,7 +127,7 @@ if ! hash helm2 2>/dev/null; then
   echo Installing helm2...
   mkdir "${ROK8S_INSTALL_PATH}/helm2-tmp"
   curl "https://get.helm.sh/helm-${HELM2_VERSION}-linux-amd64.tar.gz" | tar xzvf - -C "${ROK8S_INSTALL_PATH}/helm2-tmp"
-  mv "${ROK8S_INSTALL_PATH}/helm-tmp/linux-amd64/helm" "${ROK8S_INSTALL_PATH}/helm2"
+  mv "${ROK8S_INSTALL_PATH}/helm2-tmp/linux-amd64/helm" "${ROK8S_INSTALL_PATH}/helm2"
   chmod +x "${ROK8S_INSTALL_PATH}/helm2"
   rm -rf "${ROK8S_INSTALL_PATH}/helm2-tmp"
 fi
