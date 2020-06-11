@@ -123,7 +123,7 @@ if ! hash helm 2>/dev/null; then
 fi
 
 # make sure helm2 is installed
-if ! hash helm 2>/dev/null; then
+if ! hash helm2 2>/dev/null; then
   echo Installing helm2...
   mkdir "${ROK8S_INSTALL_PATH}/helm2-tmp"
   curl "https://get.helm.sh/helm-${HELM2_VERSION}-linux-amd64.tar.gz" | tar xzvf - -C "${ROK8S_INSTALL_PATH}/helm2-tmp"
