@@ -1,10 +1,10 @@
 #!/bin/bash
 
+# shellcheck disable=SC2086
+
 set -eo pipefail
 
 . k8s-read-config
-
-# shellcheck disable=SC2086
 
 # Set a CI_REF from branch or tag
 CI_REF="${CI_TAG}"
@@ -55,10 +55,14 @@ format_multiple_values_files() {
   done
   echo "${formatted_files%?}" )
 }
-
 helm_upgrade() {
   # shellcheck disable=SC2086
-  helm upgrade --install "${CHART_RELEASE_NAME}" \
+  if [ "$ROK8S_USE_HELM2" == "true" ]; then
+      helmCmd="helm2"
+  else
+      helmCmd="helm"
+  fi
+  "$helmCmd" upgrade --install "${CHART_RELEASE_NAME}" \
     "${CHART_PATH}" \
     -f "${CHART_VALUES}" \
     --set image.tag="${CI_SHA1}" \
@@ -72,6 +76,10 @@ helm_upgrade() {
 }
 
 helm_template() {
+  if [ "$ROK8S_USE_HELM2" ]; then
+      rok8s_echo "Template does not support helm2"
+      exit 1
+  fi
   temp_dir="${ROK8S_TMP}/remote_repo"
   if [ -n "${HELM_REPO_URLS}" ]; then
     helm fetch --untar --untardir "${temp_dir}" "${CHART_PATH}"
