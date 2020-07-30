@@ -69,7 +69,7 @@ helm_upgrade() {
     --set rok8sCIRef="${CI_REF}" \
     --set sanitizedBranch="${SANITIZED_BRANCH}" \
     --namespace="${NAMESPACE}" \
-    --wait \
+    --atomic \
     --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}" \
     ${ROK8S_HELM_DEPLOY_EXTRAARGS} \
       2>&1 | tee "${ROK8S_TMP}/helm.out"
