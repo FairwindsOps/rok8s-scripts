@@ -57,3 +57,13 @@ An important note here is that `$CI_REF` defaults to `$CI_BRANCH`, enabling cach
 In some cases it will be beneficial to have an indicator of when a container that was built using the `docker-build` command actually created a new layer, as opposed to it just using cached layers.  There is a feature called `ROK8S_ENABLE_CHANGE_DETECTION` that can help with this.
 
 When set to `true`, `ROK8S_ENABLE_CHANGE_DETECTION` will compare the sha256 of the newly built container with the sha256 of the cached container for that branch.  It will output a file called `.changesDetected`.  This file will contain `true` if there were changes, or `false` if the container ID is identical to the cache.
+
+## List of variables
+The following variables can be specified in your build.config:
+
+* `BASEDIR` - the directory in which to run the `docker build` command
+* `DOCKERFILE` - one or more dockerfiles to build, relative to `BASE_DIR`
+* `EXTERNAL_REGISTRY_BASE_DOMAIN` - the external registry, e.g. `quay.io`
+* `REPOSITORY_NAME` - the name of the repository, e.g. `acme-co/app`
+* `ADDITIONAL_DOCKER_TAG_VERSIONS` - these tags will be added in the build/push/pull commands
+* `ROK8S_ENABLE_CHANGE_DETECTION` - enable change detection

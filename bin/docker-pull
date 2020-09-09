@@ -10,6 +10,12 @@ if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be se
 # This should exit 0 even if the image is not there. For example, on a first run
 PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
 CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
+if [ -z "${ADDITIONAL_DOCKER_TAG_VERSIONS[*]}" ]; then
+  ADDITIONAL_DOCKER_TAG_VERSIONS=()
+fi
 
 docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT" || true
 docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH" || true
+for DOCKER_TAG_VERSION in "${ADDITIONAL_DOCKER_TAG_VERSIONS[@]}"; do
+  docker pull "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$DOCKER_TAG_VERSION" || true
+done
