@@ -10,7 +10,7 @@ if [ -z "$REPOSITORY_NAME" ];               then echo REPOSITORY_NAME must be se
 # This should exit 0 even if the image is not there. For example, on a first run
 PREVIOUS_COMMIT=$(git rev-parse HEAD~1)
 CI_BRANCH=$(echo "${CI_BRANCH}" | tr / _)
-if [ -z "${ADDITIONAL_DOCKER_TAG_VERSIONS[@]}" ]; then
+if [ -z "${ADDITIONAL_DOCKER_TAG_VERSIONS[*]}" ]; then
   ADDITIONAL_DOCKER_TAG_VERSIONS=()
 fi
 
