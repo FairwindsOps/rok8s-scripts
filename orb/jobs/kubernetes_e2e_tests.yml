@@ -47,8 +47,23 @@ parameters:
       the executor, so it is recommended that you choose something like /tmp/test-results
     type: string
     default: ""
+  attach-workspace:
+    description: |
+      If true, the attach_workspace step will be run before any other steps.
+    type: boolean
+    default: false
+  workspace-location:
+    description: |
+      Where to mount the workspace if attach-workspace is true.
+    type: string
+    default: "/tmp/workspace"
 executor: <<parameters.executor>>
 steps:
+  - when:
+      condition: <<parameters.attach-workspace>>
+      steps:
+        - attach_workspace:
+            at: <<parameters.workspace-location>>
   - checkout
   - setup_remote_docker:
       docker_layer_caching: << parameters.enable_docker_layer_caching >>
