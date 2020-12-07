@@ -61,7 +61,7 @@ references:
 jobs:
   test:
     docker:
-      - image: circleci/python:3.7-stretch-node
+      - image: circleci/python:3.7-buster-node
     steps:
       - checkout
       - run: sudo test/setup.sh
@@ -70,7 +70,7 @@ jobs:
 
   build:
     docker:
-      - image: circleci/buildpack-deps:stretch
+      - image: circleci/buildpack-deps:buster
     steps:
       - checkout
       - *load_supported_docker_bases
@@ -82,7 +82,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:boron-stretch
+      - image: circleci/node:boron-buster
     steps:
       - checkout
       - *load_supported_docker_bases
