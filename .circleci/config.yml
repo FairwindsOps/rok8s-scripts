@@ -82,7 +82,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:boron-buster
+      - image: circleci/node:boron
     steps:
       - checkout
       - *load_supported_docker_bases
