@@ -1,0 +1,15 @@
+description: >
+  Run a Fairwinds Insights Report. Requires that a FAIRWINDS_TOKEN be set in your environment variables.
+parameters:
+  executor:
+    description: "The name of custom executor to use. Only recommended for development."
+    type: executor
+    default: ci-images
+executor: <<parameters.executor>>
+steps:
+  - checkout
+  - setup_remote_docker
+  - run:
+      name: Run Insights Checks
+      command: |
+        curl -L https://insights.fairwinds.com/v0/insights-ci.sh | bash
