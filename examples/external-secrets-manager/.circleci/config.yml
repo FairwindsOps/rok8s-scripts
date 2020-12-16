@@ -21,7 +21,7 @@ references:
 jobs:
   deploy:
     docker:
-      - image: quay.io/reactiveops/ci-images:v11.4-stretch
+      - image: quay.io/reactiveops/ci-images:v11.5-stretch
     steps:
       - checkout
       - setup_remote_docker

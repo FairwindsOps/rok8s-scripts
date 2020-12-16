@@ -14,7 +14,7 @@ references:
 
   deploy_steps: &deploy_steps
     docker:
-      - image: quay.io/reactiveops/ci-images:v11.4-alpine
+      - image: quay.io/reactiveops/ci-images:v11.5-alpine
     steps:
       - checkout
       - *set_environment_variables
@@ -24,7 +24,7 @@ references:
 jobs:
   imagebuild:
     docker:
-      - image: quay.io/reactiveops/ci-images:v11.4-alpine
+      - image: quay.io/reactiveops/ci-images:v11.5-alpine
     steps:
       - checkout
       - setup_remote_docker
