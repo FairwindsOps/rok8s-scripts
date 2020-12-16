@@ -1,5 +1,5 @@
 description: >
-  Run a Fairwinds Insights Report
+  Run a Fairwinds Insights Report. Requires that a FAIRWINDS_TOKEN be set in your environment variables.
 parameters:
   executor:
     description: "The name of custom executor to use. Only recommended for development."
