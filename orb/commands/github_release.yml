@@ -57,7 +57,7 @@ steps:
 
           echo "$REQUEST_BODY"
 
-          curl -v --data "${REQUEST_BODY}" "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases?access_token=${GITHUB_ACCESS_TOKEN}"
+          curl -v --data "${REQUEST_BODY}" -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" "https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/releases"
         }
 
         main "$@"
