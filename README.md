@@ -61,7 +61,7 @@ There are many valid ways to configure CI pipelines, but to help you get started
 
 Each new release of rok8s-scripts generates CI images for common workflows. These images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows ensures that you don't need to spend any build time installing extra dependencies.
 
-We currently include CI Images based on Alpine and Debian Stretch as our recommended starting points. The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v11.5-stretch`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
+We currently include CI Images based on Alpine and Debian Stretch as our recommended starting points. The latest Debian Stretch release can be pulled from `quay.io/reactiveops/ci-images:v11.6-stretch`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
 
 **Deprecation Notice** As of v10 and onward, alpine and stretch will be the only available images.
 
@@ -83,7 +83,7 @@ Here is a set of guidelines to follow when deciding what version of ci-images (a
 
 You want rok8s-scripts to be stable, and just keep working until you decide to upgrade.
 
-In this scenario, you should pin to a minor version of rok8s-scripts such as `v11.5-alpine`.
+In this scenario, you should pin to a minor version of rok8s-scripts such as `v11.6-alpine`.
 
 #### You like to live dangerously
 
