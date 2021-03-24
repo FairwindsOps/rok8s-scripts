@@ -7,3 +7,5 @@ test/bin/
 test/include/
 test/lib/
 test/pip-selfcheck.json
+node_modules
+/dist

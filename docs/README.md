@@ -18,8 +18,6 @@ secure secrets management, environment specific configuration, Docker build cach
 
 **Want to learn more?** Reach out on [the Slack channel](https://fairwindscommunity.slack.com/messages/rok8s-scripts) ([request invite](https://join.slack.com/t/fairwindscommunity/shared_invite/zt-e3c6vj4l-3lIH6dvKqzWII5fSSFDi1g)), send an email to `opensource@fairwinds.com`, or join us for [office hours on Zoom](https://fairwindscommunity.slack.com/messages/office-hours)
 
-# Documentation
-Check out the [full documentation at docs.fairwinds.com](https://rok8s-scripts.docs.fairwinds.com/)
 
 ### Quickstart
 To help you get started quickly, we've built a [minimal example](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/minimal)
