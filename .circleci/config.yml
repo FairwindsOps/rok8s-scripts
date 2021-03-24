@@ -200,6 +200,6 @@ workflows:
       - publish_docs:
           filters:
             branches:
-              only: sudermanjr/docs-site
+              ignore: /.*/
             tags:
               only: /.*/
