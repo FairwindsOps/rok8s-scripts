@@ -1,7 +1,7 @@
 # Managing Kubernetes Secrets Securely
 There are multiple ways to securely manage Kubernetes Secrets with rok8s-scripts. With support for AWS Secrets Manager, Sops encrypted secrets, and fetching secrets from external sources like AWS S3 or Google Cloud Storage, there should be at least one option that works well for you.
 
-The Rok8s-scripts [k8s-deploy-secrets helper script](/bin/k8s-deploy-secrets) decrypts and deploys secrets to Kubernetes. You do not need to call this script directly, it is called by other `deploy` scripts.
+The Rok8s-scripts [k8s-deploy-secrets helper script](https://github.com/FairwindsOps/rok8s-scripts/blob/master/bin/k8s-deploy-secrets) decrypts and deploys secrets to Kubernetes. You do not need to call this script directly, it is called by other `deploy` scripts.
 
 ## External Secrets Managers
 It is possible to retrieve individual key/value pairs from an external secrets manager. Supported secret stores are:
@@ -22,7 +22,7 @@ To access encrypted secrets, users or CI need access to both your Git repository
 
 Rok8s-scripts expects secret files to include the `.secret.sops.yml` extension. In your Rok8s-scripts configuration file, set the `SOPS_SECRETS` variable to a list of secret files, **not including the extension**. For example: `SOPS_SECRETS=('production/minimal-sops-production')`
 
-An [example of sops usage with rok8s-scripts can be found here](/examples/minimal-sops-secrets).
+An [example of sops usage with rok8s-scripts can be found here](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/minimal-sops-secrets).
 
 ### Specifying Multiple Secrets Files
 
