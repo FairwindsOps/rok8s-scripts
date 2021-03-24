@@ -13,16 +13,45 @@ module.exports = {
         sidebarDepth: 0,
       },
       {
-        title: "Secrets",
+        title: "Docker",
+        path: "/docker"
+      },
+      {
+        title: "Managing Secrets",
         path: "/secrets",
       },
       {
-        title: "Versions",
-        path: "/versions"
+        title: "Deploy with Helm",
+        path: "/helm"
+      },
+      {
+        title: "Deploy Without Helm",
+        path: "/without_helm"
+      },
+      {
+        title: "CI-Images",
+        path: "/ci-images"
       },
       {
         title: "CircleCI Orb",
         path: "/orb",
+      },
+      {
+        title: "Cloud Provider Auth",
+        children: [
+          {
+            title: "AWS",
+            path: "aws"
+          },
+          {
+            title: "GCP",
+            path: "gcp"
+          }
+        ]
+      },
+      {
+        title: "Versions of Rok8s Scripts",
+        path: "/versions"
       },
       {
         title: "Contributing",
@@ -34,6 +63,10 @@ module.exports = {
           {
             title: "Code of Conduct",
             path: "contributing/code-of-conduct"
+          },
+          {
+            title: "Releasing",
+            path: "contributing/releasing"
           }
         ]
       }
