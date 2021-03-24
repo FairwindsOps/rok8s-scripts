@@ -63,10 +63,6 @@ module.exports = {
           {
             title: "Code of Conduct",
             path: "contributing/code-of-conduct"
-          },
-          {
-            title: "Releasing",
-            path: "contributing/releasing"
           }
         ]
       }
