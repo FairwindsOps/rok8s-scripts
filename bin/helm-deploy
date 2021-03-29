@@ -65,9 +65,9 @@ helm_upgrade() {
   "$helmCmd" upgrade --install "${CHART_RELEASE_NAME}" \
     "${CHART_PATH}" \
     -f "${CHART_VALUES}" \
-    --set image.tag="${CI_SHA1}" \
-    --set rok8sCIRef="${CI_REF}" \
-    --set sanitizedBranch="${SANITIZED_BRANCH}" \
+    --set ${HELM_IMAGE_TAG_VALUE_REF-"image.tag"}="${CI_SHA1}" \
+    --set ${HELM_ROK8S_CI_REF_VALUE_REF-"rok8sCIRef"}="${CI_REF}" \
+    --set ${HELM_SANITIZED_BRANCH_VALUE_REF-"sanitizedBranch"}="${SANITIZED_BRANCH}" \
     --namespace="${NAMESPACE}" \
     --wait \
     --timeout "${HELM_TIMEOUTS[$index]:-$HELM_DEFAULT_TIMEOUT}" \

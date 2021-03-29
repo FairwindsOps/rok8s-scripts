@@ -9,3 +9,4 @@ test/lib/
 test/pip-selfcheck.json
 node_modules
 /dist
+*.swp
