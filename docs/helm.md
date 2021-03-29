@@ -56,11 +56,12 @@ somevalue: anothervalue
 ```
 
 ### Values Set Automatically
+
 The helm-deploy and helm-template scripts set 3 Helm values automatically.
 
-1. `$HELM_IMAGE_TAG_VALUE_REF` default of `image.tag` is set to the value of `$CI_SHA1`, a value that should represent the Git commit sha for the current build.
-2. `$HELM_ROK8S_CI_REF_VALUE_REF` default of `rok8sCIRef` refers to the value of `$CI_TAG` if it is set, otherwise defaults to the value of `$CI_BRANCH`.
-3. `$HELM_ROK8S_SANITIZED_BRANCH_VALUE_REF` default of `sanitizedBranch` refers to the value of `$SANITIZED_BRANCH`, a URL safe value we derive from the value of `$CI_BRANCH`. This value can be quite useful for deploying ephemeral environments.
+1. `$HELM_IMAGE_TAG_VALUE_REF` (default `image.tag`) is set to the value of `$CI_SHA1`, a value that represents the Git commit sha for the current build.
+2. `$HELM_ROK8S_CI_REF_VALUE_REF` (default `rok8sCIRef`) is set to the value of `$CI_TAG` if it is set, otherwise defaults to the value of `$CI_BRANCH`.
+3. `$HELM_ROK8S_SANITIZED_BRANCH_VALUE_REF` (default `sanitizedBranch`) is set to the value of `$SANITIZED_BRANCH`, a URL-safe value that is derived from the value of `$CI_BRANCH`. This value can be quite useful for deploying ephemeral environments.
 
 ## Secret Management
 Helm stores release information in Config Maps. If we deployed Kubernetes Secrets with Helm, they'd also be visible in that Helm release Config Map. To avoid that, we manage secrets separately. Please see [Managing Kubernetes Secrets Securely](secrets.md) for further information.

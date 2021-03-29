@@ -18,7 +18,7 @@ Here is a set of guidelines to follow when deciding what version of ci-images (a
 
 You want rok8s-scripts to be stable, and just keep working until you decide to upgrade.
 
-In this scenario, you should pin to a minor version of rok8s-scripts such as `v11.6-alpine`.
+In this scenario, you should pin to a minor version of rok8s-scripts such as `v11.7-alpine`.
 
 #### You like to live dangerously
 
