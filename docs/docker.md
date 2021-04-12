@@ -36,6 +36,7 @@ By default, this will attempt to pull the following images, and use them as `--c
 "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$PREVIOUS_COMMIT"
 "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:$CI_BRANCH"
 "${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:master"
+"${EXTERNAL_REGISTRY_BASE_DOMAIN}/${REPOSITORY_NAME}:main"
 ```
 
 ## Pushing a Docker Image
