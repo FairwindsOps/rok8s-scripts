@@ -160,7 +160,7 @@ if ! hash vault 2>/dev/null; then
   chmod +x vault
 fi
 
-if ! has yq 2>/dev/null; then
+if ! hash yq 2>/dev/null; then
   echo Installing yq...
   cd "${ROK8S_INSTALL_PATH}"
   curl -L "https://github.com/mikefarah/yq/releases/download/v4.8.0/yq_linux_amd64.tar.gz" | tar zxvf -
