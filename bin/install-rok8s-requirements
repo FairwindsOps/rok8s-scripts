@@ -164,7 +164,7 @@ if ! hash yq 2>/dev/null; then
   echo Installing yq...
   cd "${ROK8S_INSTALL_PATH}"
   curl -L "https://github.com/mikefarah/yq/releases/download/v4.8.0/yq_linux_amd64.tar.gz" | tar zxvf -
+  echo "1bdbf68deeaf36267ec9ee9d39dded381f12d9d5e86ba352fdbb54cd78a4b068 yq_linux_amd64" | sha256sum -c -
   mv yq_linux_amd64 yq
   chmod +x yq
-  echo "1bdbf68deeaf36267ec9ee9d39dded381f12d9d5e86ba352fdbb54cd78a4b068 yq" | sha256sum -c -
 fi
