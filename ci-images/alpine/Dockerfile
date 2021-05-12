@@ -1,4 +1,4 @@
-FROM docker:18
+FROM docker:20
 
 USER root
 
