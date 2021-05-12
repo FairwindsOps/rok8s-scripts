@@ -1,0 +1,21 @@
+description: |
+  Retrieves environment variables from Vault and sets them.
+  Requires that a VAULT_TOKEN and a VAULT_ADDR be set in your
+  environment. Also requires that the vault binary be available
+parameters:
+  vault_path:
+    type: string
+    description: The kv path to pull env from in Vault
+steps:
+  - run:
+      name: Get Vault Environment Variables
+      shell: bash
+      command: |
+        vault token lookup >/dev/null 2>&1
+        if [ $? != 0 ]; then echo "Vault token expired or not available!" && exit 1; fi
+        set -e
+        envData=$(vault kv get -format=yaml << parameters.vault_path >> | yq r - data.data | sed -nr 's/([A-Z_]+): (.*)/\1=\2/ p')
+        for i in "${envData[@]}"; do echo "export $i" >> ${BASH_ENV}; done
+        source $BASH_ENV
+
+        echo "Successfully injected env from Vault path << parameters.vault_path >>"

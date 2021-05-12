@@ -149,3 +149,13 @@ if ! hash aws-iam-authenticator 2>/dev/null; then
   echo "1053ac315df5f1e306f62969dbf1e1308f608efd  aws-iam-authenticator" | sha1sum -c -
   chmod +x "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
 fi
+
+# make sure vault is isntalled
+if ! hash vault 2>/dev/null; then
+  echo Installing vault...
+  cd "${ROK8S_INSTALL_PATH}"
+  curl -LO "https://releases.hashicorp.com/vault/1.7.1/vault_1.7.1_linux_amd64.zip"
+  unzip vault_1.7.1_linux_amd64.zip
+  rm vault_1.7.1_linux_amd64.zip
+  chmod +x vault
+fi
