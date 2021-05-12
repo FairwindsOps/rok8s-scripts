@@ -150,7 +150,7 @@ if ! hash aws-iam-authenticator 2>/dev/null; then
   chmod +x "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
 fi
 
-# make sure vault is isntalled
+# make sure vault is installed
 if ! hash vault 2>/dev/null; then
   echo Installing vault...
   cd "${ROK8S_INSTALL_PATH}"
