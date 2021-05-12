@@ -13,6 +13,8 @@ steps:
       command: |
         vault token lookup >/dev/null 2>&1
         if [ $? != 0 ]; then echo "Vault token expired or not available!" && exit 1; fi
+        vault kv get -format=yaml << parameters.vault_path >> 2>&1
+        if [ $? != 0 ]; then echo "Cannot read vault path << parameters.vault_path >>" && exit 2; fi
         set -e
         envData=$(vault kv get -format=yaml << parameters.vault_path >> | yq r - data.data | sed -nr 's/([A-Z_]+): (.*)/\1=\2/ p')
         for i in "${envData[@]}"; do echo "export $i" >> ${BASH_ENV}; done
