@@ -11,7 +11,7 @@ usage:
   version: 2.1
 
   orbs:
-    rok8s-scripts: fairwinds/rok8s-scripts@10.1
+    rok8s-scripts: fairwinds/rok8s-scripts@11
 
   jobs:
     deploy-secrets:
