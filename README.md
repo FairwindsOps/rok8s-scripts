@@ -16,7 +16,9 @@ set of best practices we've built at Fairwinds.
 In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
-**Want to learn more?** Reach out on [the Slack channel](https://fairwindscommunity.slack.com/messages/rok8s-scripts) ([request invite](https://join.slack.com/t/fairwindscommunity/shared_invite/zt-e3c6vj4l-3lIH6dvKqzWII5fSSFDi1g)), send an email to `opensource@fairwinds.com`, or join us for [office hours on Zoom](https://fairwindscommunity.slack.com/messages/office-hours)
+## Join the Fairwinds Open Source Community
+
+The goal of the Fairwinds Community is to exchange ideas, influence the open source roadmap, and network with fellow Kubernetes users. [Chat with us on Slack](https://join.slack.com/t/fairwindscommunity/shared_invite/zt-e3c6vj4l-3lIH6dvKqzWII5fSSFDi1g) or [join the user group](https://www.fairwinds.com/open-source-software-user-group) to get involved!
 
 # Documentation
 Check out the [full documentation at docs.fairwinds.com](https://rok8s-scripts.docs.fairwinds.com/)
@@ -42,3 +44,15 @@ There are many valid ways to configure CI pipelines, but to help you get started
 - [SOPS secrets](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts.
 - [Using Helm](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments.
 - [Production ready](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features.
+
+
+## Other Projects from Fairwinds
+
+Enjoying rok8s-scripts? Check out some of our other projects:
+* [Polaris](https://github.com/FairwindsOps/Polaris) - Audit, enforce, and build policies for Kubernetes resources, including over 20 built-in checks for best practices
+* [Goldilocks](https://github.com/FairwindsOps/Goldilocks) - Right-size your Kubernetes Deployments by compare your memory and CPU settings against actual usage
+* [Pluto](https://github.com/FairwindsOps/Pluto) - Detect Kubernetes resources that have been deprecated or removed in future versions
+* [Nova](https://github.com/FairwindsOps/Nova) - Check to see if any of your Helm charts have updates available
+* [rbac-manager](https://github.com/FairwindsOps/rbac-manager) - Simplify the management of RBAC in your Kubernetes clusters
+
+Or [check out the full list](https://www.fairwinds.com/open-source-software?utm_source=rok8s-scripts&utm_medium=rok8s-scripts&utm_campaign=rok8s-scripts)
