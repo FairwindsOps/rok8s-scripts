@@ -30,7 +30,7 @@ references:
 jobs:
   build_image:
     docker:
-      - image: quay.io/reactiveops/ci-images:v11.8-stretch
+      - image: quay.io/reactiveops/ci-images:v11.9-stretch
     steps:
       - checkout
       - setup_remote_docker
@@ -38,7 +38,7 @@ jobs:
       - *build_image
   deploy:
     docker:
-      - image: quay.io/reactiveops/ci-images:v11.8-stretch
+      - image: quay.io/reactiveops/ci-images:v11.9-stretch
     steps:
       - checkout
       - setup_remote_docker
