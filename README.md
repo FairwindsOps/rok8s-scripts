@@ -41,7 +41,7 @@ There are many valid ways to configure CI pipelines, but to help you get started
 
 ### Miscellaneous examples
 - [External secrets manager](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/external-secrets-manager)
-- [SOPS secrets](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts.
+- [SOPS secrets](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/minimal-sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts.
 - [Using Helm](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments.
 - [Production ready](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features.
 
