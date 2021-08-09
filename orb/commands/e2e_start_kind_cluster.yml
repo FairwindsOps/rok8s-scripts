@@ -3,11 +3,19 @@ parameters:
   kind_version:
     description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "0.10.0"
+    default: "0.11.1"
   kind_node_image:
     description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "kindest/node:v1.18.15@sha256:5c1b980c4d0e0e8e7eb9f36f7df525d079a96169c8a8f20d8bd108c0d0889cc4"
+    default: "kindest/node:v1.20.7@sha256:cbeaf907fc78ac97ce7b625e4bf0de16e3ea725daf6b04f930bd14c67c671ff9"
+  kind_config:
+    description: "A Kind config file to use for the cluster"
+    type: string
+    default: |
+      kind: Cluster
+      apiVersion: kind.x-k8s.io/v1alpha4
+      featureGates:
+        "RemoveSelfLink": false
 steps:
   - run:
       name: Start Kind Cluster
@@ -17,8 +25,13 @@ steps:
         mkdir bin-kind && mv kind-linux-amd64 bin-kind/kind
         export PATH=$(pwd)/bin-kind:$PATH
 
+        cat  >/kind.config <<EOF
+        << parameters.kind_config >>
+        EOF
+
         kind create cluster \
             --name="e2e" \
             --image << parameters.kind_node_image >> \
+            --config /kind.config \
             --wait=120s \
             --kubeconfig=./kind-kubeconfig
