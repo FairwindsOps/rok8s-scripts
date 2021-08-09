@@ -25,7 +25,7 @@ steps:
         mkdir bin-kind && mv kind-linux-amd64 bin-kind/kind
         export PATH=$(pwd)/bin-kind:$PATH
 
-        cat  >/kind.config <<EOF
+        cat  >/kind.config \<<EOF
         << parameters.kind_config >>
         EOF
 
