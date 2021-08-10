@@ -13,7 +13,7 @@ variables:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_DRIVER: overlay2
 
-image: quay.io/reactiveops/ci-images:v11.9-alpine
+image: quay.io/reactiveops/ci-images:v11.10-alpine
 services:
   - docker:dind
 
