@@ -25,11 +25,9 @@ steps:
         mkdir bin-kind && mv kind-linux-amd64 bin-kind/kind
         export PATH=$(pwd)/bin-kind:$PATH
 
-        cat  >/kind.config \<<EOF
+        cat  >/tmp/kind.config \<<EOF
         << parameters.kind_config >>
         EOF
-
-        chmod 755 /kind.config
 
         kind create cluster \
             --name="e2e" \
