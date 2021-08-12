@@ -32,6 +32,6 @@ steps:
         kind create cluster \
             --name="e2e" \
             --image << parameters.kind_node_image >> \
-            --config /kind.config \
+            --config /tmp/kind.config \
             --wait=120s \
             --kubeconfig=./kind-kubeconfig
