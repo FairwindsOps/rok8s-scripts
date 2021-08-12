@@ -29,6 +29,8 @@ steps:
         << parameters.kind_config >>
         EOF
 
+        chmod 755 /kind.config
+
         kind create cluster \
             --name="e2e" \
             --image << parameters.kind_node_image >> \
