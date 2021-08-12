@@ -29,6 +29,10 @@ steps:
         << parameters.kind_config >>
         EOF
 
+
+        kind version
+        cat /tmp/kind.config
+
         kind create cluster \
             --name="e2e" \
             --image << parameters.kind_node_image >> \
