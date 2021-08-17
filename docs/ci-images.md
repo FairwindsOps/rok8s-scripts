@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Documentation on CI Images"
+---
 ## CI Images
 
 Each new release of rok8s-scripts generates CI images for common workflows. These images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows ensures that you don't need to spend any build time installing extra dependencies.

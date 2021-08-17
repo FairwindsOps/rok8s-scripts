@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Deploying to Google Cloud"
+---
 # Deploying to Google Cloud
 It's quite straightforward to push Docker images to Google Container Registry and deploy to GKE clusters with rok8s-scripts.
 

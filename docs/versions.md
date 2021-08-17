@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Versioning"
+---
 # Versioning
 
 ## Upgrading from v10 to v11
