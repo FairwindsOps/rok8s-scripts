@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Deploying to Kubernetes with Helm"
+---
 # Deploying to Kubernetes with Helm
 
 [Helm](https://helm.sh/) is a popular Kubernetes package manager. To deploy to Kubernetes with Helm, you'll first need to [initialize it in your cluster](https://docs.helm.sh/using_helm#install-helm).

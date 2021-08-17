@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Deploying to AWS"
+---
 # Deploying to AWS
 It's quite straightforward to push Docker images to AWS ECR and deploy to Kubernetes clusters running AWS IAM Authenticator with rok8s-scripts.
 

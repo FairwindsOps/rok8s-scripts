@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Documentation: Using rok8-scripts without Helm"
+---
 # Deploying to Kubernetes without Helm
 Although [Helm](helm.md) is our preferred method of deploying to Kubernetes, rok8s-scripts also supports deploying to Kubernetes without Helm.
 
