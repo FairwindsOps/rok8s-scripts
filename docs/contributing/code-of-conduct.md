@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Contribution Code of Conduct"
+---
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge

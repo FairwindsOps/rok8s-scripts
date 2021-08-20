@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Contribution Guidelines"
+---
 # How to contribute
 
 Issues, whether bugs, tasks, or feature requests are essential for keeping rok8s-scripts (and Fairwinds in general) great.

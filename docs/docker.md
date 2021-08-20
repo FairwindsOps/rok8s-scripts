@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Documentation on Building and Pushing Docker Images"
+---
 # Building and Pushing Docker Images
 This guide will walk you through building and pushing Docker images with rok8s-scripts. These scripts simplify caching from previously built images.
 

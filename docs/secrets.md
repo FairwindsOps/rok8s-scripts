@@ -1,3 +1,8 @@
+---
+meta:
+  - name: description
+    content: "Fairwinds rok8s Scripts | Documentation | The Rok8s-scripts k8s-deploy-secrets helper script decrypts and deploys secrets to Kubernetes"
+---
 # Managing Kubernetes Secrets Securely
 There are multiple ways to securely manage Kubernetes Secrets with rok8s-scripts. With support for AWS Secrets Manager, Sops encrypted secrets, and fetching secrets from external sources like AWS S3 or Google Cloud Storage, there should be at least one option that works well for you.
 
