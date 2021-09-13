@@ -16,35 +16,17 @@ set of best practices we've built at Fairwinds.
 In addition to building Docker images and deploying them to Kubernetes, rok8s-scripts is a great way to handle
 secure secrets management, environment specific configuration, Docker build caching, and much more.
 
+<!-- Begin boilerplate -->
 ## Join the Fairwinds Open Source Community
 
-The goal of the Fairwinds Community is to exchange ideas, influence the open source roadmap, and network with fellow Kubernetes users. [Chat with us on Slack](https://join.slack.com/t/fairwindscommunity/shared_invite/zt-e3c6vj4l-3lIH6dvKqzWII5fSSFDi1g) or [join the user group](https://www.fairwinds.com/open-source-software-user-group) to get involved!
+The goal of the Fairwinds Community is to exchange ideas, influence the open source roadmap,
+and network with fellow Kubernetes users.
+[Chat with us on Slack](https://join.slack.com/t/fairwindscommunity/shared_invite/zt-e3c6vj4l-3lIH6dvKqzWII5fSSFDi1g)
+[join the user group](https://www.fairwinds.com/open-source-software-user-group) to get involved!
 
-# Documentation
-Check out the [full documentation at docs.fairwinds.com](https://rok8s-scripts.docs.fairwinds.com/)
-
-### Quickstart
-To help you get started quickly, we've built a [minimal example](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/minimal)
-that shows how to use rok8s-scripts to build Docker images and deploy to Kubernetes
-using Circle CI. This example will serve as a helpful introduction regardless of your CI platform.
-
-## Examples
-
-rok8s-scripts is designed to work well with a wide variety of use cases and environments.
-There are many valid ways to configure CI pipelines, but to help you get started, we've included a variety of [examples](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples) in this repository.
-
-### CI Platforms
-- [Bitbucket Pipelines](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/bitbucket-pipelines.yml)
-- [CircleCI](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/.circleci/config.yml)
-- [GitLab CI](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/.gitlab-ci.yml)
-- [Jenkins](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/ci/Jenkinsfile)
-
-### Miscellaneous examples
-- [External secrets manager](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/external-secrets-manager)
-- [SOPS secrets](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/minimal-sops-secrets) - Shows how to use [sops](https://github.com/mozilla/sops) with rok8s-scripts.
-- [Using Helm](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/helm) - We recommend using Helm to manage your deployments.
-- [Production ready](https://github.com/FairwindsOps/rok8s-scripts/tree/master/examples/production-ready) - Includes a number of recommended production features.
-
+<a href="https://www.fairwinds.com/t-shirt-offer?utm_source=rok8s-scripts&utm_medium=rok8s-scripts&utm_campaign=rok8s-scripts-tshirt">
+  <img src="https://www.fairwinds.com/hubfs/Doc_Banners/Fairwinds_OSS_User_Group_740x125_v6.png" alt="Love Fairwinds Open Source? Share your business email and job title and we'll send you a free Fairwinds t-shirt!" />
+</a>
 
 ## Other Projects from Fairwinds
 
@@ -54,5 +36,3 @@ Enjoying rok8s-scripts? Check out some of our other projects:
 * [Pluto](https://github.com/FairwindsOps/Pluto) - Detect Kubernetes resources that have been deprecated or removed in future versions
 * [Nova](https://github.com/FairwindsOps/Nova) - Check to see if any of your Helm charts have updates available
 * [rbac-manager](https://github.com/FairwindsOps/rbac-manager) - Simplify the management of RBAC in your Kubernetes clusters
-
-Or [check out the full list](https://www.fairwinds.com/open-source-software?utm_source=rok8s-scripts&utm_medium=rok8s-scripts&utm_campaign=rok8s-scripts)
