@@ -65,7 +65,7 @@ if ! hash pip 2>/dev/null; then
   echo Installing pip
   if [[ $PKG_MANAGER = *"apk"* ]]; then
     # shellcheck disable=SC2086
-    sudo $PKG_INSTALL py-pip python-dev
+    sudo $PKG_INSTALL py-pip python3-dev
   elif [[ $PKG_MANAGER = *"dnf"* ]]; then
     # shellcheck disable=SC2086
     sudo $PKG_INSTALL python-pip python-devel
