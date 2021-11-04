@@ -18,7 +18,7 @@ parameters:
   kind_node_image:
     description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "kindest/node:v1.20.7@sha256:cbeaf907fc78ac97ce7b625e4bf0de16e3ea725daf6b04f930bd14c67c671ff9"
+    default: "kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6"
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
@@ -79,7 +79,6 @@ steps:
       kind_version: << parameters.kind_version >>
   - e2e_start_command_runner:
       command_runner_image: << parameters.command_runner_image >>
-  - e2e_hostpath_provisioner
   - steps: << parameters.pre_script_steps >>
   - e2e_run_script:
       pre_script: << parameters.pre_script >>
