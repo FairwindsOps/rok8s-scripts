@@ -27,12 +27,11 @@ body:
       description: Please share the steps that we can take to reproduce this. Also include any relevant configuration.
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: version
       description: The version of the tool that you are using.
-      render: bash
     validations:
       required: true
   - type: checkboxes
