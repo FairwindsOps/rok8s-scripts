@@ -28,6 +28,7 @@ parameters:
   pre_script:
     description: "Script to run on the local machine before running script on command runner."
     type: string
+    default: ""
   pre_script_steps:
     description: "Define and inject a set of custom steps to run in the local machine before scripts are executed on the command runner."
     type: steps
@@ -38,6 +39,7 @@ parameters:
   post_script:
     description: "Script to run on the local machine after running script on command runner."
     type: string
+    default: ""
   post_script_steps:
     description: "Define and inject a set of custom steps to run in the local machine after scripts are executed on the command runner."
     type: steps
