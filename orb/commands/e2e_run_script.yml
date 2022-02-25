@@ -1,11 +1,15 @@
 description: Run a script in the executor.
 parameters:
   pre_script:
-    description: "Script to run on local executor before running on remote machine."
+    description: "Script to run on the local machine before running script on command runner."
     type: string
     default: ""
   script:
     description: "Script to run on the command runner."
+    type: string
+    default: ""
+  post_script:
+    description: "Script to run on the local machine after running script on command runner."
     type: string
     default: ""
 steps:
@@ -15,3 +19,4 @@ steps:
         bash << parameters.pre_script >>
         docker cp << parameters.script >> e2e-command-runner:/script
         docker exec e2e-command-runner sh -c "chmod +x /script; /script"
+        bash << parameters.post_script >>
