@@ -9,7 +9,9 @@ description: >
   can be done using `docker cp <file> e2e-command-runner:<path>.
   The regular script is copied over to the command runner container
   and executed on the command runner, providing access to the
-  Kubernetes kind cluster via kubectl and helm commands.
+  Kubernetes kind cluster via kubectl and helm commands. The
+  post_script runs on the CircleCI executor itself after the script
+  is run on the command runner.
 parameters:
   kind_version:
     description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
@@ -24,15 +26,22 @@ parameters:
     type: string
     default: "quay.io/reactiveops/ci-images:v11-alpine"
   pre_script:
-    description: "Script to run on the local machine before running on command runner."
+    description: "Script to run on the local machine before running script on command runner."
     type: string
   pre_script_steps:
-    description: "Define and inject a set of custom steps to run in the local machine before scripts are executed against the command runner."
+    description: "Define and inject a set of custom steps to run in the local machine before scripts are executed on the command runner."
     type: steps
     default: []
   script:
     description: "The script to run on the command runner."
     type: string
+  post_script:
+    description: "Script to run on the local machine after running script on command runner."
+    type: string
+  post_script_steps:
+    description: "Define and inject a set of custom steps to run in the local machine after scripts are executed on the command runner."
+    type: steps
+    default: []
   executor:
     description: "The name of custom executor to use. Only recommended for development."
     type: executor
@@ -83,6 +92,8 @@ steps:
   - e2e_run_script:
       pre_script: << parameters.pre_script >>
       script: << parameters.script >>
+      post_script: << parameters.post_script >>
+  - steps: << parameters.post_script_steps >>
   - when:
       condition: << parameters.store-test-results >>
       steps:

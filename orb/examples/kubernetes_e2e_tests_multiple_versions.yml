@@ -18,6 +18,7 @@ usage:
             kind_node_image: "kindest/node:v1.15.6@sha256:18c4ab6b61c991c249d29df778e651f443ac4bcd4e6bdd37e0c83c0d33eaae78"
             pre_script: e2e/pre.sh
             script: e2e/test.sh
+            post_script: e2e/post.sh
             filters:
               branches:
                 only: /.*/
@@ -28,6 +29,7 @@ usage:
             kind_node_image: "kindest/node:v1.16.3@sha256:70ce6ce09bee5c34ab14aec2b84d6edb260473a60638b1b095470a3a0f95ebec"
             pre_script: e2e/pre.sh
             script: e2e/test.sh
+            post_script: e2e/post.sh
             filters:
               branches:
                 only: /.*/

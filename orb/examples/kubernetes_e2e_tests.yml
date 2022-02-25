@@ -8,7 +8,9 @@ description: >
   can be done using `docker cp <file> e2e-command-runner:<path>.
   The regular script is copied over to the command runner container
   and executed on the command runner, providing access to the
-  Kubernetes kind cluster via kubectl and helm commands.
+  Kubernetes kind cluster via kubectl and helm commands. The
+  post_script runs on the CircleCI executor itself after the script
+  is run on the command runner.
 
 usage:
   version: 2.1
@@ -24,6 +26,7 @@ usage:
             name: "End-To-End Test on Kubernetes"
             pre_script: e2e/pre.sh
             script: e2e/test.sh
+            post_script: e2e/post.sh
             filters:
               branches:
                 only: /.*/
