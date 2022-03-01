@@ -16,7 +16,6 @@ steps:
   - run:
       name: Run Script
       command: |
-        echo "Testing this works"
         [ -z << parameters.pre_script >> ] || bash << parameters.pre_script >>
         docker cp << parameters.script >> e2e-command-runner:/script
         docker exec e2e-command-runner sh -c "chmod +x /script; /script"
