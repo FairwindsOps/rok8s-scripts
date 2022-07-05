@@ -16,7 +16,7 @@ metadata:
   labels:
     app: example
     chart: example-0.1.0
-    release: RELEASE-NAME
+    release: release-name
     heritage: Helm
     dns: route53
 spec:
@@ -28,7 +28,7 @@ spec:
       name: http
   selector:
     app: example
-    release: RELEASE-NAME
+    release: release-name
 ---
 # Source: example/templates/deployment.yaml
 apiVersion: extensions/v1beta1
@@ -38,14 +38,14 @@ metadata:
   labels:
     app: example
     chart: example-0.1.0
-    release: RELEASE-NAME
+    release: release-name
     heritage: Helm
 spec:
   template:
     metadata:
       labels:
         app: example
-        release: RELEASE-NAME
+        release: release-name
     spec:
       containers:
         - name: example
