@@ -131,12 +131,14 @@ jobs:
 
   request-orb-publish:
     docker:
-      - image: alpine:latest
+      - image: ubuntu:slim
     steps:
+      - *install_vault
+      - rok8s/get_vault_env:
+          vault_path: repo/rok8s-scripts/env
       - run:
           name: "Request Orb Publish"
           command: |
-            apk --update add curl
             curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
 workflows:
   "Docker Build and Test":
