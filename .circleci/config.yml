@@ -9,7 +9,7 @@ references:
   docker_login: &docker_login
     run:
       name: Docker login
-      command: docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
+      command: docker login -u="reactiveops+circleci" -p="${REACTIVEOPS_QUAY_TOKEN}" quay.io
 
   load_supported_docker_bases: &load_supported_docker_bases
     run:
@@ -59,6 +59,16 @@ references:
         make docs-index
         git diff --exit-code docs/
 
+  install_vault_alpine: &install_vault
+    run:
+      name: install hashicorp vault
+      command: |
+        apt-get install -y curl yq
+        cd /tmp
+        curl -LO https://releases.hashicorp.com/vault/1.9.7/vault_1.9.7_linux_amd64.zip
+        sha256sum vault_1.9.7_linux_amd64.zip | grep d312f6852cdec8d29e50b72af5d36c6890e1e8bfcbedfdb71785dfc11e907c3d
+        unzip vault_1.9.7_linux_amd64.zip
+        mv vault /usr/bin/vault
 jobs:
   test:
     docker:
@@ -77,6 +87,9 @@ jobs:
       - *load_supported_docker_bases
       - setup_remote_docker
       - run: echo 'export DOCKER_BASE_TAG=dev-$CIRCLE_SHA1' >> $BASH_ENV
+      - *install_vault
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
       - *docker_login
       - *docker_build
       - *docker_push
@@ -91,6 +104,9 @@ jobs:
       - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
       - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
       - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
+      - *install_vault
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
       - *build_docker_tags
       - *docker_login
       - *docker_build
