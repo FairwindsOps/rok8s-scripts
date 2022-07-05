@@ -112,6 +112,23 @@ jobs:
       - *docker_build
       - *docker_push
 
+  publish-dev-orb:
+    working_directory: /go/src/github.com/fairwindsops/rok8s-scripts
+    docker:
+      - image: quay.io/reactiveops/ci-images:v11-buster
+    shell: /bin/bash
+    steps:
+      - checkout
+      - *install_vault
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
+      - *install_circleci
+      - orb-tools/pack:
+          source: orb/
+      - orb-tools/publish:
+          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          token-variable: CIRCLECI_DEV_API_TOKEN
+
   request-orb-publish:
     docker:
       - image: alpine:latest
@@ -177,10 +194,8 @@ workflows:
               only: /.*/
             tags:
               only: /.*/
-      - orb-tools/publish:
+      - publish-dev-orb:
           name: "Publish Dev Orb"
-          orb-ref: fairwinds/rok8sscripts@dev:${CIRCLE_BRANCH}
-          publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
             - "Pack Orb"
