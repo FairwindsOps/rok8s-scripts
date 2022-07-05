@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@9.0.0
-  rok8s-scripts: fairwinds/rok8s-scripts@11
+  rok8s: fairwinds/rok8s-scripts@11
   oss-docs: fairwinds/oss-docs@0
 
 references:
@@ -138,7 +138,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - rok8s-scripts/github_release:
+      - rok8s/github_release:
           requires:
             - release
           filters:
@@ -147,7 +147,7 @@ workflows:
             tags:
               only: /^v.*/
       - oss-docs/publish-docs:
-          repository: rok8s-scripts
+          repository: rok8s
           filters:
             branches:
               #ignore: /.*/
@@ -179,7 +179,7 @@ workflows:
               only: /.*/
       - orb-tools/publish:
           name: "Publish Dev Orb"
-          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          orb-ref: fairwinds/rok8s@dev:${CIRCLE_BRANCH}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
