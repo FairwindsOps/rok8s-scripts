@@ -61,16 +61,16 @@ references:
 jobs:
   test:
     docker:
-      - image: circleci/python:3.7-buster-node
+      - image: cimg/python:3.7-node
     steps:
       - checkout
-      - run: sudo test/setup.sh
+      - run: test/setup.sh
       - run: test/run.sh
       - *test_gh_pages
 
   build:
     docker:
-      - image: circleci/buildpack-deps:buster
+      - image: cimg/base:stable
     steps:
       - checkout
       - *load_supported_docker_bases
@@ -82,7 +82,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:boron
+      - image: cimg/node:16.15
     steps:
       - checkout
       - *load_supported_docker_bases
