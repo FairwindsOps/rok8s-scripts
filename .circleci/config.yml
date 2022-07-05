@@ -73,12 +73,12 @@ references:
     run:
       name: install hashicorp vault
       command: |
-        apt-get install -y curl yq
+        sudo apt-get install -y curl yq
         cd /tmp
         curl -LO https://releases.hashicorp.com/vault/1.9.7/vault_1.9.7_linux_amd64.zip
         sha256sum vault_1.9.7_linux_amd64.zip | grep d312f6852cdec8d29e50b72af5d36c6890e1e8bfcbedfdb71785dfc11e907c3d
         unzip vault_1.9.7_linux_amd64.zip
-        mv vault /usr/bin/vault
+        sudo mv vault /usr/bin/vault
 jobs:
   test:
     docker:
