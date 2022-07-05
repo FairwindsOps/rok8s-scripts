@@ -59,6 +59,16 @@ references:
         make docs-index
         git diff --exit-code docs/
 
+  install_circleci: &install_circleci
+    run:
+      name: Install CircleCI CLI
+      command: |
+        cd /tmp
+        curl -LO https://github.com/CircleCI-Public/circleci-cli/releases/download/v0.1.16535/circleci-cli_0.1.16535_linux_amd64.tar.gz
+        tar -zxvf circleci-cli_0.1.16535_linux_amd64.tar.gz
+        mv circleci-cli_0.1.16535_linux_amd64/circleci /bin/circleci
+        circleci version
+
   install_vault_alpine: &install_vault
     run:
       name: install hashicorp vault
@@ -198,7 +208,6 @@ workflows:
               only: /.*/
       - publish-dev-orb:
           name: "Publish Dev Orb"
-          attach-workspace: true
           requires:
             - "Pack Orb"
           filters:
