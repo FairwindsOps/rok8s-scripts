@@ -147,7 +147,7 @@ workflows:
             tags:
               only: /^v.*/
       - oss-docs/publish-docs:
-          repository: rok8s
+          repository: rok8s-scripts
           filters:
             branches:
               #ignore: /.*/
@@ -179,7 +179,7 @@ workflows:
               only: /.*/
       - orb-tools/publish:
           name: "Publish Dev Orb"
-          orb-ref: fairwinds/rok8s@dev:${CIRCLE_BRANCH}
+          orb-ref: fairwinds/rok8sscripts@dev:${CIRCLE_BRANCH}
           publish-token-variable: CIRCLECI_DEV_API_TOKEN
           attach-workspace: true
           requires:
