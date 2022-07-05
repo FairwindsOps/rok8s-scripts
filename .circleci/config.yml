@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   orb-tools: circleci/orb-tools@9.0.0
   rok8s-scripts: fairwinds/rok8s-scripts@11
+  oss-docs: fairwinds/oss-docs@0
 
 references:
   docker_login: &docker_login
@@ -104,29 +105,6 @@ jobs:
           command: |
             apk --update add curl
             curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
-  publish_docs:
-    docker:
-      - image: cimg/node:15.5.1
-    steps:
-      - checkout
-      - run:
-          name: Build Docs Site
-          command: |
-            cd ./docs
-            npm install
-            npm run check-links
-            npm run build
-      - run:
-          name: Install AWS CLI
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-      - run:
-          name: Publish Docs Site to S3
-          command: |
-            cd ./dist
-            aws s3 sync ./ s3://rok8s-scripts.docs.fairwinds.com --delete
 workflows:
   "Docker Build and Test":
     jobs:
@@ -152,7 +130,14 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-
+      - oss-docs/publish-docs:
+          repository: rok8s-scripts
+          filters:
+            branches:
+              #ignore: /.*/
+              only: sudermanjr/docs-publish-update
+            tags:
+              only: /^.*/
   "Orb Test and Publish":
     jobs:
       - orb-tools/lint:
@@ -197,9 +182,3 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - publish_docs:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
