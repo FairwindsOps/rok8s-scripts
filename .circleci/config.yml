@@ -137,7 +137,7 @@ jobs:
           name: "Install Curl"
           command: |
             apt-get update
-            apt-get install -y curl
+            apt-get install -y curl unzip
       - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/rok8s-scripts/env
