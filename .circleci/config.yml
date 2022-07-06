@@ -134,12 +134,17 @@ jobs:
       - image: ubuntu:22.10
     steps:
       - oss-docs/install-tools
+      - run:
+          name: "Install Curl"
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y curl
       - rok8s/get_vault_env:
           vault_path: repo/rok8s-scripts/env
       - run:
           name: "Request Orb Publish"
           command: |
-            curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
+            curl -X POST --data-urlencode "payload={\"text\": \"[TESTING]Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
 workflows:
   "Docker Build and Test":
     jobs:
@@ -210,6 +215,7 @@ workflows:
             - "Pack Orb"
           filters:
             branches:
-              ignore: /.*/
+              #ignore: /.*/
+              only: sudermanjr/install-curl
             tags:
               only: /^v.*/
