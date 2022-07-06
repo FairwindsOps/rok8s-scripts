@@ -2,13 +2,14 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@9.0.0
-  rok8s-scripts: fairwinds/rok8s-scripts@11
+  rok8s: fairwinds/rok8s-scripts@11
+  oss-docs: fairwinds/oss-docs@0
 
 references:
   docker_login: &docker_login
     run:
       name: Docker login
-      command: docker login -u="reactiveops+circleci" -p="${QUAY_TOKEN}" quay.io
+      command: docker login -u="reactiveops+circleci" -p="${REACTIVEOPS_QUAY_TOKEN}" quay.io
 
   load_supported_docker_bases: &load_supported_docker_bases
     run:
@@ -58,6 +59,16 @@ references:
         make docs-index
         git diff --exit-code docs/
 
+  install_circleci: &install_circleci
+    run:
+      name: Install CircleCI CLI
+      command: |
+        cd /tmp
+        curl -LO https://github.com/CircleCI-Public/circleci-cli/releases/download/v0.1.16535/circleci-cli_0.1.16535_linux_amd64.tar.gz
+        tar -zxvf circleci-cli_0.1.16535_linux_amd64.tar.gz
+        mv circleci-cli_0.1.16535_linux_amd64/circleci /bin/circleci
+        circleci version
+
 jobs:
   test:
     docker:
@@ -76,6 +87,9 @@ jobs:
       - *load_supported_docker_bases
       - setup_remote_docker
       - run: echo 'export DOCKER_BASE_TAG=dev-$CIRCLE_SHA1' >> $BASH_ENV
+      - oss-docs/install-tools
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
       - *docker_login
       - *docker_build
       - *docker_push
@@ -90,43 +104,42 @@ jobs:
       - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
       - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
       - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
+      - oss-docs/install-tools
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
       - *build_docker_tags
       - *docker_login
       - *docker_build
       - *docker_push
 
+  publish-dev-orb:
+    working_directory: /go/src/github.com/fairwindsops/rok8s-scripts
+    docker:
+      - image: quay.io/reactiveops/ci-images:v11-buster
+    shell: /bin/bash
+    steps:
+      - checkout
+      - oss-docs/install-tools
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
+      - *install_circleci
+      - orb-tools/pack:
+          source: orb/
+      - orb-tools/publish:
+          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          token-variable: CIRCLECI_DEV_API_TOKEN
+
   request-orb-publish:
     docker:
-      - image: alpine:latest
+      - image: ubuntu:slim
     steps:
+      - oss-docs/install-tools
+      - rok8s/get_vault_env:
+          vault_path: repo/rok8s-scripts/env
       - run:
           name: "Request Orb Publish"
           command: |
-            apk --update add curl
             curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
-  publish_docs:
-    docker:
-      - image: cimg/node:15.5.1
-    steps:
-      - checkout
-      - run:
-          name: Build Docs Site
-          command: |
-            cd ./docs
-            npm install
-            npm run check-links
-            npm run build
-      - run:
-          name: Install AWS CLI
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-      - run:
-          name: Publish Docs Site to S3
-          command: |
-            cd ./dist
-            aws s3 sync ./ s3://rok8s-scripts.docs.fairwinds.com --delete
 workflows:
   "Docker Build and Test":
     jobs:
@@ -144,7 +157,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - rok8s-scripts/github_release:
+      - rok8s/github_release:
           requires:
             - release
           filters:
@@ -152,7 +165,14 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-
+      - oss-docs/publish-docs:
+          repository: rok8s-scripts
+          filters:
+            branches:
+              #ignore: /.*/
+              only: sudermanjr/docs-publish-update
+            tags:
+              only: /^.*/
   "Orb Test and Publish":
     jobs:
       - orb-tools/lint:
@@ -176,11 +196,8 @@ workflows:
               only: /.*/
             tags:
               only: /.*/
-      - orb-tools/publish:
+      - publish-dev-orb:
           name: "Publish Dev Orb"
-          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
-          publish-token-variable: CIRCLECI_DEV_API_TOKEN
-          attach-workspace: true
           requires:
             - "Pack Orb"
           filters:
@@ -197,9 +214,3 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - publish_docs:
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
