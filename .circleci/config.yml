@@ -169,8 +169,7 @@ workflows:
           repository: rok8s-scripts
           filters:
             branches:
-              #ignore: /.*/
-              only: sudermanjr/docs-publish-update
+              ignore: /.*/
             tags:
               only: /^.*/
   "Orb Test and Publish":
