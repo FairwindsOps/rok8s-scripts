@@ -131,7 +131,7 @@ jobs:
 
   request-orb-publish:
     docker:
-      - image: ubuntu:slim
+      - image: ubuntu:22.10
     steps:
       - oss-docs/install-tools
       - rok8s/get_vault_env:
