@@ -133,12 +133,12 @@ jobs:
     docker:
       - image: ubuntu:22.10
     steps:
-      - oss-docs/install-tools
       - run:
           name: "Install Curl"
           command: |
             sudo apt-get update
             sudo apt-get install -y curl
+      - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/rok8s-scripts/env
       - run:
