@@ -144,7 +144,7 @@ jobs:
       - run:
           name: "Request Orb Publish"
           command: |
-            curl -X POST --data-urlencode "payload={\"text\": \"[TESTING]Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
+            curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
 workflows:
   "Docker Build and Test":
     jobs:
@@ -215,7 +215,6 @@ workflows:
             - "Pack Orb"
           filters:
             branches:
-              #ignore: /.*/
-              only: sudermanjr/install-curl
+              ignore: /.*/
             tags:
               only: /^v.*/
