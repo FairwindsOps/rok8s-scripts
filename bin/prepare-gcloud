@@ -26,9 +26,13 @@ gcloud auth activate-service-account --configuration "rok8s-${GCP_PROJECT}" --ke
 # Set GCP Project
 gcloud config set project "${GCP_PROJECT}"
 
-# Authorize the docker client to work with GCR
-gcloud auth configure-docker --quiet
-
+if [[ -z "${GCP_IMG_REPO+x}" ]]; then
+    # Authorize the docker client to work with all default GCR repos
+    gcloud auth configure-docker --quiet
+  else
+    # Authorize the docker client to work with specified GCR repos
+    gcloud auth configure-docker "${GCP_IMG_REPO}" --quiet
+fi
 
 if [[ -z "${GCP_REGIONAL_CLUSTER+x}" ]]; then
   if [[ -z ${GCP_ZONE+x} ]] || [[ -z ${CLUSTER_NAME+x} ]] ; then
