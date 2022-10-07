@@ -36,8 +36,8 @@ A path for the decoded `$GCLOUD_KEY` to be stored. A simple value like `/tmp/gcl
 ## Optional Google Cloud Configuration
 You can optionally specify a registry to use when using the prepare-gcloud script:
 
-1. `GCP_IMG_REPO`
-The registry to pass to the `gcloud auth configure-docker` command. If omitted the google default is used. See [here.](https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker)
+1. `GCP_IMG_REPO_LOCATION`
+The registry location to pass to the `gcloud auth configure-docker` command. If omitted the google default is used. See [here.](https://cloud.google.com/sdk/gcloud/reference/auth/configure-docker)
 
 ## Google Kubernetes Engine Configuration
 The configuration above is sufficient to connect to a GCP project and pull or push images, but more configuration is required to connect to a GKE cluster.
