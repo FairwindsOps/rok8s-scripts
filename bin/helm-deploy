@@ -43,7 +43,6 @@ if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   fi
 
   HELM_DEFAULT_TIMEOUT=300s
-  HELM_HOME=${HELM_HOME}
 fi
 
 format_multiple_values_files() {
