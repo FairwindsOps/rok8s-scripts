@@ -122,6 +122,8 @@ jobs:
       - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/global/env
+      - rok8s/get_vault_env:
+          vault_path: repo/rok8s-scripts/env
       - *install_circleci
       - orb-tools/pack:
           source: orb/
