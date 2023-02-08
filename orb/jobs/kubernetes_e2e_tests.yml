@@ -21,6 +21,14 @@ parameters:
     description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
     type: string
     default: "kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6"
+  kind_config:
+    description: "A Kind config file to use for the cluster"
+    type: string
+    default: |
+      kind: Cluster
+      apiVersion: kind.x-k8s.io/v1alpha4
+      featureGates:
+        "RemoveSelfLink": false
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
@@ -88,6 +96,8 @@ steps:
   - e2e_start_kind_cluster:
       kind_node_image: << parameters.kind_node_image >>
       kind_version: << parameters.kind_version >>
+      kind_config: << parameters.kind_config >>
+
   - e2e_start_command_runner:
       command_runner_image: << parameters.command_runner_image >>
   - steps: << parameters.pre_script_steps >>
