@@ -16,11 +16,11 @@ parameters:
   kind_version:
     description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "0.11.1"
+    default: "0.17.0"
   kind_node_image:
     description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6"
+    default: "kindest/node:v1.24.6@sha256:97e8d00bc37a7598a0b32d1fabd155a96355c49fa0d4d4790aab0f161bf31be1"
   kind_config:
     description: "A Kind config file to use for the cluster"
     type: string
