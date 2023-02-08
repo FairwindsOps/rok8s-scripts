@@ -27,8 +27,26 @@ parameters:
     default: |
       kind: Cluster
       apiVersion: kind.x-k8s.io/v1alpha4
-      featureGates:
-        "RemoveSelfLink": false
+      kubeadmConfigPatches:
+      - |
+        apiVersion: kubeadm.k8s.io/v1beta3
+        kind: ClusterConfiguration
+        metadata:
+          name: config
+        apiServer:
+          certSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+        etcd:
+          serverCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+          peerCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
