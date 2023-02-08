@@ -16,15 +16,41 @@ parameters:
   kind_version:
     description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "0.11.1"
+    default: "0.17.0"
   kind_node_image:
     description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "kindest/node:v1.21.1@sha256:69860bda5563ac81e3c0057d654b5253219618a22ec3a346306239bba8cfa1a6"
+    default: "kindest/node:v1.24.6@sha256:97e8d00bc37a7598a0b32d1fabd155a96355c49fa0d4d4790aab0f161bf31be1"
+  kind_config:
+    description: "A Kind config file to use for the cluster"
+    type: string
+    default: |
+      kind: Cluster
+      apiVersion: kind.x-k8s.io/v1alpha4
+      kubeadmConfigPatches:
+      - |
+        apiVersion: kubeadm.k8s.io/v1beta3
+        kind: ClusterConfiguration
+        metadata:
+          name: config
+        apiServer:
+          certSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+        etcd:
+          serverCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+          peerCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
-    default: "quay.io/reactiveops/ci-images:v11.13-alpine"
+    default: "quay.io/reactiveops/ci-images:v11.14-alpine"
   pre_script:
     description: "Script to run on the local machine before running script on command runner."
     type: string
@@ -88,6 +114,8 @@ steps:
   - e2e_start_kind_cluster:
       kind_node_image: << parameters.kind_node_image >>
       kind_version: << parameters.kind_version >>
+      kind_config: << parameters.kind_config >>
+
   - e2e_start_command_runner:
       command_runner_image: << parameters.command_runner_image >>
   - steps: << parameters.pre_script_steps >>
