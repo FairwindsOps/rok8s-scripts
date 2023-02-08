@@ -14,6 +14,26 @@ parameters:
     default: |
       kind: Cluster
       apiVersion: kind.x-k8s.io/v1alpha4
+      kubeadmConfigPatches:
+      - |
+        apiVersion: kubeadm.k8s.io/v1beta3
+        kind: ClusterConfiguration
+        metadata:
+          name: config
+        apiServer:
+          certSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+        etcd:
+          serverCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+          peerCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
 steps:
   - run:
       name: Start Kind Cluster
