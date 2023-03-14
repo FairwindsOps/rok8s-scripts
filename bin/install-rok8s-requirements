@@ -87,10 +87,10 @@ if ! hash gcloud 2>/dev/null; then
   gcloud components update --quiet || \
     curl https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | \
       bash -s -- --disable-prompts
-  gcloud components install gke-gcloud-auth-plugin --quiet
   ln -s "${HOME}/google-cloud-sdk/bin/gcloud" "${ROK8S_INSTALL_PATH}/gcloud"
   ln -s "${HOME}/google-cloud-sdk/bin/docker-credential-gcloud" "${ROK8S_INSTALL_PATH}/docker-credential-gcloud"
   ln -s "${HOME}/google-cloud-sdk/bin/gsutil" "${ROK8S_INSTALL_PATH}/gsutil"
+  gcloud components install gke-gcloud-auth-plugin --quiet
 fi
 
 # make sure awscli is installed
