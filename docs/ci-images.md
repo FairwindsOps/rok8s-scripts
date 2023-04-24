@@ -11,7 +11,7 @@ We currently include CI Images based on Alpine and Debian Buster as our recommen
 
 **Deprecation Notice** As of v10 and onward, alpine and stretch will be the only available images.
 
-**Deprecation Notice from 2023-04-24** As Stretch is being removed from maintenance from Debian, Stretch will not be removed from now.
+**Deprecation Notice from 2023-04-24** As Stretch is being removed from maintenance from Debian, we are removing Stretch support from now on.
 
 ## Upgrading from v10 to v11
 
