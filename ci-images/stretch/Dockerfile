@@ -1,4 +1,4 @@
-FROM circleci/buildpack-deps:stretch
+FROM circleci/buildpack-deps:buster
 
 USER root
 
