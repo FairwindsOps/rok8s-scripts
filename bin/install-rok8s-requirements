@@ -145,8 +145,8 @@ fi
 if ! hash aws-iam-authenticator 2>/dev/null; then
   echo Installing aws-iam-authenticator...
   cd "${ROK8S_INSTALL_PATH}"
-  wget -q "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.3.0/heptio-authenticator-aws_0.3.0_linux_amd64" -O "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
-  echo "1053ac315df5f1e306f62969dbf1e1308f608efd  aws-iam-authenticator" | sha1sum -c -
+  wget -q "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.6.2/aws-iam-authenticator_0.6.2_linux_amd64" -O "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
+  echo "953faf58a5e3653d6355e8f2c35aa4daaafb1c28987708a6c72760f49dc91023  aws-iam-authenticator" | sha256sum -c -
   chmod +x "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
 fi
 
