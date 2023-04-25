@@ -1,6 +1,6 @@
 parameters:
   version:
     type: string
-    default: "v11.15-buster"
+    default: "v12.0-buster"
 docker:
   - image: quay.io/reactiveops/ci-images:<<parameters.version>>
