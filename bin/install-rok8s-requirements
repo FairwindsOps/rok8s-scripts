@@ -32,6 +32,7 @@ else
   PKG_INSTALL="${PKG_MANAGER} install -y"
 fi
 
+AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.11.15}"
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.22.11}"
 HELM_VERSION="${HELM_VERSION:-v3.11.1}"
 HELM2_VERSION="${HELM2_VERSION:-v2.17.0}"
@@ -93,11 +94,9 @@ if ! hash gcloud 2>/dev/null; then
   gcloud components install gke-gcloud-auth-plugin --quiet
 fi
 
-# make sure awscli is installed
-if ! hash aws 2>/dev/null; then
-  echo Installing aws...
-  pip install awscli
-fi
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-$AWS_CLI_VERSION.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
