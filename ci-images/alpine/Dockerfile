@@ -1,23 +1,30 @@
+FROM python:3.10-alpine3.17 as builder
+
+ARG AWS_CLI_VERSION=2.11.15
+RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
+RUN git clone --single-branch --depth 1 -b ${AWS_CLI_VERSION} https://github.com/aws/aws-cli.git
+
+WORKDIR aws-cli
+RUN ./configure --with-install-type=portable-exe --with-download-deps
+RUN make
+RUN make install
+
+# reduce image size: remove autocomplete and examples
+RUN rm -rf \
+    /usr/local/lib/aws-cli/aws_completer \
+    /usr/local/lib/aws-cli/awscli/data/ac.index \
+    /usr/local/lib/aws-cli/awscli/examples
+RUN find /usr/local/lib/aws-cli/awscli/data -name completions-1*.json -delete
+RUN find /usr/local/lib/aws-cli/awscli/botocore/data -name examples-1.json -delete
+RUN (cd /usr/local/lib/aws-cli; for a in *.so*; do test -f /lib/$a && rm $a; done)
+
+
 FROM docker:20.10.7
 
 USER root
 
-RUN apk add --update --no-cache jq wget py-pip curl bash git openssh-client binutils
-
-RUN export GLIBC_VERSION=2.35-r0
-
-RUN curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub
-RUN curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk
-RUN curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk
-RUN curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk
-RUN apk add --no-cache --force-overwrite \
-        glibc-${GLIBC_VERSION}.apk \
-        glibc-bin-${GLIBC_VERSION}.apk \
-        glibc-i18n-${GLIBC_VERSION}.apk
-RUN /usr/glibc-compat/bin/localedef -i en_US -f UTF-8 en_US.UTF-8
-RUN ln -sf /usr/glibc-compat/lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2
-RUN rm -rf glibc-*.apk
-RUN rm -rf /var/cache/apk/*
-
+RUN apk add --update --no-cache jq wget py-pip curl bash git openssh-client 
+RUN ln -s /usr/local/lib/aws-cli/aws /usr/local/bin/aws
+COPY --from=builder /usr/local/lib/aws-cli/ /usr/local/lib/aws-cli/
 COPY bin /usr/local/bin
 RUN install-rok8s-requirements
