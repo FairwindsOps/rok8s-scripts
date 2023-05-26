@@ -186,7 +186,7 @@ workflows:
           pre-steps:
             - run:
                 command: apk add git openssh
-          source_dir: orb
+          lint-dir: orb
           filters:
             branches:
               only: /.*/
@@ -194,7 +194,7 @@ workflows:
               only: /.*/
       - orb-tools/pack:
           name: "Pack Orb"
-          source_dir: orb
+          source-dir: orb
           requires:
             - "Lint Orb Files"
           filters:
