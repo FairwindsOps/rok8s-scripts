@@ -5,7 +5,7 @@
 # shellcheck disable=SC2086
 
 if [ -z "$AWS_ECR_ACCOUNT_ID" ]; then
-  eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} $DOCKER_EMAIL_FLAG)"
+  aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${EXTERNAL_REGISTRY_BASE_DOMAIN}
 else
-  eval "$(aws ecr get-login --region ${AWS_DEFAULT_REGION} --registry-ids ${AWS_ECR_ACCOUNT_ID} $DOCKER_EMAIL_FLAG)"
+  aws ecr get-login-password --region ${AWS_DEFAULT_REGION} --registry-ids ${AWS_ECR_ACCOUNT_ID} | docker login --username AWS --password-stdin ${EXTERNAL_REGISTRY_BASE_DOMAIN}
 fi

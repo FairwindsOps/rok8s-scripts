@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@9.0.0
-  rok8s: fairwinds/rok8s-scripts@11
+  orb-tools: circleci/orb-tools@9
+  rok8s: fairwinds/rok8s-scripts@12
   oss-docs: fairwinds/oss-docs@0
 
 references:
@@ -72,7 +72,7 @@ references:
 jobs:
   test:
     docker:
-      - image: cimg/python:3.7-node
+      - image: cimg/python:3.11-node
     steps:
       - checkout
       - run: test/setup.sh
@@ -96,7 +96,7 @@ jobs:
 
   release:
     docker:
-      - image: cimg/node:16.15
+      - image: cimg/node:20.2
     steps:
       - checkout
       - *load_supported_docker_bases
@@ -133,7 +133,7 @@ jobs:
 
   request-orb-publish:
     docker:
-      - image: ubuntu:22.10
+      - image: cimg/base:stable
     steps:
       - run:
           name: "Install Curl"
