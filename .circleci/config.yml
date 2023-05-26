@@ -72,7 +72,7 @@ references:
 jobs:
   test:
     docker:
-      - image: cimg/node:20.2
+      - image: cimg/python:3.11-node
     steps:
       - checkout
       - run: test/setup.sh
