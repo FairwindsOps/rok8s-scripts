@@ -1,8 +1,8 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@9.0.0
-  rok8s: fairwinds/rok8s-scripts@11
+  orb-tools: circleci/orb-tools@12
+  rok8s: fairwinds/rok8s-scripts@12
   oss-docs: fairwinds/oss-docs@0
 
 references:
