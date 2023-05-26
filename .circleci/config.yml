@@ -126,10 +126,10 @@ jobs:
           vault_path: repo/rok8s-scripts/env
       - *install_circleci
       - orb-tools/pack:
-          source: orb/
+          source_dir: orb/
       - orb-tools/publish:
-          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
-          token-variable: CIRCLECI_DEV_API_TOKEN
+          orb_name: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          circleci_token: CIRCLECI_DEV_API_TOKEN
 
   request-orb-publish:
     docker:
