@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@12
+  orb-tools: circleci/orb-tools@9
   rok8s: fairwinds/rok8s-scripts@12
   oss-docs: fairwinds/oss-docs@0
 
@@ -126,10 +126,10 @@ jobs:
           vault_path: repo/rok8s-scripts/env
       - *install_circleci
       - orb-tools/pack:
-          source_dir: orb/
+          source: orb/
       - orb-tools/publish:
-          orb_name: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
-          circleci_token: CIRCLECI_DEV_API_TOKEN
+          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
+          token-variable: CIRCLECI_DEV_API_TOKEN
 
   request-orb-publish:
     docker:
