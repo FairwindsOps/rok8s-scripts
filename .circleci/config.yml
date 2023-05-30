@@ -94,6 +94,16 @@ jobs:
       - *docker_build
       - *docker_push
 
+  github_release:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - oss-docs/install-tools
+      - rok8s/get_vault_env:
+          vault_path: repo/global/env
+      - rok8s/github_release
+
   release:
     docker:
       - image: cimg/node:20.2
@@ -135,18 +145,14 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - run:
-          name: "Install Curl"
-          command: |
-            apt-get update
-            apt-get install -y curl unzip sudo
       - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/rok8s-scripts/env
       - run:
           name: "Request Orb Publish"
           command: |
-            curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new orb by checking out the tag and running release-orb.sh\"}" $SLACK_URL
+            curl -X POST --data-urlencode "payload={\"text\": \"Please publish a new rok8s-scripts orb by checking out $CIRCLE_TAG and running release-orb.sh\"}" $SLACK_URL
+
 workflows:
   "Docker Build and Test":
     jobs:
@@ -164,7 +170,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-      - rok8s/github_release:
+      - github_release:
           requires:
             - release
           filters:
