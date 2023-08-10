@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.17 as builder
+FROM python:3.10-alpine3.18 as builder
 
 ARG AWS_CLI_VERSION=2.11.15
 RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
@@ -19,11 +19,11 @@ RUN find /usr/local/lib/aws-cli/awscli/botocore/data -name examples-1.json -dele
 RUN (cd /usr/local/lib/aws-cli; for a in *.so*; do test -f /lib/$a && rm $a; done)
 
 
-FROM docker:20.10.7
+FROM docker:24.0.5
 
 USER root
 
-RUN apk add --update --no-cache jq wget py-pip curl bash git openssh-client 
+RUN apk add --update --no-cache jq wget py-pip curl bash git openssh-client
 RUN ln -s /usr/local/lib/aws-cli/aws /usr/local/bin/aws
 COPY --from=builder /usr/local/lib/aws-cli/ /usr/local/lib/aws-cli/
 COPY bin /usr/local/bin
