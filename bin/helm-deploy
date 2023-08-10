@@ -11,22 +11,6 @@ CI_REF="${CI_TAG}"
 CI_REF="${CI_REF:-$CI_BRANCH}"
 CI_REF=$(echo "${CI_REF}" | tr / _)
 
-detect_helm_2() {
-  # If there is tiller running, then Helm2 is probaby configured. Error and quit.
-  # set DISABLE_HELM_2_DETECTION to skip
-  if [[ ! ${DISABLE_HELM_2_DETECTION} ]]; then
-    mapfile -t TILLERS < <(kubectl get deploy --all-namespaces -l app=helm,name=tiller | awk 'NR > 1 {print $1}')
-    if [ ${#TILLERS[@]} -gt 0 ]; then
-      echo "WARNING: You appear to have helm2 running with a Tiller in your cluster!!!! This is not supported!!!"
-      echo "If you REALLY want to do this, then you can set DISABLE_HELM_2_DETECTION to true in your config file."
-      echo "Doing that is not tested or recommended, so proceed with caution!"
-      echo "Found a tiller in these namespaces:"
-      printf '%s\n' "${TILLERS[@]}"
-      exit 1
-    fi
-  fi
-}
-
 if [ "${HELM_TEMPLATE_ONLY}" != "true" ]; then
   detect_helm_2
   if [[ ! $(kubectl get namespace "$NAMESPACE") ]]; then
@@ -56,11 +40,7 @@ format_multiple_values_files() {
 }
 helm_upgrade() {
   # shellcheck disable=SC2086
-  if [ "$ROK8S_USE_HELM2" == "true" ]; then
-      helmCmd="helm2"
-  else
-      helmCmd="helm"
-  fi
+  helmCmd="helm"
   "$helmCmd" upgrade --install "${CHART_RELEASE_NAME}" \
     "${CHART_PATH}" \
     -f "${CHART_VALUES}" \
@@ -75,10 +55,6 @@ helm_upgrade() {
 }
 
 helm_template() {
-  if [ "$ROK8S_USE_HELM2" ]; then
-      rok8s_echo "Template does not support helm2"
-      exit 1
-  fi
   temp_dir="${ROK8S_TMP}/remote_repo"
   if [ -n "${HELM_REPO_URLS}" ]; then
     helm fetch --untar --untardir "${temp_dir}" "${CHART_PATH}"
