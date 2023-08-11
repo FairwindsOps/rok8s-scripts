@@ -4,7 +4,7 @@ USER root
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y -qq jq wget python-pip python-dev && \
+    apt-get install -y -qq jq wget python3-pip python3-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
