@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.18 as builder
+FROM python:3.11-alpine3.18 as builder
 
 ARG AWS_CLI_VERSION=2.11.15
 RUN apk add --no-cache git unzip groff build-base libffi-dev cmake

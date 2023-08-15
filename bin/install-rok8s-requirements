@@ -32,10 +32,9 @@ else
   PKG_INSTALL="${PKG_MANAGER} install -y"
 fi
 
-AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.11.15}"
-KUBECTL_VERSION="${KUBECTL_VERSION:-v1.24.14}"
-HELM_VERSION="${HELM_VERSION:-v3.12.0}"
-HELM2_VERSION="${HELM2_VERSION:-v2.17.0}"
+AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.13.8}"
+KUBECTL_VERSION="${KUBECTL_VERSION:-v1.25.12}"
+HELM_VERSION="${HELM_VERSION:-v3.12.2}"
 SOPS_VERSION="${SOPS_VERSION:-v3.7.3}"
 
 # make sure sudo is installed
@@ -123,49 +122,34 @@ if ! hash helm 2>/dev/null; then
   rm -rf "${ROK8S_INSTALL_PATH}/helm-tmp"
 fi
 
-# make sure helm2 is installed
-if ! hash helm2 2>/dev/null; then
-  echo Installing helm2...
-  mkdir "${ROK8S_INSTALL_PATH}/helm2-tmp"
-  curl "https://get.helm.sh/helm-${HELM2_VERSION}-linux-amd64.tar.gz" | tar xzvf - -C "${ROK8S_INSTALL_PATH}/helm2-tmp"
-  mv "${ROK8S_INSTALL_PATH}/helm2-tmp/linux-amd64/helm" "${ROK8S_INSTALL_PATH}/helm2"
-  chmod +x "${ROK8S_INSTALL_PATH}/helm2"
-  rm -rf "${ROK8S_INSTALL_PATH}/helm2-tmp"
-fi
-
 # make sure kubeval is installed
 if ! hash kubeval 2>/dev/null; then
   echo Installing kubeval...
   cd "${ROK8S_INSTALL_PATH}"
-  curl -L "https://github.com/garethr/kubeval/releases/download/0.7.3/kubeval-linux-amd64.tar.gz" | tar xzvf -
-  echo "0582bd259fb8045562d3db3bc01ab834d8f210e7  kubeval"  | sha1sum -c -
+  curl -LO "https://github.com/garethr/kubeval/releases/download/v0.16.1/kubeval-linux-amd64.tar.gz"
+  echo "2d6f9bda1423b93787fa05d9e8dfce2fc1190fefbcd9d0936b9635f3f78ba790  kubeval-linux-amd64.tar.gz"  | sha256sum -c -
+  tar -zxvf kubeval-linux-amd64.tar.gz
+  rm kubeval-linux-amd64.tar.gz
   chmod +x "${ROK8S_INSTALL_PATH}/kubeval"
-fi
-
-# make sure aws-iam-authenticator is installed
-if ! hash aws-iam-authenticator 2>/dev/null; then
-  echo Installing aws-iam-authenticator...
-  cd "${ROK8S_INSTALL_PATH}"
-  wget -q "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.6.2/aws-iam-authenticator_0.6.2_linux_amd64" -O "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
-  echo "953faf58a5e3653d6355e8f2c35aa4daaafb1c28987708a6c72760f49dc91023  aws-iam-authenticator" | sha256sum -c -
-  chmod +x "${ROK8S_INSTALL_PATH}/aws-iam-authenticator"
 fi
 
 # make sure vault is installed
 if ! hash vault 2>/dev/null; then
   echo Installing vault...
   cd "${ROK8S_INSTALL_PATH}"
-  curl -LO "https://releases.hashicorp.com/vault/1.9.3/vault_1.9.3_linux_amd64.zip"
-  unzip vault_1.9.3_linux_amd64.zip
-  rm vault_1.9.3_linux_amd64.zip
+  curl -LO "https://releases.hashicorp.com/vault/1.14.1/vault_1.14.1_linux_amd64.zip"
+  echo "6031432dfc3de07f6523d206c44fc018aa969d94c8e9125a77340af359f57ea3  vault_1.14.1_linux_amd64.zip" | sha256sum -c -
+  unzip vault_1.14.1_linux_amd64.zip
+  rm vault_1.14.1_linux_amd64.zip
   chmod +x vault
 fi
 
+# install yq
 if ! hash yq 2>/dev/null; then
   echo Installing yq...
   cd "${ROK8S_INSTALL_PATH}"
-  curl -L "https://github.com/mikefarah/yq/releases/download/v4.8.0/yq_linux_amd64.tar.gz" | tar zxvf -
-  echo "1bdbf68deeaf36267ec9ee9d39dded381f12d9d5e86ba352fdbb54cd78a4b068  yq_linux_amd64" | sha256sum -c -
+  curl -L "https://github.com/mikefarah/yq/releases/download/v4.34.2/yq_linux_amd64.tar.gz" | tar zxvf -
+  echo "1952f93323e871700325a70610d2b33bafae5fe68e6eb4aec0621214f39a4c1e  yq_linux_amd64" | sha256sum -c -
   mv yq_linux_amd64 yq
   chmod +x yq
 fi
