@@ -108,7 +108,9 @@ fi
 # make sure sops is installed
 if ! hash sops 2>/dev/null; then
   echo Installing sops...
-  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.$(uname -mo | tr '[:upper:]' '[:lower:]' | sed 's/ /./')"
+  sops_url="https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.$(    uname -mo | tr '[:upper:]' '[:lower:]' | sed 's/ /./')"
+  echo "Sops download URL: $sops_url"
+  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "$sops_url"
   chmod +x "${ROK8S_INSTALL_PATH}/sops"
 fi
 
