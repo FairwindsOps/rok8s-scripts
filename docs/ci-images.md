@@ -7,7 +7,7 @@ meta:
 
 Each new release of rok8s-scripts generates CI images for common workflows. These images include a set of common CI/CD dependencies, including Docker, Kubernetes, Helm, AWS, and Google Cloud client libraries. Starting with these images as a base for deployment workflows ensures that you don't need to spend any build time installing extra dependencies.
 
-We currently include CI Images based on Alpine and Debian Buster as our recommended starting points. The latest Debian Buster release can be pulled from `quay.io/reactiveops/ci-images:v14.1-buster`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
+We currently include CI Images based on Alpine and Debian Buster as our recommended starting points. The latest Debian Buster release can be pulled from `quay.io/reactiveops/ci-images:v14.1-bullseye`. A full list of image tags is available on our [Quay repository](https://quay.io/repository/reactiveops/ci-images).
 
 **Deprecation Notice** As of v10 and onward, alpine and stretch will be the only available images.
 

@@ -1,4 +1,4 @@
-image: quay.io/reactiveops/ci-images:v14.1-buster
+image: quay.io/reactiveops/ci-images:v14.1-bullseye
 
 aliases:
   - &initialize-env |
