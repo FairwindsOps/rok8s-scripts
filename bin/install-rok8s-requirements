@@ -32,10 +32,10 @@ else
   PKG_INSTALL="${PKG_MANAGER} install -y"
 fi
 
-AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.13.24}"
-KUBECTL_VERSION="${KUBECTL_VERSION:-v1.25.14}"
-HELM_VERSION="${HELM_VERSION:-v3.13.0}"
-SOPS_VERSION="${SOPS_VERSION:-v3.7.3}"
+AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.17.5}"
+KUBECTL_VERSION="${KUBECTL_VERSION:-v1.30.2}"
+HELM_VERSION="${HELM_VERSION:-v3.15.2}"
+SOPS_VERSION="${SOPS_VERSION:-v3.9.0}"
 
 # make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
@@ -108,7 +108,9 @@ fi
 # make sure sops is installed
 if ! hash sops 2>/dev/null; then
   echo Installing sops...
-  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "https://github.com/mozilla/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.$(uname | tr '[:upper:]' '[:lower:]')"
+  sops_url="https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64"
+  echo "Sops download URL: $sops_url"
+  curl -fsSLo "${ROK8S_INSTALL_PATH}/sops" "$sops_url"
   chmod +x "${ROK8S_INSTALL_PATH}/sops"
 fi
 
