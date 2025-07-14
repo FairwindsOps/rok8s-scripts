@@ -125,7 +125,7 @@ jobs:
   publish-dev-orb:
     working_directory: /go/src/github.com/fairwindsops/rok8s-scripts
     docker:
-      - image: quay.io/reactiveops/ci-images:v11-buster
+      - image: quay.io/reactiveops/ci-images:v14.1-bullseye
     shell: /bin/bash
     steps:
       - checkout
