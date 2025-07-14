@@ -1,9 +1,6 @@
 FROM python:3-alpine3.22
 
-RUN apk add --no-cache git unzip groff build-base libffi-dev cmake
-
 RUN apk add --no-cache aws-cli
-
 
 # reduce image size: remove autocomplete and examples
 RUN rm -rf \
