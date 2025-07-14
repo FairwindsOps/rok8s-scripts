@@ -32,7 +32,6 @@ else
   PKG_INSTALL="${PKG_MANAGER} install -y"
 fi
 
-AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.17.5}"
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.30.2}"
 HELM_VERSION="${HELM_VERSION:-v3.15.2}"
 SOPS_VERSION="${SOPS_VERSION:-v3.9.0}"
@@ -92,11 +91,6 @@ if ! hash gcloud 2>/dev/null; then
   ln -s "${HOME}/google-cloud-sdk/bin/gsutil" "${ROK8S_INSTALL_PATH}/gsutil"
   gcloud components install gke-gcloud-auth-plugin --quiet
 fi
-
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-$AWS_CLI_VERSION.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-hash aws
 
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
