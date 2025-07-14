@@ -7,7 +7,6 @@ RUN rm -rf \
     /usr/local/lib/aws-cli/aws_completer \
     /usr/local/lib/aws-cli/awscli/data/ac.index \
     /usr/local/lib/aws-cli/awscli/examples
-RUN find /usr/local/lib/aws-cli/awscli/botocore/data -name examples-1.json -delete
 RUN (cd /usr/local/lib/aws-cli; for a in *.so*; do test -f /lib/$a && rm $a; done)
 
 USER root
