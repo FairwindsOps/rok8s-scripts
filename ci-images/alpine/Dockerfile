@@ -16,9 +16,6 @@ RUN (cd /usr/local/lib/aws-cli; for a in *.so*; do test -f /lib/$a && rm $a; don
 
 USER root
 
-# Remove existing AWS CLI installation if present
-RUN rm -rf /usr/local/aws-cli /usr/local/bin/aws
-
 RUN apk add --update --no-cache jq wget py-pip curl bash git openssh-client
 RUN ln -s /usr/local/lib/aws-cli/aws /usr/local/bin/aws
 COPY bin /usr/local/bin
