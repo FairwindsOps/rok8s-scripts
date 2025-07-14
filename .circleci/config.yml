@@ -87,7 +87,7 @@ jobs:
       - *load_supported_docker_bases
       - setup_remote_docker
       - run: echo 'export DOCKER_BASE_TAG=dev-$CIRCLE_SHA1' >> $BASH_ENV
-      #- oss-docs/install-tools
+      - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/global/env
       - *docker_login
@@ -99,7 +99,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      #- oss-docs/install-tools
+      - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/global/env
       - rok8s/github_release
@@ -114,7 +114,7 @@ jobs:
       - run: echo 'export GITHUB_ORGANIZATION=$CIRCLE_PROJECT_USERNAME' >> $BASH_ENV
       - run: echo 'export GITHUB_REPOSITORY=$CIRCLE_PROJECT_REPONAME' >> $BASH_ENV
       - run: echo 'export DOCKER_BASE_TAG=$CIRCLE_TAG' >> $BASH_ENV
-      #- oss-docs/install-tools
+      - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/global/env
       - *build_docker_tags
@@ -129,7 +129,7 @@ jobs:
     shell: /bin/bash
     steps:
       - checkout
-      #- oss-docs/install-tools
+      - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/global/env
       - rok8s/get_vault_env:
@@ -145,7 +145,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      #- oss-docs/install-tools
+      - oss-docs/install-tools
       - rok8s/get_vault_env:
           vault_path: repo/rok8s-scripts/env
       - run:
