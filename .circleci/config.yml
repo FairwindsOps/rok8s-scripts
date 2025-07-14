@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   orb-tools: circleci/orb-tools@9
   rok8s: fairwinds/rok8s-scripts@12
-  oss-docs: fairwinds/oss-docs@0
+  oss-docs: fairwinds/oss-docs@latest
 
 references:
   docker_login: &docker_login
