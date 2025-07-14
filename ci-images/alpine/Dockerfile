@@ -23,8 +23,11 @@ FROM docker:27.0.2
 
 USER root
 
+# Remove existing AWS CLI installation if present
+RUN rm -rf /usr/local/aws-cli /usr/local/bin/aws
+
 RUN apk add --update --no-cache jq wget py-pip curl bash git openssh-client
-RUN ln -s /usr/local/lib/aws-cli/aws /usr/local/bin/aws
 COPY --from=builder /usr/local/lib/aws-cli/ /usr/local/lib/aws-cli/
+RUN ln -s /usr/local/lib/aws-cli/aws /usr/local/bin/aws
 COPY bin /usr/local/bin
 RUN install-rok8s-requirements
