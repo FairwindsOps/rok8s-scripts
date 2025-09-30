@@ -3,11 +3,11 @@ parameters:
   kind_version:
     description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "0.17.0"
+    default: "0.25.0"
   kind_node_image:
     description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "kindest/node:v1.24.6@sha256:97e8d00bc37a7598a0b32d1fabd155a96355c49fa0d4d4790aab0f161bf31be1"
+    default: "kindest/node:v1.33.0"
   kind_config:
     description: "A Kind config file to use for the cluster"
     type: string
@@ -16,7 +16,7 @@ parameters:
       apiVersion: kind.x-k8s.io/v1alpha4
       kubeadmConfigPatches:
       - |
-        apiVersion: kubeadm.k8s.io/v1beta3
+        apiVersion: kubeadm.k8s.io/v1beta4
         kind: ClusterConfiguration
         metadata:
           name: config
