@@ -34,9 +34,21 @@ parameters:
     type: boolean
     description: "Enables docker_layer_caching on remote docker. Requires a paid plan."
     default: false
+  checkout-path:
+    description: |
+      Where to checkout the repository.
+    type: string
+    default: "."
+  checkout-method:
+    description: |
+      Valid options include blobless and full.
+    type: string
+    default: "blobless"
 executor: <<parameters.executor>>
 steps:
-  - checkout
+  - checkout:
+      path: << parameters.checkout-path >>
+      method: << parameters.checkout-method >>
   - setup_remote_docker:
       docker_layer_caching: <<parameters.enable_docker_layer_caching>>
   - set_env
