@@ -100,6 +100,16 @@ parameters:
       Where to mount the workspace if attach-workspace is true.
     type: string
     default: "/tmp/workspace"
+  checkout-path:
+    description: |
+      Where to checkout the repository.
+    type: string
+    default: "."
+  checkout-method:
+    description: |
+      Valid options include blobless and full.
+    type: string
+    default: "blobless"
 executor: <<parameters.executor>>
 steps:
   - when:
@@ -107,7 +117,9 @@ steps:
       steps:
         - attach_workspace:
             at: <<parameters.workspace-location>>
-  - checkout
+  - checkout:
+      path: << parameters.checkout-path >>
+      method: << parameters.checkout-method >>
   - setup_remote_docker:
       docker_layer_caching: << parameters.enable_docker_layer_caching >>
   - set_env
