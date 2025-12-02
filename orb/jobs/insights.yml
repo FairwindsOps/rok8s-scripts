@@ -5,9 +5,21 @@ parameters:
     description: "The name of custom executor to use. Only recommended for development."
     type: executor
     default: ci-images
+  checkout-path:
+    description: |
+      Where to checkout the repository.
+    type: string
+    default: "."
+  checkout-method:
+    description: |
+      Valid options include blobless and full.
+    type: string
+    default: "blobless"
 executor: <<parameters.executor>>
 steps:
-  - checkout
+  - checkout:
+      path: << parameters.checkout-path >>
+      method: << parameters.checkout-method >>
   - setup_remote_docker
   - run:
       name: Run Insights Checks
