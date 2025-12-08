@@ -1,4 +1,4 @@
-FROM circleci/buildpack-deps:trixie
+FROM cimg/base:current-24.04
 
 USER root
 
