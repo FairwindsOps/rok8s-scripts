@@ -32,10 +32,10 @@ else
   PKG_INSTALL="${PKG_MANAGER} install -y"
 fi
 
-AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.17.5}"
-KUBECTL_VERSION="${KUBECTL_VERSION:-v1.30.2}"
-HELM_VERSION="${HELM_VERSION:-v3.15.2}"
-SOPS_VERSION="${SOPS_VERSION:-v3.9.0}"
+AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.28.1}"
+KUBECTL_VERSION="${KUBECTL_VERSION:-v1.34.2}"
+HELM_VERSION="${HELM_VERSION:-v3.19.2}"
+SOPS_VERSION="${SOPS_VERSION:-v3.11.0}"
 
 # make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
@@ -101,7 +101,7 @@ hash aws
 # make sure kubectl is installed
 if ! hash kubectl 2>/dev/null; then
   echo Installing kubectl...
-  wget -q "https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O "${ROK8S_INSTALL_PATH}/kubectl"
+  wget -q "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" -O "${ROK8S_INSTALL_PATH}/kubectl"
   chmod +x "${ROK8S_INSTALL_PATH}/kubectl"
 fi
 
