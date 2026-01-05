@@ -133,8 +133,6 @@ if ! hash kubeconform 2>/dev/null; then
   tar -zxvf kubeconform-linux-amd64.tar.gz
   rm kubeconform-linux-amd64.tar.gz
   chmod +x "${ROK8S_INSTALL_PATH}/kubeconform"
-  # Create kubeval symlink for backwards compatibility
-  ln -sf "${ROK8S_INSTALL_PATH}/kubeconform" "${ROK8S_INSTALL_PATH}/kubeval"
 fi
 
 # make sure vault is installed
