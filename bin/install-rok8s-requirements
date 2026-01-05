@@ -125,16 +125,6 @@ if ! hash helm 2>/dev/null; then
   rm -rf "${ROK8S_INSTALL_PATH}/helm-tmp"
 fi
 
-# make sure kubeconform is installed (replaces deprecated kubeval)
-if ! hash kubeconform 2>/dev/null; then
-  echo Installing kubeconform...
-  cd "${ROK8S_INSTALL_PATH}"
-  curl -LO "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz"
-  tar -zxvf kubeconform-linux-amd64.tar.gz
-  rm kubeconform-linux-amd64.tar.gz
-  chmod +x "${ROK8S_INSTALL_PATH}/kubeconform"
-fi
-
 # make sure vault is installed
 if ! hash vault 2>/dev/null; then
   echo Installing vault...
