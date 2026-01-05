@@ -36,6 +36,7 @@ AWS_CLI_VERSION="${AWS_CLI_VERSION:-2.28.1}"
 KUBECTL_VERSION="${KUBECTL_VERSION:-v1.34.2}"
 HELM_VERSION="${HELM_VERSION:-v3.19.2}"
 SOPS_VERSION="${SOPS_VERSION:-v3.11.0}"
+KUBECONFORM_VERSION="${KUBECONFORM_VERSION:-v0.6.7}"
 
 # make sure sudo is installed
 if ! hash sudo 2>/dev/null; then
@@ -124,15 +125,16 @@ if ! hash helm 2>/dev/null; then
   rm -rf "${ROK8S_INSTALL_PATH}/helm-tmp"
 fi
 
-# make sure kubeval is installed
-if ! hash kubeval 2>/dev/null; then
-  echo Installing kubeval...
+# make sure kubeconform is installed (replaces deprecated kubeval)
+if ! hash kubeconform 2>/dev/null; then
+  echo Installing kubeconform...
   cd "${ROK8S_INSTALL_PATH}"
-  curl -LO "https://github.com/garethr/kubeval/releases/download/v0.16.1/kubeval-linux-amd64.tar.gz"
-  echo "2d6f9bda1423b93787fa05d9e8dfce2fc1190fefbcd9d0936b9635f3f78ba790  kubeval-linux-amd64.tar.gz"  | sha256sum -c -
-  tar -zxvf kubeval-linux-amd64.tar.gz
-  rm kubeval-linux-amd64.tar.gz
-  chmod +x "${ROK8S_INSTALL_PATH}/kubeval"
+  curl -LO "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz"
+  tar -zxvf kubeconform-linux-amd64.tar.gz
+  rm kubeconform-linux-amd64.tar.gz
+  chmod +x "${ROK8S_INSTALL_PATH}/kubeconform"
+  # Create kubeval symlink for backwards compatibility
+  ln -sf "${ROK8S_INSTALL_PATH}/kubeconform" "${ROK8S_INSTALL_PATH}/kubeval"
 fi
 
 # make sure vault is installed
