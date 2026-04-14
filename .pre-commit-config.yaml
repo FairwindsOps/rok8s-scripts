@@ -24,10 +24,9 @@ repos:
        args: [--branch, master]
      - id: pretty-format-json
        args: ['--autofix']
-  - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: 3.0.0
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
     hooks:
-      - id: forbid-binary
       - id: shellcheck
         args:
           - -e
