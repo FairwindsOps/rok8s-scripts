@@ -6,7 +6,7 @@ set -e
 export PATH=$PATH:$(pwd)/bin
 
 echo "Installing Shellcheck"
-scversion="v0.5.0"
+scversion="v0.11.0"
 wget "https://github.com/koalaman/shellcheck/releases/download/$scversion/shellcheck-$scversion.linux.x86_64.tar.xz"
 tar --xz -xvf "shellcheck-$scversion.linux.x86_64.tar.xz"
 mv shellcheck-$scversion/shellcheck $(pwd)/bin/shellcheck
