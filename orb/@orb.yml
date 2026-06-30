@@ -1,4 +1,4 @@
-version: "2.1"
+version: 2.1
 
 description: |
   "rok8s-scripts is a framework for building git-triggered workflows with Docker and Kubernetes. By adding rok8s-scripts to your CI/CD pipeline, you can build, push, and deploy your applications using the set of best practices we’ve built at Fairwinds.
