@@ -3,15 +3,14 @@ parameters:
   command_runner_image:
     description: "The image to execute commands from against the kind cluster."
     type: string
-    default: "quay.io/reactiveops/ci-images:v11-alpine"
+    default: "quay.io/reactiveops/ci-images:v15.0-bullseye"
 steps:
   - run:
       name: Setup Command Runner
       command: |
         cat ./kind-kubeconfig
         docker rm -f e2e-command-runner || true
-        # ci-images alpine is based on docker:* and defaults to dockerd-entrypoint.
-        # The command runner only needs kubectl/helm against kind, not nested dockerd.
+        # Keep the sidecar alive for docker exec (kubectl/helm against kind).
         docker run -itd \
           --name "e2e-command-runner" \
           --network container:e2e-control-plane \
