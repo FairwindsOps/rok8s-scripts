@@ -1,0 +1,59 @@
+description: Start a kind cluster
+parameters:
+  kind_version:
+    description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
+    type: string
+    default: "0.17.0"
+  kind_node_image:
+    description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
+    type: string
+    default: "kindest/node:v1.24.6@sha256:97e8d00bc37a7598a0b32d1fabd155a96355c49fa0d4d4790aab0f161bf31be1"
+  kind_config:
+    description: "A Kind config file to use for the cluster"
+    type: string
+    default: |
+      kind: Cluster
+      apiVersion: kind.x-k8s.io/v1alpha4
+      kubeadmConfigPatches:
+      - |
+        apiVersion: kubeadm.k8s.io/v1beta3
+        kind: ClusterConfiguration
+        metadata:
+          name: config
+        apiServer:
+          certSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+        etcd:
+          serverCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+          peerCertSANs:
+          - e2e-control-plane
+          - 127.0.0.1
+          - localhost
+steps:
+  - run:
+      name: Start Kind Cluster
+      command: |
+        curl -LO https://github.com/kubernetes-sigs/kind/releases/download/v<< parameters.kind_version >>/kind-linux-amd64
+        chmod +x kind-linux-amd64
+        mkdir bin-kind && mv kind-linux-amd64 bin-kind/kind
+        export PATH=$(pwd)/bin-kind:$PATH
+
+        cat  >/tmp/kind.config \<<EOF
+        << parameters.kind_config >>
+        EOF
+
+
+        kind version
+        cat /tmp/kind.config
+
+        kind create cluster \
+            --name="e2e" \
+            --image << parameters.kind_node_image >> \
+            --config /tmp/kind.config \
+            --wait=120s \
+            --kubeconfig=./kind-kubeconfig

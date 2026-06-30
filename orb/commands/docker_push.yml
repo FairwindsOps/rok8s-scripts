@@ -1,0 +1,11 @@
+description: Pushes a docker image using rok8s-scripts
+parameters:
+  config:
+    type: string
+    description: The location of the rok8s-scripts config file
+    default: "deploy/build.config"
+steps:
+  - run:
+      name: Docker Push
+      command: |
+        docker-push -f << parameters.config >>
