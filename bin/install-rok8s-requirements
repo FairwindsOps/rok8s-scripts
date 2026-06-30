@@ -84,13 +84,23 @@ fi
 # make sure gcloud is installed
 if ! hash gcloud 2>/dev/null; then
   echo Installing gcloud...
-  gcloud components update --quiet || \
+  if [[ $PKG_MANAGER = *"apt"* ]]; then
+    # Debian/Ubuntu images may ship Python < 3.10; the curl SDK installer requires 3.10+.
+    sudo apt-get install -y -qq apt-transport-https ca-certificates gnupg curl
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+      sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+    echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+      sudo tee /etc/apt/sources.list.d/google-cloud-sdk.list
+    sudo apt-get update
+    sudo apt-get install -y -qq google-cloud-cli google-cloud-cli-gke-gcloud-auth-plugin
+  else
     curl https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash | \
       bash -s -- --disable-prompts
-  ln -s "${HOME}/google-cloud-sdk/bin/gcloud" "${ROK8S_INSTALL_PATH}/gcloud"
-  ln -s "${HOME}/google-cloud-sdk/bin/docker-credential-gcloud" "${ROK8S_INSTALL_PATH}/docker-credential-gcloud"
-  ln -s "${HOME}/google-cloud-sdk/bin/gsutil" "${ROK8S_INSTALL_PATH}/gsutil"
-  gcloud components install gke-gcloud-auth-plugin --quiet
+    ln -s "${HOME}/google-cloud-sdk/bin/gcloud" "${ROK8S_INSTALL_PATH}/gcloud"
+    ln -s "${HOME}/google-cloud-sdk/bin/docker-credential-gcloud" "${ROK8S_INSTALL_PATH}/docker-credential-gcloud"
+    ln -s "${HOME}/google-cloud-sdk/bin/gsutil" "${ROK8S_INSTALL_PATH}/gsutil"
+    gcloud components install gke-gcloud-auth-plugin --quiet
+  fi
 fi
 
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-$AWS_CLI_VERSION.zip" -o "awscliv2.zip"
