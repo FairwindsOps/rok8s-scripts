@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@9
+  orb-tools: circleci/orb-tools@12.3
   rok8s: fairwinds/rok8s-scripts@12
   oss-docs: fairwinds/oss-docs@0
 
@@ -59,16 +59,6 @@ references:
         make docs-index
         git diff --exit-code docs/
 
-  install_circleci: &install_circleci
-    run:
-      name: Install CircleCI CLI
-      command: |
-        cd /tmp
-        curl -LO https://github.com/CircleCI-Public/circleci-cli/releases/download/v0.1.16535/circleci-cli_0.1.16535_linux_amd64.tar.gz
-        tar -zxvf circleci-cli_0.1.16535_linux_amd64.tar.gz
-        mv circleci-cli_0.1.16535_linux_amd64/circleci /bin/circleci
-        circleci version
-
 jobs:
   test:
     docker:
@@ -122,25 +112,6 @@ jobs:
       - *docker_build
       - *docker_push
 
-  publish-dev-orb:
-    working_directory: /go/src/github.com/fairwindsops/rok8s-scripts
-    docker:
-      - image: quay.io/reactiveops/ci-images:v14.1-bullseye
-    shell: /bin/bash
-    steps:
-      - checkout
-      - oss-docs/install-tools
-      - rok8s/get_vault_env:
-          vault_path: repo/global/env
-      - rok8s/get_vault_env:
-          vault_path: repo/rok8s-scripts/env
-      - *install_circleci
-      - orb-tools/pack:
-          source: orb/
-      - orb-tools/publish:
-          orb-ref: fairwinds/rok8s-scripts@dev:${CIRCLE_BRANCH}
-          token-variable: CIRCLECI_DEV_API_TOKEN
-
   request-orb-publish:
     docker:
       - image: cimg/base:stable
@@ -189,10 +160,7 @@ workflows:
     jobs:
       - orb-tools/lint:
           name: "Lint Orb Files"
-          pre-steps:
-            - run:
-                command: apk add git openssh
-          lint-dir: orb
+          source_dir: orb
           filters:
             branches:
               only: /.*/
@@ -200,7 +168,7 @@ workflows:
               only: /.*/
       - orb-tools/pack:
           name: "Pack Orb"
-          source-dir: orb
+          source_dir: orb
           requires:
             - "Lint Orb Files"
           filters:
@@ -208,10 +176,22 @@ workflows:
               only: /.*/
             tags:
               only: /.*/
-      - publish-dev-orb:
+      - orb-tools/publish:
           name: "Publish Dev Orb"
+          orb_name: fairwinds/rok8s-scripts
+          pub_type: dev
+          dev_tags: dev:${CIRCLE_BRANCH}
+          circleci_token: CIRCLECI_DEV_API_TOKEN
+          vcs_type: << pipeline.project.type >>
+          enable_pr_comment: false
           requires:
             - "Pack Orb"
+          pre-steps:
+            - oss-docs/install-tools
+            - rok8s/get_vault_env:
+                vault_path: repo/global/env
+            - rok8s/get_vault_env:
+                vault_path: repo/rok8s-scripts/env
           filters:
             branches:
               only: /.*/

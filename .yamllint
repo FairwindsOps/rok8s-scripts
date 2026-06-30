@@ -1,0 +1,6 @@
+extends: relaxed
+
+rules:
+  line-length:
+    max: 255
+    allow-non-breakable-inline-mappings: true
