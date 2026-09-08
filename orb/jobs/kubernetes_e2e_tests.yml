@@ -16,13 +16,13 @@ parameters:
   kind_version:
     description: "The kind version to use. See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "0.17.0"
+    default: "0.33.0"
   kind_node_image:
-    description: "The kind node image to use.  See https://github.com/kubernetes-sigs/kind/releases"
+    description: "The kind node image to use. Pin by digest from the same kind release. See https://github.com/kubernetes-sigs/kind/releases"
     type: string
-    default: "kindest/node:v1.24.6@sha256:97e8d00bc37a7598a0b32d1fabd155a96355c49fa0d4d4790aab0f161bf31be1"
+    default: "kindest/node:v1.37.0@sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5"
   kind_config:
-    description: "A Kind config file to use for the cluster"
+    description: "A Kind config file to use for the cluster. Default includes kubeadm v1beta3 (Kubernetes <1.36) and v1beta4 (Kubernetes 1.36+) patches."
     type: string
     default: |
       kind: Cluster
@@ -39,18 +39,39 @@ parameters:
           - 127.0.0.1
           - localhost
         etcd:
-          serverCertSANs:
+          local:
+            serverCertSANs:
+            - e2e-control-plane
+            - 127.0.0.1
+            - localhost
+            peerCertSANs:
+            - e2e-control-plane
+            - 127.0.0.1
+            - localhost
+      - |
+        apiVersion: kubeadm.k8s.io/v1beta4
+        kind: ClusterConfiguration
+        metadata:
+          name: config
+        apiServer:
+          certSANs:
           - e2e-control-plane
           - 127.0.0.1
           - localhost
-          peerCertSANs:
-          - e2e-control-plane
-          - 127.0.0.1
-          - localhost
+        etcd:
+          local:
+            serverCertSANs:
+            - e2e-control-plane
+            - 127.0.0.1
+            - localhost
+            peerCertSANs:
+            - e2e-control-plane
+            - 127.0.0.1
+            - localhost
   command_runner_image:
     description: "The image to execute commands from against the kind cluster. Also where the script gets executed."
     type: string
-    default: "quay.io/reactiveops/ci-images:v15.0-cimg-24.04"
+    default: "quay.io/reactiveops/ci-images:v16.0-cimg-24.04"
   pre_script:
     description: "Script to run on the local machine before running script on command runner."
     type: string
