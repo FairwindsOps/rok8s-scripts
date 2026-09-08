@@ -21,7 +21,7 @@ references:
 jobs:
   deploy:
     docker:
-      - image: quay.io/reactiveops/ci-images:v14.1-bullseye
+      - image: quay.io/reactiveops/ci-images:v16.0-cimg-24.04
     steps:
       - checkout
       - setup_remote_docker
