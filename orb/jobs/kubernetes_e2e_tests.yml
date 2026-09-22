@@ -131,6 +131,12 @@ parameters:
       Valid options include blobless and full.
     type: string
     default: "blobless"
+  no_output_timeout:
+    description: >
+      How long CircleCI waits with no output from the Run Script step before
+      killing it. CircleCI duration, e.g. 20m.
+    type: string
+    default: "10m"
 executor: <<parameters.executor>>
 steps:
   - when:
@@ -156,6 +162,7 @@ steps:
       pre_script: << parameters.pre_script >>
       script: << parameters.script >>
       post_script: << parameters.post_script >>
+      no_output_timeout: << parameters.no_output_timeout >>
   - steps: << parameters.post_script_steps >>
   - when:
       condition: << parameters.store-test-results >>
