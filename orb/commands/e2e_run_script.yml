@@ -12,9 +12,16 @@ parameters:
     description: "Script to run on the local machine after running script on command runner."
     type: string
     default: ""
+  no_output_timeout:
+    description: >
+      How long CircleCI waits with no output from the Run Script step before
+      killing it. CircleCI duration, e.g. 20m.
+    type: string
+    default: "10m"
 steps:
   - run:
       name: Run Script
+      no_output_timeout: << parameters.no_output_timeout >>
       command: |
         [ -z << parameters.pre_script >> ] || bash << parameters.pre_script >>
         docker cp << parameters.script >> e2e-command-runner:/script

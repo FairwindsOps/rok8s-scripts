@@ -27,6 +27,7 @@ usage:
             pre_script: e2e/pre.sh
             script: e2e/test.sh
             post_script: e2e/post.sh
+            no_output_timeout: 20m
             filters:
               branches:
                 only: /.*/
